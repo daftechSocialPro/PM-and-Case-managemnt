@@ -1,0 +1,85 @@
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\XAPI.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\XAPI.pdb
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.Core.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.barcodes.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.forms.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.io.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.kernel.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.layout.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.pdfa.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.sign.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.styledxmlparser.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.svg.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Microsoft.ReportViewer.Common.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Microsoft.ReportViewer.ProcessingObjectModel.DLL
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Microsoft.ReportViewer.WebForms.DLL
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\BouncyCastle.Crypto.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.pdb
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.Core.pdb
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.Core.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.barcodes.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.forms.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.io.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.kernel.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.layout.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.pdfa.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.sign.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.styledxmlparser.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.svg.xml
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.csproj.AssemblyReference.cache
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.csproj.CoreCompileInputs.cache
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.csproj.CopyComplete
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.dll
+C:\Users\Hp\Desktop\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.pdb
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\XAPI.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\XAPI.pdb
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\BouncyCastle.Crypto.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.Core.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.barcodes.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.forms.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.io.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.kernel.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.layout.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.pdfa.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.sign.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.styledxmlparser.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.svg.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Microsoft.ReportViewer.Common.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Microsoft.ReportViewer.ProcessingObjectModel.DLL
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Microsoft.ReportViewer.WebForms.DLL
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Microsoft.SqlServer.Types.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\BouncyCastle.Crypto.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.pdb
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.Core.pdb
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\Common.Logging.Core.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.barcodes.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.forms.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.io.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.kernel.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.layout.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.pdfa.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.sign.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.styledxmlparser.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\bin\Debug\itext.svg.xml
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.csproj.AssemblyReference.cache
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.csproj.CoreCompileInputs.cache
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.csproj.CopyComplete
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.dll
+E:\From Dene PC\PROJECTS\PM_Case_Management\PM_Case_Managemnt_API\XAPI\obj\Debug\XAPI.pdb
+C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\XAPI\bin\Debug\XAPI.dll
+C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\XAPI\bin\Debug\XAPI.pdb
+C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\XAPI\obj\Debug\XAPI.csproj.AssemblyReference.cache
+C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\XAPI\obj\Debug\XAPI.csproj.CoreCompileInputs.cache
+C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\XAPI\obj\Debug\XAPI.dll
+C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\XAPI\obj\Debug\XAPI.pdb
+C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\XAPI\bin\Debug\XAPI.dll
+C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\XAPI\bin\Debug\XAPI.pdb
+C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\XAPI\obj\Debug\XAPI.csproj.AssemblyReference.cache
+C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\XAPI\obj\Debug\XAPI.csproj.CoreCompileInputs.cache
+C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\XAPI\obj\Debug\XAPI.dll
+C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\XAPI\obj\Debug\XAPI.pdb

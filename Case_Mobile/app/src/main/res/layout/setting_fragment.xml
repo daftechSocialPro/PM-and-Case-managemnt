@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+        >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_border_rounded_cornwe">
+
+        <EditText
+            android:id="@+id/edt_ipAdress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/pub_icon"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/poppins_regular"
+            android:hint="Ip Address"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:paddingLeft="17dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="12sp"
+            />
+
+        <ImageView
+            android:id="@+id/pub_icon"
+            android:layout_width="25.7dp"
+            android:layout_height="19.3dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:src="@drawable/pub2"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_border_rounded_cornwe">
+
+        <EditText
+            android:id="@+id/edt_Port"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/pub_icon3"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/poppins_regular"
+            android:hint="Port Number"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/black"
+
+            android:paddingLeft="17dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="12sp"
+            />
+
+        <ImageView
+            android:id="@+id/pub_icon3"
+            android:layout_width="25.7dp"
+            android:layout_height="19.3dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:src="@drawable/pub2"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_border_rounded_cornwe">
+
+        <EditText
+            android:id="@+id/edt_pubName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/pub_icon2"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/poppins_regular"
+            android:hint="Publish Name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/black"
+
+            android:paddingLeft="17dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="12sp"
+            />
+
+        <ImageView
+            android:id="@+id/pub_icon2"
+            android:layout_width="25.7dp"
+            android:layout_height="19.3dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:src="@drawable/pub2"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="18.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_fill__rounded_color"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="Save"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        android:layout_marginBottom="30dp"/>
+
+
+
+
+
+</LinearLayout>

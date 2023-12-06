@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <androidx.core.widget.NestedScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+
+
+   <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+        <LinearLayout
+            android:id="@+id/transferTitlee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_fill__rounded_color"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:padding="8dp"
+            >
+            <TextView
+                android:id="@+id/transferTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:text=""
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
+    <RelativeLayout
+        android:layout_below="@+id/transferTitlee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginTop="12.7dp"
+
+        android:background="@drawable/blue_border_rounded_cornwe"
+
+        >
+        <TextView
+            android:id="@+id/transferCurrentState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="13sp"
+            android:text=""
+
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            />
+        <TextView
+            android:id="@+id/transferNextState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="13sp"
+            android:text=""
+            android:layout_below="@+id/transferCurrentState"
+            android:layout_marginTop="8dp"
+            android:layout_centerInParent="true"
+
+            />
+        <TextView
+            android:id="@+id/transferNeededDocuments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="13sp"
+            android:text=""
+            android:layout_below="@+id/transferNextState"
+            android:layout_marginTop="8dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="8dp"
+
+            />
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textSize="0sp"
+            android:text=""
+            android:layout_below="@+id/transferNextState"
+            android:layout_marginTop="8dp"
+            android:layout_centerInParent="true"
+
+            />
+
+    </RelativeLayout>
+
+    </RelativeLayout>
+   <RelativeLayout
+    android:id="@+id/transferTo"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="62dp"
+    android:layout_marginTop="12.7dp"
+    android:layout_marginRight="62dp"
+    android:background="@drawable/blue_border_rounded_cornwe">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/item_"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Transfer to"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+        <AutoCompleteTextView
+            android:id="@+id/auto_complete_txt_transfer"
+            android:inputType="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+</RelativeLayout>
+   <RelativeLayout
+
+        android:id="@+id/empRelative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_border_rounded_cornwe">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/item_employee_transfer"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="16dp"
+
+            android:hint="Employee"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            >
+
+            <AutoCompleteTextView
+                android:id="@+id/auto_complete_txt_transfer_emp"
+                android:inputType="text"
+                android:padding="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/item_structure_transfer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+
+            android:hint="Structure"
+           style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/auto_complete_txt_transfer_str"
+                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </RelativeLayout>
+   <RelativeLayout
+        android:id="@+id/structureRelative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_border_rounded_cornwe">
+
+
+
+
+
+
+    </RelativeLayout>
+   <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_border_rounded_cornwe">
+        <Button
+            android:id="@+id/chooseFile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose File"/>
+    </RelativeLayout>
+   <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        android:background="@drawable/blue_border_rounded_cornwe">
+
+
+
+        <EditText
+            android:id="@+id/edit_remark_transfer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/poppins_regular"
+            android:hint="Remark"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:minLines="4"
+            android:paddingLeft="17dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:textCursorDrawable="@drawable/cursor_color"
+            android:textSize="12sp"
+            />
+
+    </RelativeLayout>
+   <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+
+            android:padding="20dp"
+            android:id="@+id/btn_transfer_case"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="18.7dp"
+            android:layout_marginRight="62dp"
+             android:background="@drawable/blue_fill__rounded_color"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="Transfer"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:layout_marginBottom="30dp"/>
+
+    </RelativeLayout>
+
+
+
+
+
+</LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_views"
+    android:layout_margin="12dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    app:contentPadding="4dp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Codelia"
+                android:textColor="#709D99"
+                android:id="@+id/document_name"
+
+                android:textSize="18sp"
+
+                />
+ <Button
+     android:id="@+id/button_preview"
+     android:layout_alignParentRight="true"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:text="Preview"
+
+
+
+     />
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>

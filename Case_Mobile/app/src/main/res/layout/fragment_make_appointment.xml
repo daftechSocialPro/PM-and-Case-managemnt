@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="12.7dp"
+        android:layout_marginRight="62dp"
+        >
+
+
+        <DatePicker
+        android:background="@drawable/blue_border_rounded_cornwe"
+            android:id="@+id/Edit_DatePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"/>
+
+        <TimePicker
+            android:layout_marginTop="10dp"
+            android:background="@drawable/blue_border_rounded_cornwe"
+            android:layout_below="@id/Edit_DatePicker"
+            android:id="@+id/Edit_TimePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:timePickerMode="spinner"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_alignParentRight="true"
+            android:padding="20dp"
+            android:id="@+id/btn_make_Appointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="18.7dp"
+            android:layout_marginRight="62dp"
+            android:background="@drawable/blue_fill__rounded_color"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="Make Appointment"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:layout_marginBottom="30dp"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>
