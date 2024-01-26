@@ -98,6 +98,11 @@ export class PMService {
         return this.http.get<IActivityAttachment[]>(this.BaseURI + "/Activity/getActivityAttachments?taskId=" + taskId)
     }
 
+    getactivityById(actId:string){
+        return this.http.get<ActivityView>(this.BaseURI + "/Activity/byActivityId?actId=" + actId)
+    }
+
+
     //report 
     getDirectorLevelPerformance(BranchId?: string) {
 

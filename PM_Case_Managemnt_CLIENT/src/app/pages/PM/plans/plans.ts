@@ -38,8 +38,8 @@ export interface PlanView {
 }
 
 export interface PlanSingleview {
-    Id:String,
-    PlanName:String,
+    Id:string,
+    PlanName:string,
     PlanWeight:number,
     RemainingWeight:number,
     PlannedBudget:number,

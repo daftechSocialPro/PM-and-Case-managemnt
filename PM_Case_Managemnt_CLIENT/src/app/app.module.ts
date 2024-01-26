@@ -160,6 +160,9 @@ import { ViewPdfComponent } from './pages/Case/case-detail/view-pdf/view-pdf.com
 import { SearchCasesComponent } from './pages/Case/search-cases/search-cases.component';
 import { UpdateCaseComponent } from './pages/Case/encode-case/update-case/update-case.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ProgramDetailComponent } from './pages/PM/programs/program-detail/program-detail.component';
+import { PlanDetailComponent } from './pages/PM/plans/plan-detail/plan-detail.component';
+import { ActivityDetailComponent } from './pages/PM/plans/plan-detail/activity-detail/activity-detail.component';
 
 @NgModule({
   declarations: [
@@ -294,7 +297,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
     PdfViewerComponent,
     ViewPdfComponent,
     SearchCasesComponent,
-    UpdateCaseComponent
+    UpdateCaseComponent,
+    ProgramDetailComponent,
+    PlanDetailComponent,
+    ActivityDetailComponent
    
   ],
   imports: [

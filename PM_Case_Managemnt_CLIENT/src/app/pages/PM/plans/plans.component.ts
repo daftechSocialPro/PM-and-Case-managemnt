@@ -72,4 +72,8 @@ export class PlansComponent implements OnInit {
     return styles;
   }
 
+  routeToPlanDetail(planId: string){
+
+    this.router.navigate(['/planDetail', planId]);
+  }
 }

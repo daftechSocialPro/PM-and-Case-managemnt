@@ -15,15 +15,19 @@
     <section class="section profile">
        <div class="row">
 
-         <div class="col-lg-6"*ngFor="let program of Programs" style="cursor: pointer;" (click)="getProjects(program.Id)" >
+         <div class="col-lg-6"*ngFor="let program of Programs" style="cursor: pointer;" >
         
             <div class="card"  >
+               
                <div class="card-header">{{program.ProgramName}}</div>
-               <div class="card-body" style="background-color: #f6f9ff !important;">
+               
+               <div (click)="getProjects(program.Id)"  class="card-body" style="background-color: #f6f9ff !important;">
+                  
                   <h5 class="card-title">
                      
                      {{program.ProgramBudgetYear}}
                   </h5>
+
                  
 
                   <table class="table table-bordered mt-2">
@@ -42,8 +46,6 @@
                            <td>{{ps.StructureHead}}</td>
                         
                         </tr>
-                  
-                        
                      </tbody>
                   </table>
 
@@ -51,11 +53,18 @@
               
                  {{program.Remark}}
                </div>
-               <div class="card-footer"> Projects: {{program.NumberOfProjects}}</div>
+               <div class="card-footer d-flex justify-content-between align-items-center">
+                  Projects: {{program.NumberOfProjects}}
+                  <button class="btn btn-primary text-end mb-3" (click)="programDetail(program.Id)">
+                    Detail View
+                  </button>
+                </div>
+                
             </div>
-       
+            
          </div>
- 
+         
        </div>
     </section>
+
  </main>

@@ -44,22 +44,22 @@ namespace PM_Case_Managemnt_API.Services.PM.Program
                               ProgramBudgetYear = p.ProgramBudgetYear.Name + " ( " + p.ProgramBudgetYear.FromYear + " - " + p.ProgramBudgetYear.ToYear + " )",
                               NumberOfProjects =  _dBContext.Plans.Where(x=>x.ProgramId == p.Id).Count() , //must be seen
                               ProgramStructure = _dBContext.Plans
-    .Include(x => x.Structure)
-    .Where(x => x.ProgramId == p.Id)
-    .Select(x => new ProgramStructureDto
-    {
-        StructureName = x.Structure.StructureName + "( "+ _dBContext.Employees.Where(y => y.OrganizationalStructureId == x.StructureId && y.Position == Position.Director).FirstOrDefault().FullName +" )",
-        //StructureHead = 
-    })
-    .GroupBy(x => x.StructureName)
-    .Select(g => new ProgramStructureDto
-    {
-        StructureName = g.Key,
-        StructureHead = g.Count().ToString() + " Projects"
+                                .Include(x => x.Structure)
+                                .Where(x => x.ProgramId == p.Id)
+                                .Select(x => new ProgramStructureDto
+                                {
+                                    StructureName = x.Structure.StructureName + "( "+ _dBContext.Employees.Where(y => y.OrganizationalStructureId == x.StructureId && y.Position == Position.Director).FirstOrDefault().FullName +" )",
+                                    //StructureHead = 
+                                })
+                                .GroupBy(x => x.StructureName)
+                                .Select(g => new ProgramStructureDto
+                                {
+                                    StructureName = g.Key,
+                                    StructureHead = g.Count().ToString() + " Projects"
 
 
-    })
-    .ToList(),
+                                })
+                                .ToList(),
                               ProgramPlannedBudget = p.ProgramPlannedBudget,
                               Remark = p.Remark
 
@@ -96,7 +96,6 @@ namespace PM_Case_Managemnt_API.Services.PM.Program
                 ProgramPlannedBudget = program.ProgramPlannedBudget,
                 RemainingBudget = program.ProgramPlannedBudget - _dBContext.Plans.Sum(x => x.PlandBudget),
                 RemainingWeight = 100 - _dBContext.Plans.Sum(x => x.PlanWeight),
-                
                 Remark = program.Remark
             };
 

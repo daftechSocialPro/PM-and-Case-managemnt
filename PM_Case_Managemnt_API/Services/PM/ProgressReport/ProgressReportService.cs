@@ -2609,10 +2609,8 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                         .Include(x => x.Quarter)
 
                         .Where(x => x.CreatedAt >= BudgetYear.FromDate && x.CreatedAt <= BudgetYear.ToDate &&
-
-
-                   (x.Activity.ActivityParentId != null ? (x.Activity.ActivityParent.Task.Plan.StructureId) : (x.Activity.TaskId != null ? x.Activity.Task.Plan.StructureId : x.Activity.Plan.StructureId))
-                == filterationCriteria.structureId).ToList();
+                          (x.Activity.ActivityParentId != null ? (x.Activity.ActivityParent.Task.Plan.StructureId) : (x.Activity.TaskId != null ? x.Activity.Task.Plan.StructureId : x.Activity.Plan.StructureId))
+                           == filterationCriteria.structureId).ToList();
 
                     if (filterationCriteria.filterbyId == 1)
                     {
@@ -2646,9 +2644,6 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                     }
                     else if (filterationCriteria.filterbyId == 2)
                     {
-
-
-
                         int month = (int)(filterationCriteria.Month != null ? filterationCriteria.Month : 1);
                         int fromMonth = XAPI.EthiopicDateTime.GetGregorianMonth(DateTime.Now.Day, month, DateTime.Now.Year);
                         ActualWorked = ActualWorked.Where(x => x.CreatedAt.Month == fromMonth).ToList();

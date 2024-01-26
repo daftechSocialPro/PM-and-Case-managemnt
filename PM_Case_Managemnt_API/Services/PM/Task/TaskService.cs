@@ -68,13 +68,23 @@ namespace PM_Case_Managemnt_API.Services.PM
             if (task != null)
             {
 
-                var taskMembers = (from t in _dBContext.TaskMembers.Include(x => x.Employee).Where(x => x.TaskId == task.Id)
+                //var taskMembers = (from t in _dBContext.TaskMembers.Include(x => x.Employee).Where(x => x.TaskId == task.Id)
+                //                   select new SelectListDto
+                //                   {
+                //                       Id = t.Id,
+                //                       Name = t.Employee.FullName,
+                //                       Photo = t.Employee.Photo,
+                //                       EmployeeId = t.EmployeeId.ToString()
+                //                   }).ToList();
+
+
+                var taskMembers = (from t in _dBContext.Employees.Where(x => x.OrganizationalStructureId == task.Plan.StructureId)
                                    select new SelectListDto
                                    {
-                                       Id = t.Id,
-                                       Name = t.Employee.FullName,
-                                       Photo = t.Employee.Photo,
-                                       EmployeeId = t.EmployeeId.ToString()
+                                       //Id = t.Id,
+                                       Name = t.FullName,
+                                       Photo = t.Photo,
+                                       EmployeeId = t.Id.ToString()
                                    }).ToList();
 
 

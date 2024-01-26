@@ -9,8 +9,8 @@ export interface Task {
 }
 
 export interface TaskView {
-    Id?: String
-    TaskName?: String
+    Id?: string
+    TaskName?: string
     TaskWeight?: number
     RemianingWeight?: number
     NumberofActivities?: number

@@ -80,51 +80,74 @@ namespace PM_Case_Managemnt_API.Services.PM.Plan
         public async Task<PlanSingleViewDto> GetSinglePlan(Guid planId)
         {
 
+            var plan = await (from p in _dBContext.Plans.Where(x => x.Id == planId)
+                              select new PlanSingleViewDto
+                              {
+                                  Id = p.Id,
+                                  PlanName = p.PlanName,
+                                  PlanWeight = p.PlanWeight,
+                                  PlannedBudget = p.PlandBudget,
+                                  RemainingBudget = p.PlandBudget,
+                                  //RemainingWeight = float.Parse((100.0 - taskweightSum).ToString()),
+                                  EndDate = p.PeriodEndAt.ToString(),
+                                  StartDate = p.PeriodStartAt.ToString(),
+                                  //Tasks = tasks
 
-            var tasks = (from t in _dBContext.Tasks.Where(x => x.PlanId == planId)
-                        select new TaskVIewDto
-                        {
-                            Id= t.Id,
-                            TaskName = t.TaskDescription,
-                            TaskWeight = t.Weight,
-                           
-                            FinishedActivitiesNo= 0,
-                            TerminatedActivitiesNo= 0,
-                            StartDate= t.ShouldStartPeriod??DateTime.Now,
-                            EndDate=t.ShouldEnd??DateTime.Now,
-                           
-                            HasActivity= t.HasActivityParent,
-                            PlannedBudget  = t.PlanedBudget,
-                            NumberOfMembers = _dBContext.TaskMembers.Count(x=>x.TaskId == t.Id),
-                         
-                            RemianingWeight = 100 - _dBContext.Activities.Sum(x => x.Weight),
-                            NumberofActivities = _dBContext.Activities.Include(x => x.ActivityParent).Count(x => x.TaskId == t.Id || x.ActivityParent.TaskId == t.Id),
-                            NumberOfFinalized = _dBContext.Activities.Include(x => x.ActivityParent).Count(x => x.Status == Status.Finalized && ( x.TaskId == t.Id || x.ActivityParent.TaskId == t.Id)),
-                            NumberOfTerminated = _dBContext.Activities.Include(x => x.ActivityParent).Count(x => x.Status == Status.Terminated &&( x.TaskId == t.Id || x.ActivityParent.TaskId == t.Id))
+                              }).FirstOrDefaultAsync();
 
-                        }).ToList();
+            var tasks = (from t in _dBContext.Tasks.Include(z => z.Plan).Where(x => x.PlanId == planId)
+                         select new TaskVIewDto
+                         {
+                             Id = t.Id,
+                             TaskName = t.TaskDescription,
+                             TaskWeight = t.Weight,
+
+                             FinishedActivitiesNo = 0,
+                             TerminatedActivitiesNo = 0,
+                             StartDate = t.ShouldStartPeriod ?? DateTime.Now,
+                             EndDate = t.ShouldEnd ?? DateTime.Now,
+
+                             HasActivity = t.HasActivityParent,
+                             PlannedBudget = t.PlanedBudget,
+                             //NumberOfMembers = _dBContext.TaskMembers.Count(x=>x.TaskId == t.Id),
+
+                             RemianingWeight = (float)(plan.PlanWeight - _dBContext.Activities.Where(x => x.Task.PlanId == planId || x.ActivityParent.Task.PlanId == planId).Sum(x => x.Weight)),
+                             NumberofActivities = _dBContext.Activities.Include(x => x.ActivityParent).Count(x => x.TaskId == t.Id || x.ActivityParent.TaskId == t.Id),
+                             NumberOfFinalized = _dBContext.Activities.Include(x => x.ActivityParent).Count(x => x.Status == Status.Finalized && (x.TaskId == t.Id || x.ActivityParent.TaskId == t.Id)),
+                             NumberOfTerminated = _dBContext.Activities.Include(x => x.ActivityParent).Count(x => x.Status == Status.Terminated && (x.TaskId == t.Id || x.ActivityParent.TaskId == t.Id)),
+                             //TaskMembers = (from tm in _dBContext.TaskMembers.Include(x => x.Employee).Where(x => x.TaskId == t.Id)
+                             //               select new SelectListDto
+                             //               {
+                             //                   Id = tm.Id,
+                             //                   Name = tm.Employee.FullName,
+                             //                   Photo = tm.Employee.Photo,
+                             //                   EmployeeId = tm.EmployeeId.ToString()
+                             //               }).ToList(),
+                             TaskMembers = (from tm in _dBContext.Employees.Where(x => x.OrganizationalStructureId == t.Plan.StructureId)
+                                            select new SelectListDto
+                                            {
+                                                Id = tm.Id,
+                                                Name = tm.FullName,
+                                                Photo = tm.Photo,
+                                                EmployeeId = tm.Id.ToString()
+                                            }).ToList(),
+                             RemainingBudget = t.PlanedBudget - _dBContext.Activities.Where(x => x.ActivityParent.TaskId == t.Id)
+                       .Sum(x => x.PlanedBudget),
+
+
+
+                         }).ToList();
 
             float taskBudgetsum = tasks.Sum(x => x.PlannedBudget);
-            float taskweightSum = tasks.Sum(x => x.TaskWeight ?? 0); 
+            float taskweightSum = tasks.Sum(x => x.TaskWeight ?? 0);
 
-     
-                return await( from p in _dBContext.Plans.Where(x=>x.Id == planId)
-                       select new PlanSingleViewDto
-                       {
-                           Id = p.Id,
-                           PlanName = p.PlanName,
-                           PlanWeight = p.PlanWeight,
-                           PlannedBudget = p.PlandBudget,
-                           RemainingBudget = p.PlandBudget - taskBudgetsum,
-                           RemainingWeight = float.Parse( (100.0 - taskweightSum).ToString()),
-                           EndDate = p.PeriodEndAt.ToString(),
-                           StartDate = p.PeriodStartAt.ToString(),
-                          
+            plan.RemainingBudget = plan.RemainingBudget - taskBudgetsum;
+            plan.RemainingWeight = float.Parse((plan.PlanWeight - taskweightSum).ToString());
+            plan.Tasks = tasks;
 
-                           Tasks = tasks
 
-                       }).FirstOrDefaultAsync();
-            
+
+            return plan;
 
 
 
