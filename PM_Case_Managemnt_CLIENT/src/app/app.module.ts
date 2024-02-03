@@ -163,7 +163,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ProgramDetailComponent } from './pages/PM/programs/program-detail/program-detail.component';
 import { PlanDetailComponent } from './pages/PM/plans/plan-detail/plan-detail.component';
 import { ActivityDetailComponent } from './pages/PM/plans/plan-detail/activity-detail/activity-detail.component';
-
+import { StepsModule } from 'primeng/steps';
+import { CaseDetailsComponent } from './pages/case/encode-case/add-case/case-details/case-details.component';
+import { CaseFilesComponent } from './pages/case/encode-case/add-case/case-files/case-files.component';
+import { QRCodeModule } from 'angularx-qrcode';
 @NgModule({
   declarations: [
     AppComponent,
@@ -300,8 +303,10 @@ import { ActivityDetailComponent } from './pages/PM/plans/plan-detail/activity-d
     UpdateCaseComponent,
     ProgramDetailComponent,
     PlanDetailComponent,
-    ActivityDetailComponent
-   
+    ActivityDetailComponent,
+    CaseDetailsComponent,
+    CaseFilesComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -328,7 +333,10 @@ import { ActivityDetailComponent } from './pages/PM/plans/plan-detail/activity-d
     OrganizationChartModule,
     PdfViewerModule,
     CarouselModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    StepsModule,
+    QRCodeModule
+    
   
   ],
   providers: [

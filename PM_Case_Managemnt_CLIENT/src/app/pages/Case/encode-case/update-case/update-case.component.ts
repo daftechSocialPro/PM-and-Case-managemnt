@@ -4,12 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonService, toastPayload } from 'src/app/common/common.service';
 import { SelectList } from 'src/app/pages/common/common';
 import { UserView } from 'src/app/pages/pages-login/user';
-import { fileSettingSender } from '../add-case/add-case.component';
+
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from 'src/app/pages/pages-login/user.service';
 import { CaseService } from '../../case.service';
 import { IndividualConfig } from 'ngx-toastr';
 import { AddApplicantComponent } from '../add-applicant/add-applicant.component';
+import { fileSettingSender } from '../add-case/case-details/case-details.component';
 
 @Component({
   selector: 'app-update-case',

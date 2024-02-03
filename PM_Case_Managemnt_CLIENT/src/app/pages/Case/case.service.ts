@@ -71,8 +71,14 @@ export class CaseService {
     addCase(caseValue: FormData) {
 
 
-        return this.http.post(this.BaseURI + "/encoding", caseValue)
+        return this.http.post<any>(this.BaseURI + "/encoding", caseValue)
     }
+
+    addCaseFiles(caseValue: FormData) {
+
+        return this.http.post(this.BaseURI + "/fileEncoding", caseValue)
+    }
+
     updateCase(caseValue: FormData) {
 
 

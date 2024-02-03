@@ -80,6 +80,7 @@ namespace PM_Case_Managemnt_API.DTOS.CaseDto
         public string CaseTypeName { get; set; }
         public string CaseNumber { get; set; }
         public string CreatedAt { get; set; }
+        public string? CreatedBy { get; set; }
         public string? ApplicantName {get; set;}
         public string? ApplicantPhoneNo { get; set; }
         public string? EmployeeName { get; set; }

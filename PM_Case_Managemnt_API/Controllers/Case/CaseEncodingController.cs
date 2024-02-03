@@ -50,6 +50,30 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                     CreatedBy = Guid.Parse(Request.Form["CreatedBy"]),
                 };
                 string caseId = await _caseEncodeService.Add(caseEncodePostDto);
+                var result = new { CaseId = caseId, CaseData = caseEncodePostDto };
+
+                
+                return Ok(result);
+
+                
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+
+        }
+
+
+        [HttpPost("fileEncoding"), DisableRequestSizeLimit]
+        public async Task<IActionResult> Upload()
+        {
+            try
+            {
+                var caseId = Request.Form["CaseId"];
+                var Case = await _caseEncodeService.GetSingleCase(Guid.Parse(caseId));
+                //var applicantId = Request.Form["ApplicantId"];
+                //var createdby = Request.Form["CreatedBy"];
 
                 if (Request.Form.Files.Any())
                 {
@@ -62,7 +86,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                         {
                             string folderName = Path.Combine("Assets", "CaseAttachments");
 
-                            var applicant = _applicantService.GetApplicantById(caseEncodePostDto.ApplicantId);
+                            var applicant = _applicantService.GetApplicantById(Guid.Parse(Case.ApplicantId));
                             string applicantName = applicant.Result.ApplicantName; // replace with actual applicant name
                             string applicantFolder = Path.Combine(folderName, applicantName);
 
@@ -88,7 +112,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                                 {
                                     Id = Guid.NewGuid(),
                                     CreatedAt = DateTime.Now,
-                                    CreatedBy = caseEncodePostDto.CreatedBy,
+                                    CreatedBy = Guid.Parse(Case.CreatedBy),
                                     RowStatus = RowStatus.Active,
                                     CaseId = Guid.Parse(caseId),
                                     FilePath = dbPath
@@ -122,7 +146,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                                 {
                                     Id = Guid.NewGuid(),
                                     CreatedAt = DateTime.Now,
-                                    CreatedBy = caseEncodePostDto.CreatedBy,
+                                    CreatedBy = Guid.Parse(Case.CreatedBy),
                                     RowStatus = RowStatus.Active,
                                     FilePath = dbPath,
                                     FileSettingId = Guid.Parse(fileName.Split(".")[0]),
@@ -140,12 +164,13 @@ namespace PM_Case_Managemnt_API.Controllers.Case
 
                 return NoContent();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
-
         }
+
+
         [HttpPut("encoding"), DisableRequestSizeLimit]
         public async Task<IActionResult> Update()
         {
