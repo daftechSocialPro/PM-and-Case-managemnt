@@ -16,11 +16,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using PM_Case_Managemnt_API.Data;
 using PM_Case_Managemnt_API.DTOS.Common;
 using PM_Case_Managemnt_API.Hubs.EncoderHub;
 using PM_Case_Managemnt_API.Models.Auth;
 using PM_Case_Managemnt_API.Models.Common;
+using static PM_Case_Managemnt_API.DTOS.AuthenticationDtos;
 
 namespace PM_Case_Managemnt_API.Controllers
 {
@@ -34,6 +36,7 @@ namespace PM_Case_Managemnt_API.Controllers
         private AuthenticationContext _authenticationContext;
         private readonly DBContext _dbcontext;
         private IHubContext<EncoderHub, IEncoderHubInterface> _encoderHub;
+        private RoleManager<IdentityRole> _roleManager;
 
         public ApplicationUserController(
             DBContext dbcontext, 
@@ -41,7 +44,8 @@ namespace PM_Case_Managemnt_API.Controllers
             UserManager<ApplicationUser> userManager, 
             SignInManager<ApplicationUser> signInManager, 
             IOptions<ApplicationSettings> appSettings,
-            IHubContext<EncoderHub, IEncoderHubInterface> encoderHub
+            IHubContext<EncoderHub, IEncoderHubInterface> encoderHub,
+            RoleManager<IdentityRole> roleManager
 )
         {
             _userManager = userManager;
@@ -50,7 +54,8 @@ namespace PM_Case_Managemnt_API.Controllers
             _authenticationContext = authenticationContext;
             _dbcontext = dbcontext;
             _encoderHub = encoderHub;
-            
+            _roleManager = roleManager;
+
 
         }
 
@@ -168,6 +173,123 @@ namespace PM_Case_Managemnt_API.Controllers
 
         }
 
+
+        /////////
+        //
+        [HttpGet]
+        [Route("getNotAssignedRoles")]
+        public async Task<List<SelectRolesListDto>> GetNotAssignedRole(string userId)
+        {
+            var currentuser = await _userManager.Users.FirstOrDefaultAsync(x => x.Id.Equals(userId));
+            if (currentuser != null)
+            {
+                var currentRoles = await _userManager.GetRolesAsync(currentuser);
+                if (currentRoles.Any())
+                {
+                    var notAssignedRoles = await _roleManager.Roles.
+                                  Where(x =>
+                                  !currentRoles.Contains(x.Name)).Select(x => new SelectRolesListDto
+                                  {
+                                      Id = x.Id,
+                                      Name = x.Name
+                                  }).ToListAsync();
+
+                    return notAssignedRoles;
+                }
+                else
+                {
+                    var notAssignedRoles = await _roleManager.Roles
+                                .Select(x => new SelectRolesListDto
+                                {
+                                    Id = x.Id,
+                                    Name = x.Name
+                                }).ToListAsync();
+
+                    return notAssignedRoles;
+
+                }
+
+
+            }
+
+            throw new FileNotFoundException();
+        }
+
+        [HttpGet]
+        [Route("getAssignedRoles")]
+        public async Task<List<SelectRolesListDto>> GetAssignedRoles(string userId)
+        {
+            var currentuser = await _userManager.Users.FirstOrDefaultAsync(x => x.Id.Equals(userId));
+            if (currentuser != null)
+            {
+                var currentRoles = await _userManager.GetRolesAsync(currentuser);
+                if (currentRoles.Any())
+                {
+                    var notAssignedRoles = await _roleManager.Roles.
+                                      Where(x =>
+                                      currentRoles.Contains(x.Name)).Select(x => new SelectRolesListDto
+                                      {
+                                          Id = x.Id,
+                                          Name = x.Name
+                                      }).ToListAsync();
+
+                    return notAssignedRoles;
+                }
+
+                return new List<SelectRolesListDto>();
+
+            }
+
+            throw new FileNotFoundException();
+        }
+
+        [HttpPost]
+        [Route("assignRole")]
+        public async Task<IActionResult> AssignRole(UserRoleDto userRole)
+        {
+            var currentUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userRole.UserId);
+
+
+            if (currentUser != null)
+            {
+                var roleExists = await _roleManager.RoleExistsAsync(userRole.RoleName);
+
+                if (roleExists)
+                {
+                    await _userManager.AddToRoleAsync(currentUser, userRole.RoleName);
+                    
+                    return Ok(new { message = "Successfully Added Role" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Role does not exist" });
+                }
+            }
+            else
+            {
+                return BadRequest(new { message = "User Not Found" });
+            }
+        }
+
+        [HttpPost]
+        [Route("revokeRole")]
+        public async Task<IActionResult> RevokeRole(UserRoleDto userRole)
+        {
+            var curentUser = await _userManager.Users.FirstOrDefaultAsync(x => x.Id.Equals(userRole.UserId));
+
+            if (curentUser != null)
+            {
+                await _userManager.RemoveFromRoleAsync(curentUser, userRole.RoleName);
+                return Ok(new { message = "Succesfully Revoked Roles" });
+            }
+            return BadRequest(new { message = "User Not Found" });
+
+        }
+        /////
+        //
+
+
+
         [HttpGet("users")]
 
         public async Task<List<EmployeeDto>> getUsers()
@@ -181,7 +303,7 @@ namespace PM_Case_Managemnt_API.Controllers
                     join e in _dbcontext.Employees.Include(x=>x.OrganizationalStructure) on u.EmployeesId equals e.Id
                     select new EmployeeDto
                     {
-
+                        Id = Guid.Parse(u.Id),
                         UserName = u.UserName,
                         FullName = e.FullName,
                         Photo = e.Photo,

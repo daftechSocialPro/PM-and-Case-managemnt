@@ -24,6 +24,7 @@
                    <h2>{{emp.Title}} {{emp.FullName}}</h2>
                    <h3>{{emp.StructureName}}( {{emp.Position}} )</h3>
                    <h4>{{emp.PhoneNumber}}</h4>
+                   <button (click)="manageRoles(emp.Id)" pButton pRipple type="button" label="Manage Roles" class="p-button-outlined" ></button>
                               
                 </div>
              </div>
