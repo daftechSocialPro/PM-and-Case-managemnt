@@ -514,6 +514,13 @@ C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\PM_Case_Ma
 C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.genruntimeconfig.cache
 C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\PM_Case_Managemnt_API\obj\Debug\net7.0\ref\PM_Case_Managemnt_API.dll
 C:\Users\Hp\Desktop\Kirubel Files\DAFTech Social\PM_Case_Management_2\PM_Case_Managemnt_API\bin\Debug\net7.0\System.Net.WebSockets.WebSocketProtocol.dll
+C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.csproj.AssemblyReference.cache
+C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.AssemblyInfoInputs.cache
+C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.AssemblyInfo.cs
+C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.csproj.CoreCompileInputs.cache
+C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\bin\Debug\net7.0\appsettings.json
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\bin\Debug\net7.0\PM_Case_Managemnt_API.staticwebassets.runtime.json
@@ -597,13 +604,6 @@ C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\bin\Debug
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\bin\Debug\net7.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\bin\Debug\net7.0\XAPI.dll
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\bin\Debug\net7.0\XAPI.pdb
-C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.csproj.AssemblyReference.cache
-C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.AssemblyInfoInputs.cache
-C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.AssemblyInfo.cs
-C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.csproj.CoreCompileInputs.cache
-C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\PM_Case_Managemnt_API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\staticwebassets\msbuild.PM_Case_Managemnt_API.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\staticwebassets\msbuild.build.PM_Case_Managemnt_API.props
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\PM_Case_Managemnt_API\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.PM_Case_Managemnt_API.props

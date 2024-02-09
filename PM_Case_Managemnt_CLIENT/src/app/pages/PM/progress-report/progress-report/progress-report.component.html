@@ -170,11 +170,12 @@
                             <td class="table-user">
 
 
-                                <div *ngFor="let emp of actRow?.Employees;">
+                                <div *ngFor="let emp of actRow?.Employees;" style="white-space: nowrap;">
                                     <img [src]="getImage(emp.Photo)" style="width:50px" alt="table-user"
                                         class="mr-1 rounded-circle">
                                     <a href="javascript:void(0);"
-                                        class="text-body font-weight-semibold">{{emp.FullName}}</a>
+                                        class="text-body font-weight-semibold" >{{emp.FullName}}</a>
+                                        <br/>
                                 </div>
 
                             </td>

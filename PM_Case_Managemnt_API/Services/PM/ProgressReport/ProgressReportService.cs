@@ -523,7 +523,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                                 {
                                     foreach (var progs in stu.StructurePlans)
                                     {
-                                        if (progs.PlanTargetDivision != null)
+                                        if (progs.PlanTargetDivision.Count() > 0)
                                         {
                                             var newMonth = progs.PlanTargetDivision.Where(x => x.Order <= j && x.MonthName == null);
                                             ActivityTargetDivisionReport planProgram = new ActivityTargetDivisionReport();
@@ -1222,7 +1222,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                     var allActivities = _dBContext.Activities
 
                         .Include(x => x.ActivityTargetDivisions)
-                        .Where(x => x.ActivityParentId == filterationCriteria.actParentId && x.ActivityTargetDivisions != null).OrderBy(c => c.ShouldStat).Include(a => a.AssignedEmploye).Include(a => a.Task).ToList();
+                        .Where(x => x.ActivityParentId == filterationCriteria.actParentId && x.ActivityTargetDivisions.Count()> 0).OrderBy(c => c.ShouldStat).Include(a => a.AssignedEmploye).Include(a => a.Task).ToList();
                     if (filterationCriteria.budgetYear != null)
                     {
                         DateType = "Year of " + " " + filterationCriteria.budgetYear;
