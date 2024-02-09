@@ -73,6 +73,10 @@ export class HeaderComponent implements OnInit {
   this.connection.on('getNotification', (result) => {
    this.getAssignedCases()
   });
+  // this.connection.on('getUplodedFiles', (result) => {
+    
+  //   console.log("UPLODED FILES",result)
+  //  });
 }
   
   }

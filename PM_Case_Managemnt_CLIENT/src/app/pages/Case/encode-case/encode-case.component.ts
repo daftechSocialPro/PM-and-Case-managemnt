@@ -62,7 +62,7 @@ export class EncodeCaseComponent implements OnInit {
     let modalRef = this.modalService.open(UpdateCaseComponent,{size:'xl', backdrop:'static'});
     modalRef.componentInstance.caseId = caseId
     modalRef.result.then(()=>{
-      
+      this.router.navigate(['encodecase']);
       this.getEnocdedCases()
       
     })

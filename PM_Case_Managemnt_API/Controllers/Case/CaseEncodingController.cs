@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using PM_Case_Managemnt_API.DTOS.CaseDto;
+using PM_Case_Managemnt_API.Hubs.EncoderHub;
+using PM_Case_Managemnt_API.Models.Auth;
 using PM_Case_Managemnt_API.Models.CaseModel;
 using PM_Case_Managemnt_API.Models.Common;
 using PM_Case_Managemnt_API.Services.CaseMGMT.Applicants;
@@ -18,17 +22,23 @@ namespace PM_Case_Managemnt_API.Controllers.Case
         private readonly ICaseEncodeService _caseEncodeService;
         private readonly ICaseAttachementService _caseAttachmentService;
         private readonly IFilesInformationService _filesInformationService;
-        private readonly IApplicantService _applicantService; 
+        private readonly IApplicantService _applicantService;
+        private IHubContext<EncoderHub, IEncoderHubInterface> _encoderHub;
+        private UserManager<ApplicationUser> _userManager;
         public CaseEncodingController(
             ICaseEncodeService caseEncodeService,
             ICaseAttachementService caseAttachementService, 
             IFilesInformationService filesInformationService,
-            IApplicantService applicantService)
+            IApplicantService applicantService,
+            IHubContext<EncoderHub, IEncoderHubInterface> encoderHub,
+            UserManager<ApplicationUser> userManager )
         {
             _caseEncodeService = caseEncodeService;
             _caseAttachmentService = caseAttachementService;
             _filesInformationService = filesInformationService;
             _applicantService = applicantService;
+            _encoderHub = encoderHub;
+            _userManager = userManager;
         }
 
 
@@ -74,11 +84,18 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                 var Case = await _caseEncodeService.GetSingleCase(Guid.Parse(caseId));
                 //var applicantId = Request.Form["ApplicantId"];
                 //var createdby = Request.Form["CreatedBy"];
-
+                var user = await _userManager.FindByIdAsync(Case.CreatedBy);
+                var employeeId = "";
+                if (user != null) 
+                {
+                    employeeId = user.EmployeesId.ToString();
+                }
+                
                 if (Request.Form.Files.Any())
                 {
                     List<CaseAttachment> attachments = new List<CaseAttachment>();
                     List<FilesInformation> fileInfos = new List<FilesInformation>();
+                    List<CaseFilesGetDto> fileList = new List<CaseFilesGetDto>();
                     foreach (var file in Request.Form.Files)
                     {
 
@@ -118,6 +135,13 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                                     FilePath = dbPath
                                 };
                                 attachments.Add(attachment);
+                                CaseFilesGetDto uplodedFile = new()
+                                {
+                                    FileName= fileName,
+                                    FilePath = dbPath
+                                };
+                                fileList.Add(uplodedFile);
+
                             }
 
                         }
@@ -154,12 +178,18 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                                     filetype = file.ContentType
                                 };
                                 fileInfos.Add(filesInformation);
+                                
 
                             }
                         }
+                       
+                        
+
                     }
                     await _caseAttachmentService.AddMany(attachments);
                     await _filesInformationService.AddMany(fileInfos);
+                    await _encoderHub.Clients.Group(employeeId).getUplodedFiles(fileList, employeeId);
+
                 }
 
                 return NoContent();

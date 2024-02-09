@@ -169,6 +169,8 @@ import { CaseFilesComponent } from './pages/case/encode-case/add-case/case-files
 import { QRCodeModule } from 'angularx-qrcode';
 import { ManageRolesComponent } from './pages/common/user-management/manage-roles/manage-roles.component';
 import { PickListModule } from 'primeng/picklist';
+import { UpdateCaseDetailsComponent } from './pages/case/encode-case/update-case/update-case-details/update-case-details.component';
+import { UpdateCaseFilesComponent } from './pages/case/encode-case/update-case/update-case-files/update-case-files.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -309,6 +311,8 @@ import { PickListModule } from 'primeng/picklist';
     CaseDetailsComponent,
     CaseFilesComponent,
     ManageRolesComponent,
+    UpdateCaseDetailsComponent,
+    UpdateCaseFilesComponent,
     
   ],
   imports: [
@@ -339,7 +343,8 @@ import { PickListModule } from 'primeng/picklist';
     NgxPaginationModule,
     StepsModule,
     QRCodeModule,
-    PickListModule
+    PickListModule,
+    
     
   
   ],

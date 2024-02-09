@@ -159,4 +159,10 @@ namespace PM_Case_Managemnt_API.DTOS.CaseDto
         public Guid CaseId { get; set; }
         public Guid FolderId { get; set; }
     }
+
+    public class CaseFilesGetDto
+    {
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
+    }
 }

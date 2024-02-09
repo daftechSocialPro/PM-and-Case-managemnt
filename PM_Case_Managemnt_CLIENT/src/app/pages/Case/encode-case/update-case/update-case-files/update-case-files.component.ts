@@ -1,44 +1,108 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CommonService, toastPayload } from 'src/app/common/common.service';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { toastPayload, CommonService } from 'src/app/common/common.service';
 import { SelectList } from 'src/app/pages/common/common';
+import { UserView } from 'src/app/pages/pages-login/user';
+import { UserService } from 'src/app/pages/pages-login/user.service';
 import { CaseService } from '../../../case.service';
+import { ICaseView } from '../../Icase';
+import { fileSettingSender } from '../../add-case/case-details/case-details.component';
 import { IndividualConfig } from 'ngx-toastr';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-declare var Dynamsoft: any;
+import { Router } from '@angular/router';
+import { HeaderComponent } from 'src/app/layouts/header/header.component';
+import { environment } from 'src/environments/environment';
+import * as signalR from '@microsoft/signalr';
 @Component({
-  selector: 'app-case-files',
-  templateUrl: './case-files.component.html',
-  styleUrls: ['./case-files.component.css']
+  selector: 'app-update-case-files',
+  templateUrl: './update-case-files.component.html',
+  styleUrls: ['./update-case-files.component.css']
 })
-export class CaseFilesComponent implements OnInit {
-
-  
+export class UpdateCaseFilesComponent implements OnInit{
+  @Input() caseId!: string
+  encodecase !: ICaseView
+  caseForm!: FormGroup;
+  applicants!: SelectList[];
+  outsideCases!: SelectList[];
   fileSettings!: SelectList[];
+  toast!: toastPayload;
+  CaseNumber!: string;
   Documents: any;
   settingsFile: fileSettingSender[] = [];
-  toast!: toastPayload;
-  case!:any
+
+  user!: UserView;
+  mobileUplodedFiles:any[] = []
+  public connection!: signalR.HubConnection;
+  urlHub : string = environment.assetUrl+"/ws/Encoder"
+  
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private commonService: CommonService,
+    private modalService: NgbModal,
+    private caseService: CaseService,
+    private userService: UserService,
+    private router: Router, 
+    
+  ) {
+    this.caseId = this.router.getCurrentNavigation()?.extras.state?.['response'];
+    console.log("caseId",this.caseId)
+  }
+  ngOnInit(): void {
+    this.user = this.userService.getCurrentUser()
+    this.getSingleCase()
+    this.connection = new signalR.HubConnectionBuilder()
+    .withUrl(this.urlHub, {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets
+    })
+    .configureLogging(signalR.LogLevel.Debug)
+    .build();
+
+  this.connection.start()
+    .then((res) => {
+      this.connection.invoke('addDirectorToGroup', this.user.EmployeeId);
+      console.log('Connection started.......!');
+    })
+    .catch((err) => console.log('Error while connecting to the server', err));
+    this.connection = new signalR.HubConnectionBuilder()
+    .withUrl(this.urlHub, {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets
+    })
+    .configureLogging(signalR.LogLevel.Debug)
+    .build();
+
+  this.connection.start()
+    .then((res) => {
+      console.log("employeeId",this.user.EmployeeId)
+     this.connection.invoke('addDirectorToGroup', this.user.EmployeeId);
+      console.log('Connection started.......!');
+    })
+    .catch((err) => console.log('Error while connecting to the server', err));
+    if(this.connection){
+      this.connection.on('getUplodedFiles', (result) => {
+        this.mobileUplodedFiles = result
+        console.log("UPLODED FILES",this.mobileUplodedFiles)
+       });
+    }
+  }
   
 
 
-  constructor(
 
-    private activeModal: NgbActiveModal,
-    private router: Router,
-    private caseService: CaseService,
-    private commonService: CommonService
-  ){
-    this.case = this.router.getCurrentNavigation()?.extras.state?.['response'];
+  getSingleCase() {
+
+    this.caseService.GetSingleCase(this.caseId).subscribe({
+      next: (res) => {
+        this.encodecase = res
+
+        
+      }, error: (err) => {
+
+      }
+    })
   }
-
-  ngOnInit(): void {
-      
-    console.log('this.caseId: ', this.case);
-    
-  }
-
   submit(){
 
     const formData = new FormData();
@@ -56,7 +120,7 @@ export class CaseFilesComponent implements OnInit {
       );
     }
     // formData.set('ApplicantId', this.case.CaseData.ApplicantId);
-    formData.set('CaseId', this.case.CaseId);
+    formData.set('CaseId', this.caseId);
     // formData.set('CreatedBy', this.case.CaseData.CreatedBy);
 
     this.caseService.addCaseFiles(formData).subscribe({
@@ -71,7 +135,7 @@ export class CaseFilesComponent implements OnInit {
           } as IndividualConfig,
         };
         this.commonService.showToast(this.toast);
-        
+        this.router.navigate(['encodecase']);
         this.activeModal.close();
       },
       error: (err) => {
@@ -93,10 +157,9 @@ export class CaseFilesComponent implements OnInit {
 
 
   }
-
   onImagesScannedUpdate(images: any) {
-    
-    
+
+
     const fileArray = [];
     for (let i = 0; i < images.length; i++) {
 
@@ -104,10 +167,13 @@ export class CaseFilesComponent implements OnInit {
       fileArray.push(Filee);
 
     }
- 
+
     this.Documents = this.createFileList(fileArray);
   }
 
+
+  
+  
   onFileSelected(event: any) {
     this.Documents = event.target.files;
     console.log(this.Documents)
@@ -141,6 +207,7 @@ export class CaseFilesComponent implements OnInit {
     }
   }
 
+  
   getFile(imageData: any) {
 
     const byteString = atob(imageData.src.split(',')[1]);
@@ -169,12 +236,26 @@ export class CaseFilesComponent implements OnInit {
 
     return result;
   }
+
+  viewFile(file: string) {
+
+
+    return this.commonService.createImgPath(file)
+
+
+  }
+  RemoveFile(attachmentId: string) {
+
+    this.caseService.RemoveAttachment(attachmentId).subscribe({
+      next:(res)=>{
+        this.getSingleCase()
+      }
+    })
+    
+
+  }
   closeModal() {
+    this.router.navigate(['encodecase']);
     this.activeModal.close();
   }
-}
-
-export interface fileSettingSender {
-  FileSettingId: string;
-  File: File;
 }

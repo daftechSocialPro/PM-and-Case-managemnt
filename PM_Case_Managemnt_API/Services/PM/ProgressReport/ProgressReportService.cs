@@ -224,7 +224,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                                     else
                                     {
 
-                                        var ParentActivities = _dBContext.ActivityParents.Where(x => x.TaskId == taskitems.Id).ToList();
+                                        var ParentActivities = _dBContext.ActivityParents.Include(x => x.Activities).Where(x => x.TaskId == taskitems.Id).ToList();
 
 
                                         TotalBirr += (float)ParentActivities.Sum(x => x.PlanedBudget);
@@ -708,7 +708,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                                     {
 
                                         List<ActivityLst> activityLsts = new List<ActivityLst>();
-                                        foreach (var ActItems in actparent.Activities.Where(x => x.ActivityTargetDivisions != null))
+                                        foreach (var ActItems in actparent.Activities.Where(x => x.ActivityTargetDivisions.Count()>0))
                                         {
                                             ActivityLst lst = new ActivityLst();
                                             lst.ActivityDescription = ActItems.ActivityDescription;
@@ -949,7 +949,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                                 taskLsts.Add(taskLst);
 
                             }
-                            else if (taskItems.Activities.Any() && taskItems.Activities.FirstOrDefault().ActivityTargetDivisions != null)
+                            else if (taskItems.Activities.Any() && taskItems.Activities.FirstOrDefault().ActivityTargetDivisions.Count()>0)
                             {
 
                                 var Acti = taskItems.Activities.FirstOrDefault();
@@ -1067,7 +1067,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                         plns.taskLsts = taskLsts;
                         plansLsts.Add(plns);
                     }
-                    else if (plansItems.Activities.Any() && plansItems.Activities.FirstOrDefault().ActivityTargetDivisions != null)
+                    else if (plansItems.Activities.Any() && plansItems.Activities.FirstOrDefault().ActivityTargetDivisions.Count()>0)
                     {
 
                         List<PlanOcc> planoccPlan = new List<PlanOcc>();
