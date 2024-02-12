@@ -1999,7 +1999,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                                         {
                                             List<ActivityLst> activityLsts = new List<ActivityLst>();
 
-                                            foreach (var ActItems in actparentItems.Activities.Where(x => x.targetDivision != null))
+                                            foreach (var ActItems in actparentItems.Activities.Where(x => x.ActivityTargetDivisions != null))
                                             {
                                                 ActivityLst lst = new ActivityLst();
                                                 lst.ActivityDescription = ActItems.ActivityDescription;
