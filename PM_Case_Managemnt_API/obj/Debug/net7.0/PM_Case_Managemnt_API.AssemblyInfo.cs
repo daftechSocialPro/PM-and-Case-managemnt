@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PM_Case_Managemnt_API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0174f3d3954a8746ce609ab83d9591171ab008c8")]
 [assembly: System.Reflection.AssemblyProductAttribute("PM_Case_Managemnt_API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PM_Case_Managemnt_API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

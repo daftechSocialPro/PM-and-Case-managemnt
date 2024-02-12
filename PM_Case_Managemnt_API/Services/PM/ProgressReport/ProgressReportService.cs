@@ -523,7 +523,7 @@ namespace PM_Case_Managemnt_API.Services.PM.ProgressReport
                                 {
                                     foreach (var progs in stu.StructurePlans)
                                     {
-                                        if (progs.PlanTargetDivision.Count() > 0)
+                                        if (progs.PlanTargetDivision != null)
                                         {
                                             var newMonth = progs.PlanTargetDivision.Where(x => x.Order <= j && x.MonthName == null);
                                             ActivityTargetDivisionReport planProgram = new ActivityTargetDivisionReport();
