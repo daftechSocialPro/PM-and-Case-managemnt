@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PM_Case_Managemnt_API.Data;
 
 #nullable disable
 
-namespace PMCaseManagemntAPI.Migrations
+namespace PMCaseManagemntAPI.Migrations.DB
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240214064921_activityBudgetTypeChange2")]
+    partial class activityBudgetTypeChange2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1138,9 +1141,6 @@ namespace PMCaseManagemntAPI.Migrations
                     b.Property<float>("FieldWork")
                         .HasColumnType("real");
 
-                    b.Property<Guid>("FinanceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<float>("Goal")
                         .HasColumnType("real");
 
@@ -1193,8 +1193,6 @@ namespace PMCaseManagemntAPI.Migrations
                     b.HasIndex("CommiteeId");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("FinanceId");
 
                     b.HasIndex("PlanId");
 
@@ -2236,12 +2234,6 @@ namespace PMCaseManagemntAPI.Migrations
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("PM_Case_Managemnt_API.Models.Common.Employee", "Finance")
-                        .WithMany()
-                        .HasForeignKey("FinanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PM_Case_Managemnt_API.Models.PM.Plan", "Plan")
                         .WithMany("Activities")
                         .HasForeignKey("PlanId");
@@ -2261,8 +2253,6 @@ namespace PMCaseManagemntAPI.Migrations
                     b.Navigation("Commitee");
 
                     b.Navigation("Employee");
-
-                    b.Navigation("Finance");
 
                     b.Navigation("Plan");
 

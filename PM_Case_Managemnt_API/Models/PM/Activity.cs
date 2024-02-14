@@ -69,8 +69,9 @@ namespace PM_Case_Managemnt_API.Models.PM
         //
         public BudgetType BudgetType { get; set; }
         public string? ProjectFunder { get; set; }
-        public string? Finance { get; set; }
-        public string? CapitalPlannedBudget { get; set; }
+        public Guid? FinanceId { get; set; }
+        public virtual Employee Finance { get; set; } = null!;
+
 
 
         public ICollection<ActivityProgress> ActProgress { get; set; }
@@ -95,7 +96,6 @@ namespace PM_Case_Managemnt_API.Models.PM
 
     public enum BudgetType
     {
-       
         REGULAR,
         CAPITAL,
     }

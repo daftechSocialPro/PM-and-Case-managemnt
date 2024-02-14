@@ -29,7 +29,9 @@ export class AddActivitiesComponent implements OnInit {
   unitMeasurments: SelectList[] = [];
   toast!: toastPayload;
   comitteEmployees : SelectList[]=[];
-
+  FinanceId!: string;
+  employeeList: SelectList[] = [];
+  employee!: SelectList;
 
 
   constructor(
@@ -45,7 +47,7 @@ export class AddActivitiesComponent implements OnInit {
       StartDate: ['', Validators.required],
       EndDate: ['', Validators.required],
       ActivityDescription: ['', Validators.required],
-      PlannedBudget: ['', [Validators.required,Validators.max(this.task?.RemainingBudget!)]],
+      PlannedBudget: [0, [Validators.max(this.task?.RemainingBudget!)]],
       Weight: ['', [Validators.required,Validators.max(this.task?.RemianingWeight!)]],
       ActivityType: [''],
       OfficeWork: [0, Validators.required],
@@ -59,8 +61,8 @@ export class AddActivitiesComponent implements OnInit {
       AssignedEmployee: [],
       BudgetType: ['', Validators.required],
       ProjectFunder: [''],
-      CapitalPlannedBudget: [''],
-      Finance: [''],
+      
+      // Finance: [''],
 
 
     })
@@ -68,7 +70,7 @@ export class AddActivitiesComponent implements OnInit {
   ngOnInit(): void {
 
     this.user = this.userService.getCurrentUser()
-
+    this.listEmployees()
     this.pmService.getComitteeSelectList().subscribe({
       next: (res) => {
         this.committees = res
@@ -106,17 +108,15 @@ export class AddActivitiesComponent implements OnInit {
 
   }
 
-  selectEmployee(event: SelectList) {
-    this.selectedEmployee.push(event)
-    this.task.TaskMembers = this.task.TaskMembers!.filter(x => x.Id != event.Id)
+  listEmployees() {
 
-  }
-
-  removeSelected(emp: SelectList) {
-
-    this.selectedEmployee = this.selectedEmployee.filter(x => x.Id != emp.Id)
-    this.task.TaskMembers!.push(emp)
-
+    this.orgService.getEmployeesSelectList().subscribe({
+      next: (res) => {
+        this.employeeList = res
+      }, error: (err) => {
+        console.log(err)
+      }
+    })
   }
 
   submit() {
@@ -188,6 +188,20 @@ export class AddActivitiesComponent implements OnInit {
   }
 
   addActivityParent(){
+    if (!this.FinanceId && this.activityForm.value.BudgetType == 'CAPITAL' ){
+      this.toast = {
+        message: "Finance Not selected",
+        title: 'Network error.',
+        type: 'error',
+        ic: {
+          timeOut: 2500,
+          closeButton: true,
+        } as IndividualConfig,
+      };
+      this.commonService.showToast(this.toast);
+
+      return
+    }
     if (this.activityForm.valid) {
       let actvityP: SubActivityDetailDto = {
         SubActivityDesctiption: this.activityForm.value.ActivityDescription,
@@ -205,8 +219,7 @@ export class AddActivitiesComponent implements OnInit {
         CommiteeId: this.activityForm.value.CommiteeId,
         BudgetType:this.activityForm.value.BudgetType,
         ProjectFunder:this.activityForm.value.ProjectFunder,
-        CapitalPlannedBudget:this.activityForm.value.CapitalPlannedBudget,
-        Finance:this.activityForm.value.Finance,
+        FinanceId:this.FinanceId,
         Employees: this.activityForm.value.AssignedEmployee
       }
 
@@ -323,4 +336,10 @@ export class AddActivitiesComponent implements OnInit {
     }
   }
 
+  selectEmployeeF(event: SelectList) {
+
+    this.employee = event;
+    this.FinanceId = event.Id
+
+  }
 }
