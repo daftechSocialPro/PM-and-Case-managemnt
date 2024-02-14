@@ -31,6 +31,10 @@ namespace PM_Case_Managemnt_API.DTOS.PM
         public Guid? CommiteeId { get; set; }
         public Guid? PlanId { get; set; }
         public Guid? TaskId { get; set; }
+        public string BudgetType { get; set; }
+        public string? ProjectFunder { get; set; }
+        public string? Finance { get; set; }
+        public string? CapitalPlannedBudget { get; set; }
         public string[]? Employees { get; set; } 
     }
 }

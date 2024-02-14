@@ -16,8 +16,8 @@ namespace PM_Case_Managemnt_API.Models.Auth
         [Required]
 
         public string UserId { get; set; }
-        [Required]
-        public string CurrentPassword { get; set; }
+        
+        public string? CurrentPassword { get; set; }
 
         [Required]
         public string NewPassword { get; set; }

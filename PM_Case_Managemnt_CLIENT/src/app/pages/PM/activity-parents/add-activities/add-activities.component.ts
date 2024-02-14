@@ -56,7 +56,11 @@ export class AddActivitiesComponent implements OnInit {
       WhomToAssign: [''],
       TeamId: [null],
       CommiteeId: [null],
-      AssignedEmployee: []
+      AssignedEmployee: [],
+      BudgetType: ['', Validators.required],
+      ProjectFunder: [''],
+      CapitalPlannedBudget: [''],
+      Finance: [''],
 
 
     })
@@ -199,6 +203,10 @@ export class AddActivitiesComponent implements OnInit {
         Goal: this.activityForm.value.Goal,
         TeamId: this.activityForm.value.TeamId,
         CommiteeId: this.activityForm.value.CommiteeId,
+        BudgetType:this.activityForm.value.BudgetType,
+        ProjectFunder:this.activityForm.value.ProjectFunder,
+        CapitalPlannedBudget:this.activityForm.value.CapitalPlannedBudget,
+        Finance:this.activityForm.value.Finance,
         Employees: this.activityForm.value.AssignedEmployee
       }
 
@@ -214,7 +222,7 @@ export class AddActivitiesComponent implements OnInit {
 
       let addActivityDto: ActivityDetailDto = {
         ActivityDescription: this.activityForm.value.ActivityDescription,
-        HasActivity: false,
+        HasActivity: true,
         TaskId: this.task.Id!,
         CreatedBy: this.user.UserID,
         ActivityDetails: activityList
@@ -271,5 +279,48 @@ export class AddActivitiesComponent implements OnInit {
     })
   }
 
+  weightChange(weight:string){
+
+    if (this.task){
+      if ( Number(weight)>this.task.RemianingWeight!){
+
+        this.toast = {
+          message: "Weight can not be greater than Remaining weight",
+          title: 'Form Validation.',
+          type: 'error',
+          ic: {
+            timeOut: 2500,
+            closeButton: true,
+          } as IndividualConfig,
+        };
+        this.commonService.showToast(this.toast);
+
+        this.activityForm.controls['Weight'].setValue('')
+      }
+    }
+  }
+
+
+  
+  budgetChange(budget:string){
+
+    if (this.task){
+      if ( Number(budget)>this.task?.RemainingBudget!){
+
+        this.toast = {
+          message: "Budget can not be greater than Remaining Budget",
+          title: 'Form Validation.',
+          type: 'error',
+          ic: {
+            timeOut: 2500,
+            closeButton: true,
+          } as IndividualConfig,
+        };
+        this.commonService.showToast(this.toast);
+
+        this.activityForm.controls['PlannedBudget'].setValue('')
+      }
+    }
+  }
 
 }

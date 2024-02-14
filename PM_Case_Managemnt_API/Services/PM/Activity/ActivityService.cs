@@ -69,6 +69,11 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
                 activity.PlanedBudget = item.PlannedBudget;
                 activity.UnitOfMeasurementId = item.UnitOfMeasurement;
                 activity.Weight = item.Weight;
+                activity.BudgetType = (BudgetType)Enum.Parse(typeof(BudgetType), item.BudgetType);
+                activity.ProjectFunder = item.ProjectFunder;
+                activity.Finance = item.Finance;
+                activity.CapitalPlannedBudget = item.CapitalPlannedBudget;
+
                 if (!string.IsNullOrEmpty(item.StartDate))
                 {
                     string[] startDate = item.StartDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);

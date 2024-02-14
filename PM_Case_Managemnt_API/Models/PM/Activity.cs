@@ -66,6 +66,12 @@ namespace PM_Case_Managemnt_API.Models.PM
         public Guid? ActivityParentId { get; set; }
         public virtual ActivityParent ActivityParent { get; set; } = null!;
 
+        //
+        public BudgetType BudgetType { get; set; }
+        public string? ProjectFunder { get; set; }
+        public string? Finance { get; set; }
+        public string? CapitalPlannedBudget { get; set; }
+
 
         public ICollection<ActivityProgress> ActProgress { get; set; }
         public ICollection<EmployeesAssignedForActivities> AssignedEmploye { get; set; }
@@ -85,5 +91,12 @@ namespace PM_Case_Managemnt_API.Models.PM
         Finalized,
         OnProgress,
         Terminated
+    }
+
+    public enum BudgetType
+    {
+       
+        REGULAR,
+        CAPITAL,
     }
 }

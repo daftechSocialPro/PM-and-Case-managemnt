@@ -100,4 +100,7 @@ export class UserService {
     return this.http.get<SelectList[]>(this.BaseURI+'/ApplicationUser/getAssignedRoles?userId='+userId)
 
   }
+  changePassword(data:any){
+    return this.http.post(this.BaseURI + "/ApplicationUser/ChangePassword",data)
+  }
 }

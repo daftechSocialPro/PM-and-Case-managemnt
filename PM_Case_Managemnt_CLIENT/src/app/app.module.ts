@@ -171,6 +171,7 @@ import { ManageRolesComponent } from './pages/common/user-management/manage-role
 import { PickListModule } from 'primeng/picklist';
 import { UpdateCaseDetailsComponent } from './pages/case/encode-case/update-case/update-case-details/update-case-details.component';
 import { UpdateCaseFilesComponent } from './pages/case/encode-case/update-case/update-case-files/update-case-files.component';
+import { ChangePasswordComponent } from './pages/common/user-management/change-password/change-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -313,6 +314,7 @@ import { UpdateCaseFilesComponent } from './pages/case/encode-case/update-case/u
     ManageRolesComponent,
     UpdateCaseDetailsComponent,
     UpdateCaseFilesComponent,
+    ChangePasswordComponent,
     
   ],
   imports: [
