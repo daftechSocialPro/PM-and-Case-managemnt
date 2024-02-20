@@ -126,13 +126,14 @@ namespace PM_Case_Managemnt_API.Helpers
 
         }
 
-        public async Task<bool> SendSmsForCase(string message, Guid caseId, Guid caseHistoryId, string userId, MessageFrom messageFrom)
+        public async Task<bool> SendSmsForCase(string message, Guid caseId, Guid caseHistoryId, string userId, MessageFrom messageFrom, string? smsTemplateContent)
         {
             try
             {
                 Case currentCase = await _dbContext.Cases.Include(x => x.Applicant).Include(x => x.Employee).FirstOrDefaultAsync(x => x.Id == caseId);
                 CaseHistory currentHistory = await _dbContext.CaseHistories.Include(x => x.ToStructure).Include(x => x.Case).FirstOrDefaultAsync(x => x.Id == caseHistoryId);
                 bool result = false;
+                var messageWithTemplate = "";
                 if (currentCase != null)
                 {
                     if (currentHistory != null)
@@ -147,10 +148,11 @@ namespace PM_Case_Managemnt_API.Helpers
                                 phoneNumber = "0" + phone[1] + phone[2];
                             }
                         }
-                        result = await UnlimittedMessageSender(phoneNumber, message, userId);
+                        messageWithTemplate = $"{currentCase.CaseNumber} {currentCase.Applicant.ApplicantName} {smsTemplateContent} {message}";
+                        result = await UnlimittedMessageSender(phoneNumber, messageWithTemplate, userId);
                         currentHistory.IsSmsSent = result;
                         if (currentCase.PhoneNumber2 != null && !result)
-                            result = await MessageSender(currentCase.PhoneNumber2.ToString(), message, userId);
+                            result = await MessageSender(currentCase.PhoneNumber2.ToString(), messageWithTemplate, userId);
                     }
                 }
 
@@ -159,7 +161,7 @@ namespace PM_Case_Managemnt_API.Helpers
                 {
                     CaseId = caseId,
                     CreatedBy = Guid.Parse(userId),
-                    MessageBody = message,
+                    MessageBody = messageWithTemplate,
                     MessageFrom = messageFrom,
                     Messagestatus = result,
                 };

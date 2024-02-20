@@ -487,7 +487,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                 string name = currentCase.Applicant != null ? currentCase.Applicant.ApplicantName : currentCase.Employee.FullName;
                 string message = name + "\nበጉዳይ ቁጥር፡" + currentCase.CaseNumber + "\nየተመዘገበ ጉዳዮ በ፡" + currentHist.ToStructure.StructureName + " ተጠናቋል\nየቢሮ ቁጥር: - ";
 
-                await _smshelper.SendSmsForCase(message, currentHist.CaseId, currentHist.Id, UserId.ToString(), MessageFrom.Complete);
+                await _smshelper.SendSmsForCase(message, currentHist.CaseId, currentHist.Id, UserId.ToString(), MessageFrom.Complete,null);
 
 
 
@@ -769,7 +769,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                 string toStructureName = _db.OrganizationalStructures.Find(newHistory.ToStructureId).StructureName;
 
                 string message = name + "\nበጉዳይ ቁጥር፡" + currentCase.CaseNumber + "\nየተመዘገበ ጉዳዮ ለ " + toStructureName + " ተላልፏል\nየቢሮ ቁጥር:";
-                await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Transfer);
+                await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Transfer,null);
 
                 return "Successfully Transfred";
 
@@ -808,7 +808,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
 
 
 
-                        await _smshelper.SendSmsForCase(message.message, affairId, currcaseHist.Id, empId, MessageFrom.Custom_text);
+                        await _smshelper.SendSmsForCase(message.message, affairId, currcaseHist.Id, empId, MessageFrom.Custom_text, message.SmsTemplateContent);
 
 
                     }
@@ -971,6 +971,8 @@ namespace PM_Case_Managemnt_API.Controllers.Case
             public string message { get; set; }
             public string affairId { get; set; }
             public string employeeId { get; set; }
+
+            public string? SmsTemplateContent { get; set; } 
 
         }
     }
