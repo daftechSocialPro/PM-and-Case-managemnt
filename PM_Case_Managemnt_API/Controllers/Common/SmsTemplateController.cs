@@ -59,7 +59,7 @@ namespace PM_Case_Managemnt_API.Controllers.Common
         {
             if (ModelState.IsValid)
             {
-                return Ok(smsTemplateService.UpdateSmsTemplate(template));
+                return Ok(await smsTemplateService.UpdateSmsTemplate(template));
             }
             else
             {

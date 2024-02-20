@@ -13,4 +13,5 @@ export interface SmsTemplateGetDto{
     CreatedBy:string
     Remark:string
     CreatedAt:string
+    
 }

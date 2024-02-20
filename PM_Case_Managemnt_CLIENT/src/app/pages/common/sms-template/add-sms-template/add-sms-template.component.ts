@@ -19,6 +19,7 @@ export class AddSmsTemplateComponent implements OnInit {
   toast !: toastPayload;
   templateForm!: FormGroup
   user!: UserView
+  
 constructor(
   private formBuilder: FormBuilder, 
   private orgService: OrganizationService, 
@@ -36,54 +37,64 @@ ngOnInit(): void {
   });
 
   if(this.template){
-    this.getSingleTemplate()
+    this.templateForm.controls["Title"].setValue(this.template.Title)
+    this.templateForm.controls["Description"].setValue(this.template.Description)
+    this.templateForm.controls["Remark"].setValue(this.template.Remark)
   }
 }
 
 
-getSingleTemplate(){
-  this.orgService.getSmsTemplateById(this.template.Id).subscribe({
-    next : (res) => {
-      this.templateForm.controls["Title"]
-    }
-  })
-}
+
 
 submit() {
 
   if (this.templateForm.valid) {
 
-    const template : SmsTemplatePostDto ={
-      Title : this.templateForm.value.Title,
-      Description : this.templateForm.value.Description,
-      Remark : this.templateForm.value.Remark,
-      CreatedBy : this.user.UserID
-    }
-    this.orgService.createSmsTemplate(template).subscribe({
-
-      next: (res) => {
-
-        if (res.success) {
-
-          this.toast = {
-            message: res.message,
-            title: 'Successfully Created.',
-            type: 'success',
-            ic: {
-              timeOut: 2500,
-              closeButton: true,
-            } as IndividualConfig,
-          };
+    if(this.template){
+      const template : SmsTemplateGetDto ={
+        Title : this.templateForm.value.Title,
+        Description : this.templateForm.value.Description,
+        Remark : this.templateForm.value.Remark,
+        CreatedBy : this.template.CreatedBy,
+        CreatedAt : this.template.CreatedAt,
+        Id : this.template.Id
+      }
+      this.orgService.updateSmsTemplate(template).subscribe({
+        next: (res) => {
   
-          this.commonService.showToast(this.toast);
-          this.closeModal();
-          this.templateForm.reset()
-
-        }
-        else{
+          if (res.Success) {
+            this.toast = {
+              message: res.Message,
+              title: 'Successfully Updated.',
+              type: 'success',
+              ic: {
+                timeOut: 2500,
+                closeButton: true,
+              } as IndividualConfig,
+            };
+    
+            this.commonService.showToast(this.toast);
+            this.closeModal();
+            this.templateForm.reset()
+  
+          }
+          else{
+            this.toast = {
+              message: res.Message,
+              title: 'Something went Wrong',
+              type: 'error',
+              ic: {
+                timeOut: 2500,
+                closeButton: true,
+              } as IndividualConfig,
+            };
+            this.commonService.showToast(this.toast);
+          }
+  
+        }, error: (err) => {
           this.toast = {
-            message: res.message,
-            title: 'Something went Wrong',
+            message: err,
+            title: 'Network error.',
             type: 'error',
             ic: {
               timeOut: 2500,
@@ -91,24 +102,74 @@ submit() {
             } as IndividualConfig,
           };
           this.commonService.showToast(this.toast);
+  
+  
         }
-
-      }, error: (err) => {
-        this.toast = {
-          message: err,
-          title: 'Network error.',
-          type: 'error',
-          ic: {
-            timeOut: 2500,
-            closeButton: true,
-          } as IndividualConfig,
-        };
-        this.commonService.showToast(this.toast);
-
-
       }
+      );
+
     }
-    );
+    else{
+
+      const template : SmsTemplatePostDto ={
+        Title : this.templateForm.value.Title,
+        Description : this.templateForm.value.Description,
+        Remark : this.templateForm.value.Remark,
+        CreatedBy : this.user.UserID
+      }
+      this.orgService.createSmsTemplate(template).subscribe({
+  
+        next: (res) => {
+  
+          if (res.Success) {
+            console.log("result", res)
+            this.toast = {
+              message: res.Message,
+              title: 'Successfully Created.',
+              type: 'success',
+              ic: {
+                timeOut: 2500,
+                closeButton: true,
+              } as IndividualConfig,
+            };
+    
+            this.commonService.showToast(this.toast);
+            this.closeModal();
+            this.templateForm.reset()
+  
+          }
+          else{
+            this.toast = {
+              message: res.Message,
+              title: 'Something went Wrong',
+              type: 'error',
+              ic: {
+                timeOut: 2500,
+                closeButton: true,
+              } as IndividualConfig,
+            };
+            this.commonService.showToast(this.toast);
+          }
+  
+        }, error: (err) => {
+          console.log("Error", err)
+          this.toast = {
+            message: err,
+            title: 'Network error.',
+            type: 'error',
+            ic: {
+              timeOut: 2500,
+              closeButton: true,
+            } as IndividualConfig,
+          };
+          this.commonService.showToast(this.toast);
+  
+  
+        }
+      }
+      );
+    }
+    
   }
   else{
     this.toast = {

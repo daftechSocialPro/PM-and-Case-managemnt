@@ -26,7 +26,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Content</th>
-                                <th scope="col">Status</th>
+                                <!-- <th scope="col">Status</th> -->
                                 <th scope="col">Remark</th>
                                 <th scope="col">Action</th>
 
@@ -37,16 +37,16 @@
                             <tr *ngFor="let template of smsTemplates ; let i= index">
 
                                 <th scope="row">{{i+1}}</th>
-                                <td>{{template.Name}}</td>
-                                <td>{{template.string}}</td>
-                                <td>{{template.RowStatus=="0"?"Active":"InActive"}}</td>
+                                <td>{{template.Title}}</td>
+                                <td>{{template.Description}}</td>
+                                <!-- <td>{{template.RowStatus=="0"?"Active":"InActive"}}</td> -->
                                 <td>{{template.Remark}}</td>
                                 <td>
                                 <a (click)="updateSmsTemplate(template)" 
                                     class="btn btn-outline-warning"><i class=" bi bi-pen"></i> 
                                         Update</a> |
-                                <a (click)="deleteSmsTemplate(template)" 
-                                    class="btn btn-outline-warning"><i class=" bi bi-trash"></i> 
+                                <a (click)="deleteSmsTemplate(template.Id)" 
+                                    class="btn btn-outline-danger"><i class=" bi bi-trash"></i> 
                                         Delete</a> 
 
                                 </td>

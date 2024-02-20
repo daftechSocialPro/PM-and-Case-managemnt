@@ -9,16 +9,16 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
 {
     public class SmsTemplateService : ISmsTemplateService
     {
-        private readonly DBContext dBContext;
+        private readonly DBContext _dBContext;
 
         public SmsTemplateService(DBContext dBContext)
         {
-            this.dBContext = dBContext;
+            _dBContext = dBContext;
         }
 
         public async Task<List<SmsTemplateGetDto>> GetSmsTemplates()
         {
-            var templates = await dBContext.SmsTemplates.Select(x => new SmsTemplateGetDto
+            var templates = await _dBContext.SmsTemplates.Select(x => new SmsTemplateGetDto
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -34,7 +34,7 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
 
         public async Task<SmsTemplateGetDto> GetSmsTemplatebyId(Guid id)
         {
-            var template = await dBContext.SmsTemplates.Where(x => x.Id == id).Select(x => new SmsTemplateGetDto
+            var template = await _dBContext.SmsTemplates.Where(x => x.Id == id).Select(x => new SmsTemplateGetDto
             {
                 Id = x.Id,
                 Title = x.Title,
@@ -50,7 +50,7 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
 
         public async Task<List<SelectListDto>> GetSmsTemplateSelectList()
         {
-            var templates = await dBContext.SmsTemplates.Where(x => x.RowStatus == RowStatus.Active).Select(x => new SelectListDto
+            var templates = await _dBContext.SmsTemplates.Where(x => x.RowStatus == RowStatus.Active).Select(x => new SelectListDto
             {
                 Id = x.Id,
                 Name = x.Title,
@@ -76,8 +76,8 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
                     CreatedAt = DateTime.Now,
                 };
 
-                await dBContext.SmsTemplates.AddAsync(template);
-                await dBContext.SaveChangesAsync();
+                await _dBContext.SmsTemplates.AddAsync(template);
+                await _dBContext.SaveChangesAsync();
 
                 return new ResponseMessage
                 {
@@ -101,7 +101,7 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
         {
             try
             {
-                var template = await dBContext.SmsTemplates.FindAsync(smsTemplate.Id);
+                var template = await _dBContext.SmsTemplates.FirstOrDefaultAsync(x => x.Id == smsTemplate.Id);
 
                 if(template is null)
                 {
@@ -117,7 +117,8 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
                     template.Description= smsTemplate.Description;
                     template.Remark= smsTemplate.Remark;
 
-                    await dBContext.SaveChangesAsync();
+                    //_dBContext.Entry(template).State = EntityState.Modified;
+                    await _dBContext.SaveChangesAsync();
 
                     return new ResponseMessage
                     {
@@ -138,7 +139,7 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
 
         public async Task<ResponseMessage> DeleteSmsTemplate(Guid id)
         {
-            var template = await dBContext.SmsTemplates.FindAsync(id);
+            var template = await _dBContext.SmsTemplates.FindAsync(id);
             if (template is null)
             {
                 return new ResponseMessage
@@ -149,8 +150,8 @@ namespace PM_Case_Managemnt_API.Services.Common.SmsTemplate
             }
             else
             {
-                dBContext.SmsTemplates.Remove(template);
-                await dBContext.SaveChangesAsync();
+                _dBContext.SmsTemplates.Remove(template);
+                await _dBContext.SaveChangesAsync();
                 return new ResponseMessage
                 {
                     Success = true,
