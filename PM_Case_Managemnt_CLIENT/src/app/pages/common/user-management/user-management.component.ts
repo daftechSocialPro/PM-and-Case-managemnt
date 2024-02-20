@@ -5,6 +5,7 @@ import { UserService } from '../../pages-login/user.service';
 import { Employee } from '../organization/employee/employee';
 import { AddUsersComponent } from './add-users/add-users.component';
 import { ManageRolesComponent } from './manage-roles/manage-roles.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @Component({
   selector: 'app-user-management',
@@ -39,6 +40,12 @@ getUsers(){
 
   manageRoles(userId: string){
     let modalRef= this.modalService.open(ManageRolesComponent,{size:'lg',backdrop:'static'})
+    modalRef.componentInstance.userId = userId
+    modalRef.result.then(()=>{this.getUsers()})
+  }
+
+  changePassword(userId: string){
+    let modalRef= this.modalService.open(ChangePasswordComponent,{size:'lg',backdrop:'static'})
     modalRef.componentInstance.userId = userId
     modalRef.result.then(()=>{this.getUsers()})
   }

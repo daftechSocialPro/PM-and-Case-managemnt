@@ -18,7 +18,7 @@ namespace PM_Case_Managemnt_API.DTOS.PM
         public string SubActivityDesctiption { get; set; } = null!;
         public string StartDate { get; set; } = null!;
         public string EndDate { get; set; } = null!;
-        public float PlannedBudget { get; set; }
+        public float? PlannedBudget { get; set; }
         public float Weight { get; set; }
         public int ActivityType { get; set; }
         public float OfficeWork { get; set; }
@@ -31,6 +31,9 @@ namespace PM_Case_Managemnt_API.DTOS.PM
         public Guid? CommiteeId { get; set; }
         public Guid? PlanId { get; set; }
         public Guid? TaskId { get; set; }
+        public string BudgetType { get; set; }
+        public string? ProjectFunder { get; set; }
+        public Guid? FinanceId { get; set; }
         public string[]? Employees { get; set; } 
     }
 }

@@ -183,7 +183,7 @@
                                             <td class="text-left">{{v+1}}.{{k+1}}.{{j+1}}.{{m+1}}</td>
                                             <td>{{subActrow.SubActivityDescription}}</td>
 
-                                            <ng-container *ngIf="subActrow?.subActivityTargetDivision == null">
+                                            <ng-container *ngIf="subActrow?.subActivityTargetDivision !== null">
                                                 <td>{{subActrow.Weight}}</td>
                                                 <td>{{subActrow.UnitOfMeasurement }}</td>
                                                 <td>{{subActrow.Target }}</td>

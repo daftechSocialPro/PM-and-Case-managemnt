@@ -66,9 +66,13 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
                 activity.FieldWork = item.FieldWork;
                 activity.Goal = item.Goal;
                 activity.OfficeWork = item.OfficeWork;
-                activity.PlanedBudget = item.PlannedBudget;
+                activity.PlanedBudget = (float)item.PlannedBudget;
                 activity.UnitOfMeasurementId = item.UnitOfMeasurement;
                 activity.Weight = item.Weight;
+                activity.BudgetType = (BudgetType)Enum.Parse(typeof(BudgetType), item.BudgetType);
+                activity.ProjectFunder = item.ProjectFunder;
+                activity.FinanceId = item.FinanceId;
+                
                 if (!string.IsNullOrEmpty(item.StartDate))
                 {
                     string[] startDate = item.StartDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
@@ -161,7 +165,7 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
             activity.FieldWork = activityDetail.FieldWork;
             activity.Goal = activityDetail.Goal;
             activity.OfficeWork = activityDetail.OfficeWork;
-            activity.PlanedBudget = activityDetail.PlannedBudget;
+            activity.PlanedBudget = (float)activityDetail.PlannedBudget;
             activity.UnitOfMeasurementId = activityDetail.UnitOfMeasurement;
             activity.Weight = activityDetail.Weight;
             if(activityDetail.PlanId != null)

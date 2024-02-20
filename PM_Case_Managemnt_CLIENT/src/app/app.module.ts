@@ -173,6 +173,7 @@ import { UpdateCaseDetailsComponent } from './pages/case/encode-case/update-case
 import { UpdateCaseFilesComponent } from './pages/case/encode-case/update-case/update-case-files/update-case-files.component';
 import { SmsTemplateComponent } from './pages/common/sms-template/sms-template.component';
 import { AddSmsTemplateComponent } from './pages/common/sms-template/add-sms-template/add-sms-template.component';
+import { ChangePasswordComponent } from './pages/common/user-management/change-password/change-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -317,6 +318,7 @@ import { AddSmsTemplateComponent } from './pages/common/sms-template/add-sms-tem
     UpdateCaseFilesComponent,
     SmsTemplateComponent,
     AddSmsTemplateComponent,
+    ChangePasswordComponent,
     
   ],
   imports: [

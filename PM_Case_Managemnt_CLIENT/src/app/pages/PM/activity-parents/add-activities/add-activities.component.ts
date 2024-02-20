@@ -29,7 +29,9 @@ export class AddActivitiesComponent implements OnInit {
   unitMeasurments: SelectList[] = [];
   toast!: toastPayload;
   comitteEmployees : SelectList[]=[];
-
+  FinanceId!: string;
+  employeeList: SelectList[] = [];
+  employee!: SelectList;
 
 
   constructor(
@@ -45,7 +47,7 @@ export class AddActivitiesComponent implements OnInit {
       StartDate: ['', Validators.required],
       EndDate: ['', Validators.required],
       ActivityDescription: ['', Validators.required],
-      PlannedBudget: ['', [Validators.required,Validators.max(this.task?.RemainingBudget!)]],
+      PlannedBudget: [0, [Validators.max(this.task?.RemainingBudget!)]],
       Weight: ['', [Validators.required,Validators.max(this.task?.RemianingWeight!)]],
       ActivityType: [''],
       OfficeWork: [0, Validators.required],
@@ -56,7 +58,11 @@ export class AddActivitiesComponent implements OnInit {
       WhomToAssign: [''],
       TeamId: [null],
       CommiteeId: [null],
-      AssignedEmployee: []
+      AssignedEmployee: [],
+      BudgetType: ['', Validators.required],
+      ProjectFunder: [''],
+      
+      // Finance: [''],
 
 
     })
@@ -64,7 +70,7 @@ export class AddActivitiesComponent implements OnInit {
   ngOnInit(): void {
 
     this.user = this.userService.getCurrentUser()
-
+    this.listEmployees()
     this.pmService.getComitteeSelectList().subscribe({
       next: (res) => {
         this.committees = res
@@ -102,17 +108,15 @@ export class AddActivitiesComponent implements OnInit {
 
   }
 
-  selectEmployee(event: SelectList) {
-    this.selectedEmployee.push(event)
-    this.task.TaskMembers = this.task.TaskMembers!.filter(x => x.Id != event.Id)
+  listEmployees() {
 
-  }
-
-  removeSelected(emp: SelectList) {
-
-    this.selectedEmployee = this.selectedEmployee.filter(x => x.Id != emp.Id)
-    this.task.TaskMembers!.push(emp)
-
+    this.orgService.getEmployeesSelectList().subscribe({
+      next: (res) => {
+        this.employeeList = res
+      }, error: (err) => {
+        console.log(err)
+      }
+    })
   }
 
   submit() {
@@ -184,6 +188,20 @@ export class AddActivitiesComponent implements OnInit {
   }
 
   addActivityParent(){
+    if (!this.FinanceId && this.activityForm.value.BudgetType == 'CAPITAL' ){
+      this.toast = {
+        message: "Finance Not selected",
+        title: 'Network error.',
+        type: 'error',
+        ic: {
+          timeOut: 2500,
+          closeButton: true,
+        } as IndividualConfig,
+      };
+      this.commonService.showToast(this.toast);
+
+      return
+    }
     if (this.activityForm.valid) {
       let actvityP: SubActivityDetailDto = {
         SubActivityDesctiption: this.activityForm.value.ActivityDescription,
@@ -199,6 +217,9 @@ export class AddActivitiesComponent implements OnInit {
         Goal: this.activityForm.value.Goal,
         TeamId: this.activityForm.value.TeamId,
         CommiteeId: this.activityForm.value.CommiteeId,
+        BudgetType:this.activityForm.value.BudgetType,
+        ProjectFunder:this.activityForm.value.ProjectFunder,
+        FinanceId:this.FinanceId,
         Employees: this.activityForm.value.AssignedEmployee
       }
 
@@ -214,7 +235,7 @@ export class AddActivitiesComponent implements OnInit {
 
       let addActivityDto: ActivityDetailDto = {
         ActivityDescription: this.activityForm.value.ActivityDescription,
-        HasActivity: false,
+        HasActivity: true,
         TaskId: this.task.Id!,
         CreatedBy: this.user.UserID,
         ActivityDetails: activityList
@@ -271,5 +292,54 @@ export class AddActivitiesComponent implements OnInit {
     })
   }
 
+  weightChange(weight:string){
 
+    if (this.task){
+      if ( Number(weight)>this.task.RemianingWeight!){
+
+        this.toast = {
+          message: "Weight can not be greater than Remaining weight",
+          title: 'Form Validation.',
+          type: 'error',
+          ic: {
+            timeOut: 2500,
+            closeButton: true,
+          } as IndividualConfig,
+        };
+        this.commonService.showToast(this.toast);
+
+        this.activityForm.controls['Weight'].setValue('')
+      }
+    }
+  }
+
+
+  
+  budgetChange(budget:string){
+
+    if (this.task){
+      if ( Number(budget)>this.task?.RemainingBudget!){
+
+        this.toast = {
+          message: "Budget can not be greater than Remaining Budget",
+          title: 'Form Validation.',
+          type: 'error',
+          ic: {
+            timeOut: 2500,
+            closeButton: true,
+          } as IndividualConfig,
+        };
+        this.commonService.showToast(this.toast);
+
+        this.activityForm.controls['PlannedBudget'].setValue('')
+      }
+    }
+  }
+
+  selectEmployeeF(event: SelectList) {
+
+    this.employee = event;
+    this.FinanceId = event.Id
+
+  }
 }

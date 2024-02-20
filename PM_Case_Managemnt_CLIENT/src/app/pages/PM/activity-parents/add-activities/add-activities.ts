@@ -25,6 +25,10 @@ export interface SubActivityDetailDto {
     CommiteeId:string,
     PlanId?:string,
     TaskId?:string,
+    FinanceId?:string,
+    CapitalPlannedBudget?:string,
+    ProjectFunder?:string,
+    BudgetType?:string,
     Employees :string[]
 }
 

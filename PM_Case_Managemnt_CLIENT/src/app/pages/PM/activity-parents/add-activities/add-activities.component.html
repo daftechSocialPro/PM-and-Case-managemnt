@@ -39,8 +39,38 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="BudgetType" #budget
+                                            formControlName="BudgetType">
+
+                                            <option>--- Select Budget Type --- </option>
+                                            <option value="CAPITAL"> Capital</option>
+                                            <option value="REGULAR"> Regular</option>
+                                            
+                                        </select>
+                                        <label for="BudgetType">Budget Type </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" *ngIf="budget.value=='CAPITAL'">
                                     <div class="form-floating">
-                                        <input type="number" class="form-control" id="PlannedBudget" placeholder="EndDate"
+                                        <input type="text" class="form-control" id="ProjectFunder" placeholder="Project Funder"
+                                            formControlName="ProjectFunder">
+                                        <label for="ProjectFunder">Project Funder</label>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <app-autocomplete *ngIf="employeeList.length > 0 && budget.value=='CAPITAL'" [data]="employeeList"
+                                            placeHolder="Finance" (selectedItem)="selectEmployeeF($event)">
+                                        </app-autocomplete>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" *ngIf="budget.value=='CAPITAL'">
+                                    <div class="form-floating">
+                                        <input type="number" class="form-control" id="PlannedBudget" placeholder="EndDate" #budget 
                                             formControlName="PlannedBudget">
                                         <label for="PlannedBudget">Planned Budget</label>
                                         <small style="color: red;">Remaining Budget : {{task?.RemainingBudget}}</small>
@@ -48,7 +78,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="number" class="form-control" id="Weight" placeholder="Weight"
+                                        <input type="number" class="form-control" id="Weight" placeholder="Weight" #weight (change)="weightChange(weight.value)"
                                             formControlName="Weight">
                                         <label for="Weight">Weight</label>
                                         <small style="color: red;">Remaining Weight : {{task?.RemianingWeight}}</small>
@@ -94,6 +124,8 @@
                                         <label for="UnitofMeasurment">Unit of Measurment </label>
                                     </div>
                                 </div>
+                                
+                                
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
