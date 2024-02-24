@@ -47,6 +47,11 @@ export class UpdateCaseComponent implements OnInit {
 
   closeModal() {
     this.activeModal.close();
+    this.router.navigateByUrl('/encodecase', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['encodecase']);
+  });
+    //window.location.reload();
+    
   }
   
 

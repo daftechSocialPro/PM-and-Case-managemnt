@@ -237,7 +237,8 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
 
                 string name = currentCase.Applicant != null ? currentCase.Applicant.ApplicantName : currentCase.Employee.FullName;
                 string message = name + "\nበጉዳይ ቁጥር፡" + currentCase.CaseNumber + "\nየተመዘገበ ጉዳዮ በ፡" + currentHist.ToStructure.StructureName + " ተጠናቋል\nየቢሮ ቁጥር: - ";
-                await _smshelper.SendSmsForCase(message, currentHist.CaseId, currentHist.Id, UserId.ToString(), MessageFrom.Complete);
+
+                await _smshelper.SendSmsForCase(message, currentHist.CaseId, currentHist.Id, UserId.ToString(), MessageFrom.Complete,caseCompleteDto.SmsTemplateContent);
 
                 return 1;
             }
@@ -288,8 +289,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
                 string name = currentCase.Applicant != null ? currentCase.Applicant.ApplicantName : currentCase.Employee.FullName;
                 var message = name + "\nበጉዳይ ቁጥር፡" + currentCase.CaseNumber + "\nየተመዘገበ ጉዳዮ በ፡" + selectedHistory.ToStructure.StructureName + " ወደኋላ ተመልሷል  \nየቢሮ ቁጥር: -";
 
-                await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Revert);
-                return 1;
+                await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Revert, null);
             }
             catch (Exception ex)
             {
@@ -360,9 +360,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
 
                 string message = name + "\nበጉዳይ ቁጥር፡" + currentCase.CaseNumber + "\nየተመዘገበ ጉዳዮ ለ " + toStructure + " ተላልፏል\nየቢሮ ቁጥር:";
 
-                await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Transfer);
-
-                return 1;
+                await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Transfer, null);
             }
             catch (Exception ex)
 
@@ -410,9 +408,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
         {
 
             var history = _dbContext.CaseHistories.Find(smsdetail.CaseHistoryId);
-            await _smshelper.SendSmsForCase(smsdetail.Remark, history.CaseId, history.Id, smsdetail.EmployeeId.ToString(), MessageFrom.Custom_text);
-
-            return 1;
+            await _smshelper.SendSmsForCase(smsdetail.Remark, history.CaseId, history.Id, smsdetail.EmployeeId.ToString(), MessageFrom.Custom_text, smsdetail.SmsTemplateContent);
         }
 
         public async Task<CaseEncodeGetDto> GetCaseDetial(Guid employeeId, Guid historyId)

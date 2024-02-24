@@ -1,11 +1,11 @@
 <main id="main" class="main">
     <div class="pagetitle">
-        <h1>Unit of Measurement</h1>
+        <h1>SMS Template</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
                 <li class="breadcrumb-item">Commmon</li>
-                <li class="breadcrumb-item active">Unit of Measurment</li>
+                <li class="breadcrumb-item active">SMS Template</li>
             </ol>
         </nav>
     </div>
@@ -13,10 +13,10 @@
         <div class="row">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Unit of Measurment</h5>
+                    <h5 class="card-title">SMS Template</h5>
                     <div class="text-end col-lg-12">
-                        <button class="btn btn-primary text-end mb-3" (click)="addUnitOfMeasurment()"> Add Unit
-                            Measurment</button>
+                        <button class="btn btn-primary text-end mb-3" (click)="addSmsTemplate()"> Add SMS Template
+                            </button>
                     </div>
 
                     <table class="table table-hover">
@@ -25,9 +25,8 @@
 
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Local Name</th>
-                                <th scope="col">Measurment Type </th>
-                                <th scope="col">Status</th>
+                                <th scope="col">Content</th>
+                                <!-- <th scope="col">Status</th> -->
                                 <th scope="col">Remark</th>
                                 <th scope="col">Action</th>
 
@@ -35,18 +34,20 @@
                         </thead>
                         <tbody>
 
-                            <tr *ngFor="let measurmentParamter of unitOfMeasurments ; let i= index">
+                            <tr *ngFor="let template of smsTemplates ; let i= index">
 
                                 <th scope="row">{{i+1}}</th>
-                                <td>{{measurmentParamter.Name}}</td>
-                                <td>{{measurmentParamter.LocalName}}</td>
-                                <td>{{measurmentParamter.Type=="0"?"Percent":"Number"}}</td>
-                                <td>{{measurmentParamter.RowStatus=="0"?"Active":"InActive"}}</td>
-                                <td>{{measurmentParamter.Remark}}</td>
+                                <td>{{template.Title}}</td>
+                                <td>{{template.Description}}</td>
+                                <!-- <td>{{template.RowStatus=="0"?"Active":"InActive"}}</td> -->
+                                <td>{{template.Remark}}</td>
                                 <td>
-                                <a (click)="updateUnitOfMeasurment(measurmentParamter)" 
+                                <a (click)="updateSmsTemplate(template)" 
                                     class="btn btn-outline-warning"><i class=" bi bi-pen"></i> 
-                                        Update</a>
+                                        Update</a> |
+                                <a (click)="deleteSmsTemplate(template.Id)" 
+                                    class="btn btn-outline-danger"><i class=" bi bi-trash"></i> 
+                                        Delete</a> 
 
                                 </td>
 

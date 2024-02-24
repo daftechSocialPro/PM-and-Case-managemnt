@@ -10,6 +10,7 @@ import { ChangePasswordModel, Employee } from './employee/employee';
 import { OrganizationBranch } from './org-branch/org-branch';
 import { OrganizationProfile } from './org-profile/org-profile';
 import { OrganizationalStructure } from './org-structure/org-structure';
+import { SmsTemplateGetDto, SmsTemplatePostDto } from '../sms-template/sms-template';
 
 @Injectable({
   providedIn: 'root'
@@ -153,6 +154,26 @@ export class OrganizationService {
   }
 
 
-  
+  //SMS Template
 
+  getSmsTemplate(){
+    return this.http.get<SmsTemplateGetDto[]>(this.BaseURI + "/SmsTemplate/GetSmsTemplate")
+  }
+  getSmsTemplateById(id:string){
+    return this.http.get<SmsTemplateGetDto>(this.BaseURI + "/SmsTemplate/GetSmsTemplateById?id="+id)
+  }
+  getSmsTemplateSelectList(){
+    return this.http.get<SelectList[]>(this.BaseURI + "/SmsTemplate/GetSmsTemplateSelectList")
+  }
+  
+  createSmsTemplate(template:SmsTemplatePostDto){
+    return this.http.post<any>(this.BaseURI + "/SmsTemplate/CreateSmsTemplate", template )
+  }
+
+  updateSmsTemplate(template:SmsTemplateGetDto){
+    return this.http.put<any>(this.BaseURI + "/SmsTemplate/UpdateSmsTemplate", template )
+  }
+  deleteSmsTemplate(id:string){
+    return this.http.delete<any>(this.BaseURI + "/SmsTemplate/DeleteSmsTemplate?id="+id )
+  }
 }

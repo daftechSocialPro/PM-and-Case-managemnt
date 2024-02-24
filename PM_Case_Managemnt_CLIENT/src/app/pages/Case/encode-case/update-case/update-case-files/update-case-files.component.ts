@@ -59,19 +59,6 @@ export class UpdateCaseFilesComponent implements OnInit{
     .configureLogging(signalR.LogLevel.Debug)
     .build();
 
-  this.connection.start()
-    .then((res) => {
-      this.connection.invoke('addDirectorToGroup', this.user.EmployeeId);
-      console.log('Connection started.......!');
-    })
-    .catch((err) => console.log('Error while connecting to the server', err));
-    this.connection = new signalR.HubConnectionBuilder()
-    .withUrl(this.urlHub, {
-      skipNegotiation: true,
-      transport: signalR.HttpTransportType.WebSockets
-    })
-    .configureLogging(signalR.LogLevel.Debug)
-    .build();
 
   this.connection.start()
     .then((res) => {
@@ -255,7 +242,8 @@ export class UpdateCaseFilesComponent implements OnInit{
 
   }
   closeModal() {
-    this.router.navigate(['encodecase']);
     this.activeModal.close();
+    this.router.navigate(['encodecase']);
+    window.location.reload();
   }
 }

@@ -171,6 +171,8 @@ import { ManageRolesComponent } from './pages/common/user-management/manage-role
 import { PickListModule } from 'primeng/picklist';
 import { UpdateCaseDetailsComponent } from './pages/case/encode-case/update-case/update-case-details/update-case-details.component';
 import { UpdateCaseFilesComponent } from './pages/case/encode-case/update-case/update-case-files/update-case-files.component';
+import { SmsTemplateComponent } from './pages/common/sms-template/sms-template.component';
+import { AddSmsTemplateComponent } from './pages/common/sms-template/add-sms-template/add-sms-template.component';
 import { ChangePasswordComponent } from './pages/common/user-management/change-password/change-password.component';
 
 import { NgxEchartsModule } from 'ngx-echarts'; 
@@ -324,6 +326,8 @@ import { AssignEmployeesActivityComponent } from './pages/PM/plans/plan-detail/a
     ManageRolesComponent,
     UpdateCaseDetailsComponent,
     UpdateCaseFilesComponent,
+    SmsTemplateComponent,
+    AddSmsTemplateComponent,
     ChangePasswordComponent,
     AssignTargetToBranchComponent,
     AssignEmployeesActivityComponent,

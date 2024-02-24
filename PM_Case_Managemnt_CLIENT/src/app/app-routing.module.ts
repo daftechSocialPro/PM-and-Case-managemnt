@@ -82,6 +82,7 @@ import { CaseFilesComponent } from './pages/case/encode-case/add-case/case-files
 import { CaseDetailsComponent } from './pages/case/encode-case/add-case/case-details/case-details.component';
 import { UpdateCaseDetailsComponent } from './pages/case/encode-case/update-case/update-case-details/update-case-details.component';
 import { UpdateCaseFilesComponent } from './pages/case/encode-case/update-case/update-case-files/update-case-files.component';
+import { SmsTemplateComponent } from './pages/common/sms-template/sms-template.component';
 
 
 
@@ -97,6 +98,7 @@ const routes: Routes = [
   { path: 'employee', canActivate: [AuthGuard], component: EmployeeComponent ,data:{permittedRoles : ['Super Admin','Employee Manager']}  },
   { path: 'unitmeasurment', canActivate: [AuthGuard], component: UnitMeasurementComponent,data:{permittedRoles : ['Super Admin','Case Admin','PM Admin']} },
   { path: 'archive', canActivate: [AuthGuard], component: ArchiveManagementComponent,data :{permittedRoles:['Super Admin','Case Admin','PM Admin'] }},
+  { path: 'smstemplate', canActivate: [AuthGuard], component: SmsTemplateComponent,data:{permittedRoles : ['Super Admin','Case Admin']} },
 
   { path: 'usermanagement', canActivate: [AuthGuard], component: UserManagementComponent,data:{permittedRoles : ['Super Admin','Employee Manager']} },
   { path: 'program', canActivate:[AuthGuard],component:ProgramsComponent,data:{permittedRoles: ['Super Admin','Director','PM Admin','Planner','Plan Reporting']}},

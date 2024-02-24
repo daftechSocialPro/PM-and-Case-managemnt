@@ -13,6 +13,17 @@
 
 
                         <div class="col-12 mt-2">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="SmsTemplate" formControlName="SmsTemplate" aria-label="SmsTemplate">
+
+                                    <option *ngFor="let tem of smsTemplateSelectList" [value]=(tem.Photo)>{{tem.Name}}</option>
+
+                                </select>
+                                <label for="Type">SMS Template</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-2">
                             <div class="form-floating"><textarea class="form-control" formControlName="Remark"
                                     placeholder="Address" id="Remark" style="height: 120px;"></textarea><label
                                     for="Remark">Message</label>

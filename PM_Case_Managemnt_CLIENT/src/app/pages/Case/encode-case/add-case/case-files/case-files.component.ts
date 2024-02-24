@@ -5,6 +5,10 @@ import { SelectList } from 'src/app/pages/common/common';
 import { CaseService } from '../../../case.service';
 import { IndividualConfig } from 'ngx-toastr';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from 'src/environments/environment';
+import * as signalR from '@microsoft/signalr';
+import { UserService } from 'src/app/pages/pages-login/user.service';
+import { UserView } from 'src/app/pages/pages-login/user';
 
 declare var Dynamsoft: any;
 @Component({
@@ -20,7 +24,10 @@ export class CaseFilesComponent implements OnInit {
   settingsFile: fileSettingSender[] = [];
   toast!: toastPayload;
   case!:any
-  
+  user!: UserView
+  mobileUplodedFiles:any[] = []
+  public connection!: signalR.HubConnection;
+  urlHub : string = environment.assetUrl+"/ws/Encoder"
 
 
   constructor(
@@ -28,16 +35,37 @@ export class CaseFilesComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private router: Router,
     private caseService: CaseService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private userService: UserService
   ){
     this.case = this.router.getCurrentNavigation()?.extras.state?.['response'];
   }
 
   ngOnInit(): void {
-      
+    this.user = this.userService.getCurrentUser()
     console.log('this.caseId: ', this.case);
+    this.connection = new signalR.HubConnectionBuilder()
+    .withUrl(this.urlHub, {
+      skipNegotiation: true,
+      transport: signalR.HttpTransportType.WebSockets
+    })
+    .configureLogging(signalR.LogLevel.Debug)
+    .build();
 
 
+  this.connection.start()
+    .then((res) => {
+      console.log("employeeId",this.user.EmployeeId)
+     this.connection.invoke('addDirectorToGroup', this.user.EmployeeId);
+      console.log('Connection started.......!');
+    })
+    .catch((err) => console.log('Error while connecting to the server', err));
+    if(this.connection){
+      this.connection.on('getUplodedFiles', (result) => {
+        this.mobileUplodedFiles = result
+        console.log("UPLODED FILES",this.mobileUplodedFiles)
+       });
+    }
     
   }
 
@@ -185,6 +213,9 @@ export class CaseFilesComponent implements OnInit {
   }
   closeModal() {
     this.activeModal.close();
+  }
+  viewFile(file: string) {
+    return this.commonService.createImgPath(file)
   }
 }
 

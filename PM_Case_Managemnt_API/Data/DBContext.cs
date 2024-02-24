@@ -84,7 +84,8 @@ namespace PM_Case_Managemnt_API.Data
         public DbSet<QuarterSetting> QuarterSettings { get; set; }
 
 
-
+        //Sms Template
+        public DbSet<SmsTemplate> SmsTemplates { get; set; }
 
 
     }
