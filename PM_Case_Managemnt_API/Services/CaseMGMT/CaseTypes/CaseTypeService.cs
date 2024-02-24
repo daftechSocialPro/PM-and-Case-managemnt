@@ -51,11 +51,51 @@ namespace PM_Case_Managemnt_API.Services.CaseService.CaseTypes
             }
         }
 
+
+
+
+        public async Task UpdateCaseType(CaseTypePostDto caseTypeDto)
+        {
+            try
+            {
+                var caseType = await _dbContext.CaseTypes.FindAsync(caseTypeDto.Id);
+
+                caseType.CaseTypeTitle = caseTypeDto.CaseTypeTitle;
+                caseType.TotlaPayment = caseTypeDto.TotalPayment;
+                caseType.Code = caseTypeDto.Code;
+                caseType.Remark = caseTypeDto.Remark;
+                caseType.Counter = caseTypeDto.Counter;
+                caseType.MeasurementUnit = Enum.Parse<TimeMeasurement>(caseTypeDto.MeasurementUnit);
+
+
+                await _dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public async Task<List<CaseTypeGetDto>> GetAll()
         {
             try
             {
-                List<CaseType> caseTypes = await _dbContext.CaseTypes.Include(p => p.ParentCaseType).Where(x=>x.ParentCaseTypeId==null).ToListAsync();
+                List<CaseType> caseTypes = await _dbContext.CaseTypes.Include(p => p.ParentCaseType).Where(x => x.ParentCaseTypeId == null).ToListAsync();
                 List<CaseTypeGetDto> result = new();
 
                 foreach (CaseType caseType in caseTypes)
@@ -73,14 +113,14 @@ namespace PM_Case_Managemnt_API.Services.CaseService.CaseTypes
                         Counter = caseType.Counter,
 
                         TotalPayment = caseType.TotlaPayment,
-                        Children = _dbContext.CaseTypes.Where(x=>x.ParentCaseTypeId == caseType.Id).Select(y=> new CaseTypeGetDto
+                        Children = _dbContext.CaseTypes.Where(x => x.ParentCaseTypeId == caseType.Id).Select(y => new CaseTypeGetDto
                         {
                             Id = y.Id,
                             CaseTypeTitle = y.CaseTypeTitle,
                             Code = y.Code,
                             CreatedAt = y.CreatedAt.ToString(),
                             CreatedBy = y.CreatedBy,
-                            Counter =y.Counter,
+                            Counter = y.Counter,
                             MeasurementUnit = y.MeasurementUnit.ToString(),
                             Remark = y.Remark,
                             RowStatus = y.RowStatus.ToString(),
@@ -102,7 +142,7 @@ namespace PM_Case_Managemnt_API.Services.CaseService.CaseTypes
         {
             try
             {
-                List<CaseType> caseTypes = await _dbContext.CaseTypes.Include(p => p.ParentCaseType).Where(x => x.CaseForm == Enum.Parse<CaseForm>(caseForm) && x.ParentCaseTypeId==null).ToListAsync();
+                List<CaseType> caseTypes = await _dbContext.CaseTypes.Include(p => p.ParentCaseType).Where(x => x.CaseForm == Enum.Parse<CaseForm>(caseForm) && x.ParentCaseTypeId == null).ToListAsync();
                 List<SelectListDto> result = new();
 
                 foreach (CaseType caseType in caseTypes)
@@ -158,11 +198,28 @@ namespace PM_Case_Managemnt_API.Services.CaseService.CaseTypes
 
             if (!childCases.Any())
                 return 1;
-            else 
-            return (int)childCases.FirstOrDefault().OrderNumber+1;
+            else
+                return (int)childCases.FirstOrDefault().OrderNumber + 1;
 
         }
 
+        public async Task DeleteCaseType(Guid caseTypeId)
+        {
 
+            var caseType = await _dbContext.CaseTypes.FindAsync(caseTypeId);
+
+            var childCases = await _dbContext.CaseTypes.Where(x => x.ParentCaseTypeId == caseTypeId).ToListAsync();
+
+            if (caseType != null)
+            {
+                _dbContext.CaseTypes.RemoveRange(childCases);
+                await _dbContext.SaveChangesAsync();
+
+                _dbContext.CaseTypes.Remove(caseType);
+                await _dbContext.SaveChangesAsync();
+            }
+
+;
+        }
     }
 }

@@ -25,7 +25,7 @@
                               [ngClass]="getUrl()=='/assignedactivities'?'nav-link ':'nav-link collapsed'"
                               routerLink="/assignedactivities"> <i
                                           class="bi bi-circle"></i><span>Assigned Activities
-                                          <span class="badge bg-success">{{this.Activties.length}}</span></span> </a>
+                                          <span class="badge bg-success">{{this.Activties}}</span></span> </a>
                         </li>
                         <li *ngIf="roleMatch(['Super Admin','Director','PM Admin','Planner','Plan Reporting'])"> <a
                               [ngClass]="getUrl()=='/comittee'?'nav-link ':'nav-link collapsed'"

@@ -24,7 +24,8 @@ namespace PM_Case_Managemnt_API.Controllers.Case
             try
             {
                 return Ok(await _caseTypeService.GetAll());
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
@@ -37,17 +38,49 @@ namespace PM_Case_Managemnt_API.Controllers.Case
             {
                 await _caseTypeService.Add(caseType);
                 return NoContent();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        [HttpPost("UpdateCaseType")]
+        public async Task<IActionResult> UpdateCaseType(CaseTypePostDto caseType)
+        {
+            try
+            {
+                await _caseTypeService.UpdateCaseType(caseType);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+
+        [HttpDelete("DeleteCaseType")]
+        public async Task<IActionResult> DeleteCaseType(Guid caseTypeId)
+        {
+            try
+            {
+                await _caseTypeService.DeleteCaseType(caseTypeId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+
         [HttpGet("typeSelectList")]
         public async Task<IActionResult> GetSelectList()
         {
             try
             {
-               
+
                 return Ok(await _caseTypeService.GetAllSelectList());
             }
             catch (Exception ex)
@@ -71,7 +104,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
         }
         [HttpGet("fileSettingsByCaseTypeId")]
 
-        public async Task<IActionResult> GetFileSettingsByCaseTypeId(Guid CaseTypeId )
+        public async Task<IActionResult> GetFileSettingsByCaseTypeId(Guid CaseTypeId)
         {
 
 
@@ -89,12 +122,12 @@ namespace PM_Case_Managemnt_API.Controllers.Case
 
         [HttpGet("GetChildOrder")]
 
-        public async Task<IActionResult> GetChildOrder (Guid caseTypeId)
+        public async Task<IActionResult> GetChildOrder(Guid caseTypeId)
         {
 
             try
             {
-                return Ok( _caseTypeService.GetChildOrder(caseTypeId));
+                return Ok(_caseTypeService.GetChildOrder(caseTypeId));
             }
             catch (Exception ex)
             {

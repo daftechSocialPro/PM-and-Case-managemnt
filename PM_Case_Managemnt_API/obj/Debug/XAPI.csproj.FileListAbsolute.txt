@@ -1,2 +1,0 @@
-C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\PM_Case_Managemnt_API\obj\Debug\XAPI.csproj.AssemblyReference.cache
-C:\Users\Hp\Desktop\kirubel\PM_Case_Management_2\PM_Case_Managemnt_API\obj\Debug\XAPI.csproj.CoreCompileInputs.cache

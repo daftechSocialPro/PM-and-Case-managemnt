@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj": {}
+    "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj": {}
   },
   "projects": {
-    "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj": {
+    "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj",
+        "projectUniqueName": "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj",
         "projectName": "PM_Case_Managemnt_API",
-        "projectPath": "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj",
-        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\PM_Case_Managemnt_API\\obj\\",
+        "projectPath": "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\PM_Case_Managemnt_API\\PM_Case_Managemnt_API.csproj",
+        "packagesPath": "C:\\Users\\Hp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\PM_Case_Managemnt_API\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Hp\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,15 +22,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\XAPI\\XAPI.csproj": {
-                "projectPath": "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\XAPI\\XAPI.csproj"
+              "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\XAPI\\XAPI.csproj": {
+                "projectPath": "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\XAPI\\XAPI.csproj"
               }
             }
           }
@@ -123,15 +118,15 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\XAPI\\XAPI.csproj": {
+    "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\XAPI\\XAPI.csproj": {
       "restore": {
-        "projectUniqueName": "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\XAPI\\XAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\XAPI\\XAPI.csproj",
         "projectName": "XAPI",
-        "projectPath": "D:\\DAFTech Social Projects\\PM-and-Case-managemnt_DireDawa\\XAPI\\XAPI.csproj",
+        "projectPath": "C:\\Users\\Hp\\Desktop\\New folder\\PM-and-Case-managemnt\\XAPI\\XAPI.csproj",
         "frameworks": {
           "net48": {
             "projectReferences": {}

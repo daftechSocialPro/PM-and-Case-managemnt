@@ -4,6 +4,7 @@ import { CommonService } from 'src/app/common/common.service';
 import { PMService } from '../../pm.services';
 import { ActivityView, ViewProgressDto } from '../activityview';
 import { AcceptRejectComponent } from './accept-reject/accept-reject.component';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-progress',
@@ -16,7 +17,9 @@ export class ViewProgressComponent implements OnInit {
   progress!:ViewProgressDto[];
   userType :string[]=["Director","Project Manager","Finance"]
   actionType : string []=["Accept","Reject"]
-  constructor(private activeModal: NgbActiveModal,private modalService : NgbModal,private pmService : PMService,private commonService : CommonService) { }
+  constructor(private activeModal: NgbActiveModal,private modalService : NgbModal,private pmService : PMService,private commonService : CommonService,
+    
+    private route : Router) { }
   ngOnInit(): void { 
     
 
@@ -25,6 +28,12 @@ export class ViewProgressComponent implements OnInit {
     this.getProgress() }
 
 
+    detailCase(caseHistoryId: string) {
+
+     
+      this.route.navigate(['casedetail',{historyId:caseHistoryId}])
+      this.closeModal()
+    }
   getProgress (){
 
     this.pmService.viewProgress(this.activity.Id).subscribe({

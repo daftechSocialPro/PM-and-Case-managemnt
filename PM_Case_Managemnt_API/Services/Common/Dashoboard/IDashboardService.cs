@@ -7,7 +7,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
     {
 
         public  Task<DashboardDto> GetPendingCase(string startat, string endat);
-        public Task<barChartDto> GetMonthlyReport();
+        public Task<barChartDto> GetMonthlyReport(int year);
 
         public Task<PMDashboardDto> GetPMDashboardDto(Guid empID);
 

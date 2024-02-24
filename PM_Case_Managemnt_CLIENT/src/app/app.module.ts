@@ -172,6 +172,16 @@ import { PickListModule } from 'primeng/picklist';
 import { UpdateCaseDetailsComponent } from './pages/case/encode-case/update-case/update-case-details/update-case-details.component';
 import { UpdateCaseFilesComponent } from './pages/case/encode-case/update-case/update-case-files/update-case-files.component';
 import { ChangePasswordComponent } from './pages/common/user-management/change-password/change-password.component';
+
+import { NgxEchartsModule } from 'ngx-echarts'; 
+import { ConfirmationService, MessageService } from 'primeng/api';
+
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { ToastModule } from 'primeng/toast';
+import { AssignTargetToBranchComponent } from './pages/PM/plans/plan-detail/assign-target-to-branch/assign-target-to-branch.component';
+import { AssignEmployeesActivityComponent } from './pages/PM/plans/plan-detail/assign-employees-activity/assign-employees-activity.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -315,6 +325,8 @@ import { ChangePasswordComponent } from './pages/common/user-management/change-p
     UpdateCaseDetailsComponent,
     UpdateCaseFilesComponent,
     ChangePasswordComponent,
+    AssignTargetToBranchComponent,
+    AssignEmployeesActivityComponent,
     
   ],
   imports: [
@@ -346,8 +358,13 @@ import { ChangePasswordComponent } from './pages/common/user-management/change-p
     StepsModule,
     QRCodeModule,
     PickListModule,
+    ConfirmDialogModule,
+    ToastModule,
     
-    
+    NgxEchartsModule.forRoot({
+      
+      echarts: () => import('echarts'), 
+    }),
   
   ],
   providers: [
@@ -356,6 +373,11 @@ import { ChangePasswordComponent } from './pages/common/user-management/change-p
       useClass: AuthHeaderIneterceptor,
       multi: true,
     },
+
+    ConfirmationService,
+    DialogService,
+    MessageService,
+    
   ],
   bootstrap: [AppComponent],
 })

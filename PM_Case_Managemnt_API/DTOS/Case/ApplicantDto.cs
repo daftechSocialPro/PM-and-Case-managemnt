@@ -5,6 +5,7 @@ namespace PM_Case_Managemnt_API.DTOS.CaseDto
 {
     public class ApplicantPostDto
     {
+        public Guid ApplicantId { get; set; }
         public string ApplicantName { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
         public string Email { get; set; }
@@ -14,10 +15,10 @@ namespace PM_Case_Managemnt_API.DTOS.CaseDto
 
     }
 
-    public class ApplicantGetDto: ApplicantPostDto
+    public class ApplicantGetDto : ApplicantPostDto
     {
         public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; } 
+        public DateTime CreatedAt { get; set; }
         public RowStatus RowStatus { get; set; }
 
     }

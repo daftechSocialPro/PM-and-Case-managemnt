@@ -33,6 +33,8 @@ export class AssignedActivitiesComponent implements OnInit {
   getAssignedActivites() {
     this.pmService.getAssignedActivities(this.user.EmployeeId).subscribe({
       next: (res) => {
+
+        console.log("assigned Activities",res)
         this.Activties = res
       }, error: (err) => {
         console.log(err)

@@ -12,6 +12,7 @@ export interface Plan {
     StructureId: String;
     ProjectManagerId: String;
     FinanceId: String;
+    ProjectFunder:string 
 
 }
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CaseService } from '../case.service';
 import { ICaseView } from '../encode-case/Icase';
+import { DetailReportComponent } from '../case-report/case-detail-report/detail-report/detail-report.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-search-cases',
@@ -12,7 +14,10 @@ export class SearchCasesComponent implements OnInit {
 
   searchForm !: FormGroup
   myacaselist!: ICaseView[]
-  constructor(private caseService : CaseService,private formBuilder: FormBuilder){}
+  constructor(
+    private modalService : NgbModal,
+    private caseService : CaseService,
+    private formBuilder: FormBuilder){}
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({
 
@@ -41,4 +46,8 @@ export class SearchCasesComponent implements OnInit {
     this.getSearchCases()
   }
 
+  detail(caseId : string) {
+    let modalRef = this.modalService.open(DetailReportComponent, { size: "xl", backdrop: "static" })
+    modalRef.componentInstance.CaseId = caseId
+  }
 }

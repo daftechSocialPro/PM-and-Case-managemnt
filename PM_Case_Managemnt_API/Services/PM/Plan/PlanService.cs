@@ -18,6 +18,8 @@ namespace PM_Case_Managemnt_API.Services.PM.Plan
         public async Task<int> CreatePlan(PlanDto plan)
         {
 
+            var budgetYear = await _dBContext.BudgetYears.FindAsync(plan.BudgetYearId);
+
             var Plans = new PM_Case_Managemnt_API.Models.PM.Plan
             {
                 Id = Guid.NewGuid(),
@@ -30,11 +32,23 @@ namespace PM_Case_Managemnt_API.Services.PM.Plan
                 ProjectType = plan.ProjectType == 0 ? ProjectType.Capital : ProjectType.Regular,
                 Remark = plan.Remark,
                 StructureId = plan.StructureId,
-                ProjectManagerId = plan.ProjectManagerId,
-                FinanceId = plan.FinanceId,
+                ProjectManagerId = plan.ProjectManagerId,        
+                ProjectFunder = plan.ProjectFunder,
+                PeriodStartAt =budgetYear.FromDate,
+                PeriodEndAt =budgetYear.ToDate,                
                 CreatedAt = DateTime.Now,
 
             };
+
+
+
+
+
+
+            if (plan.FinanceId != Guid.Empty) {
+                Plans.FinanceId = plan.FinanceId;
+            }
+            
             await _dBContext.AddAsync(Plans);
             await _dBContext.SaveChangesAsync();
             return 1;

@@ -89,3 +89,11 @@ C:\Users\Naol\source\repos\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.csproj.Asse
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.csproj.CoreCompileInputs.cache
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.dll
 C:\Users\Naol\source\repos\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.pdb
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\bin\Debug\XAPI.dll
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\bin\Debug\XAPI.pdb
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\bin\Debug\Microsoft.SqlServer.Types.dll
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.csproj.AssemblyReference.cache
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.csproj.CoreCompileInputs.cache
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.csproj.CopyComplete
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.dll
+C:\Users\Hp\Desktop\New folder\PM-and-Case-managemnt\XAPI\obj\Debug\XAPI.pdb

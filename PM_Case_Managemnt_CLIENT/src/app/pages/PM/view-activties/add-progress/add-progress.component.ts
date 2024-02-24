@@ -60,6 +60,8 @@ export class AddProgressComponent implements OnInit {
    
 
   ngOnInit():  void {    
+
+    console.log('addprogress',this.activity)
     this.getLocation()
     this.user = this.userService.getCurrentUser();
   }
@@ -89,8 +91,10 @@ export class AddProgressComponent implements OnInit {
       formData.set('ProgressStatus',this.ProgressStatus);
       formData.set('CreatedBy', this.user.UserID);
       formData.set('EmployeeValueId', this.user.EmployeeId);
+      if(this.position != null){
       formData.set('lat',this.position.lat)
       formData.set('lng',this.position.lng)
+      }
 
    
 

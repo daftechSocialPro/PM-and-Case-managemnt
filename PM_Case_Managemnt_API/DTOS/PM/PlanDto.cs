@@ -18,6 +18,8 @@ namespace PM_Case_Managemnt_API.DTOS.PM
         public Guid ProjectManagerId { get; set; }
         public Guid FinanceId { get; set; }
 
+        public string? ProjectFunder { get; set; }
+
     }
 
     public class PlanViewDto
