@@ -16,7 +16,7 @@
                 <!-- <ngx-document-scanner></ngx-document-scanner> -->
                 <app-scanner (imagesScannedUpdated)="onImagesScannedUpdate($event)"></app-scanner>
                 <label for="inputNumber" class="col-sm-12 col-form-label">{{case.CaseId}}</label>
-                <qrcode [qrdata]="case.CaseId" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+                <qrcode [qrdata]="qrData" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
                 <div *ngIf="mobileUplodedFiles && mobileUplodedFiles.length > 0">
                     <label for="inputNumber" class="col-sm-12 col-form-label">Mobile Uploded Files</label>
                     <table class="table table-bordered">

@@ -30,6 +30,7 @@ export class UpdateCaseFilesComponent implements OnInit{
   Documents: any;
   settingsFile: fileSettingSender[] = [];
 
+  qrData!:string
   user!: UserView;
   mobileUplodedFiles:any[] = []
   public connection!: signalR.HubConnection;
@@ -73,6 +74,8 @@ export class UpdateCaseFilesComponent implements OnInit{
         console.log("UPLODED FILES",this.mobileUplodedFiles)
        });
     }
+
+    this.qrData = `${this.caseId}_${this.user.EmployeeId}_CASE`
   }
   
 

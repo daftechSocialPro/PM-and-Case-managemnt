@@ -424,6 +424,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
             CaseEncodeGetDto result = new CaseEncodeGetDto
             {
                 Id = currentHistry.Id,
+                CaseId = currentHistry.CaseId,
                 CaseTypeName = currentHistry.Case.CaseType.CaseTypeTitle,
                 CaseNumber = currentHistry.Case.CaseNumber,
                 CreatedAt = currentHistry.Case.CreatedAt.ToString(),

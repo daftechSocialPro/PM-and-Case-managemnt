@@ -78,6 +78,7 @@ namespace PM_Case_Managemnt_API.DTOS.CaseDto
     public class CaseEncodeGetDto
     {
         public Guid Id { get; set; }
+        public Guid? CaseId { get; set; }
         public string CaseTypeName { get; set; }
         public string CaseNumber { get; set; }
         public string CreatedAt { get; set; }

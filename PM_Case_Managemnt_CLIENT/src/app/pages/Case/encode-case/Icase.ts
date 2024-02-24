@@ -3,6 +3,7 @@ import { SelectList } from "../../common/common"
 export interface ICaseView{
 
     Id : string,
+    CaseId? : string,
     CaseNumber : string,
     LetterNumber : string,
     LetterSubject : string,

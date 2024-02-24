@@ -80,117 +80,117 @@ namespace PM_Case_Managemnt_API.Controllers.Case
         {
             try
             {
-                var caseId = Request.Form["CaseId"];
-                var Case = await _caseEncodeService.GetSingleCase(Guid.Parse(caseId));
-                //var applicantId = Request.Form["ApplicantId"];
-                //var createdby = Request.Form["CreatedBy"];
-                var user = await _userManager.FindByIdAsync(Case.CreatedBy);
-                var employeeId = "";
-                if (user != null) 
-                {
-                    employeeId = user.EmployeesId.ToString();
-                }
-                
-                if (Request.Form.Files.Any())
-                {
-                    List<CaseAttachment> attachments = new List<CaseAttachment>();
-                    List<FilesInformation> fileInfos = new List<FilesInformation>();
-                    List<CaseFilesGetDto> fileList = new List<CaseFilesGetDto>();
-                    foreach (var file in Request.Form.Files)
+
+                var ids = Request.Form["CaseId"].ToString().Split('_');
+
+
+                    var caseId = ids[0];
+                    var Case = await _caseEncodeService.GetSingleCase(Guid.Parse(caseId));
+                    
+                    
+                    var employeeId = ids[1];
+                    
+
+                    if (Request.Form.Files.Any())
                     {
-
-                        if (file.Name.ToLower() == "attachments")
+                        List<CaseAttachment> attachments = new List<CaseAttachment>();
+                        List<FilesInformation> fileInfos = new List<FilesInformation>();
+                        List<CaseFilesGetDto> fileList = new List<CaseFilesGetDto>();
+                        foreach (var file in Request.Form.Files)
                         {
-                            string folderName = Path.Combine("Assets", "CaseAttachments");
 
-                            var applicant = _applicantService.GetApplicantById(Guid.Parse(Case.ApplicantId));
-                            string applicantName = applicant.Result.ApplicantName; // replace with actual applicant name
-                            string applicantFolder = Path.Combine(folderName, applicantName);
-
-
-
-                            string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), applicantFolder);
-
-                            //Create directory if not exists
-                            if (!Directory.Exists(pathToSave))
-                                Directory.CreateDirectory(pathToSave);
-
-                            if (file.Length > 0)
+                            if (file.Name.ToLower() == "attachments")
                             {
-                                string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                                string fullPath = Path.Combine(pathToSave, fileName);
-                                string dbPath = Path.Combine(applicantFolder, fileName);
+                                string folderName = Path.Combine("Assets", "CaseAttachments");
 
-                                using (var stream = new FileStream(fullPath, FileMode.Create))
+                                var applicant = _applicantService.GetApplicantById(Guid.Parse(Case.ApplicantId));
+                                string applicantName = applicant.Result.ApplicantName;
+                                string applicantFolder = Path.Combine(folderName, applicantName);
+
+                                string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), applicantFolder);
+
+                                //Create directory if not exists
+                                if (!Directory.Exists(pathToSave))
+                                    Directory.CreateDirectory(pathToSave);
+
+                                if (file.Length > 0)
                                 {
-                                    file.CopyTo(stream);
-                                }
-                                CaseAttachment attachment = new()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    CreatedAt = DateTime.Now,
-                                    CreatedBy = Guid.Parse(Case.CreatedBy),
-                                    RowStatus = RowStatus.Active,
-                                    CaseId = Guid.Parse(caseId),
-                                    FilePath = dbPath
-                                };
-                                attachments.Add(attachment);
-                                CaseFilesGetDto uplodedFile = new()
-                                {
-                                    FileName= fileName,
-                                    FilePath = dbPath
-                                };
-                                fileList.Add(uplodedFile);
+                                    string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                                    string fullPath = Path.Combine(pathToSave, fileName);
+                                    string dbPath = Path.Combine(applicantFolder, fileName);
 
-                            }
+                                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                                    {
+                                        file.CopyTo(stream);
+                                    }
+                                    CaseAttachment attachment = new()
+                                    {
+                                        Id = Guid.NewGuid(),
+                                        CreatedAt = DateTime.Now,
+                                        CreatedBy = Guid.Parse(Case.CreatedBy),
+                                        RowStatus = RowStatus.Active,
+                                        CaseId = Guid.Parse(caseId),
+                                        FilePath = dbPath
+                                    };
+                                    attachments.Add(attachment);
+                                    CaseFilesGetDto uplodedFile = new()
+                                    {
+                                        FileName = fileName,
+                                        FilePath = dbPath
+                                    };
+                                    fileList.Add(uplodedFile);
 
-                        }
-                        else if (file.Name.ToLower() == "filesettings")
-                        {
-                            string folderName = Path.Combine("Assets", "FileSettings");
-                            string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-
-                            // Create the directory if not exists
-                            if (!Directory.Exists(pathToSave))
-                                Directory.CreateDirectory(pathToSave);
-
-                            if (file.Length > 0)
-                            {
-                                string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                                string fullPath = Path.Combine(pathToSave, fileName);
-                                string dbPath = Path.Combine(folderName, fileName);
-
-
-                                using (var stream = new FileStream(fullPath, FileMode.Create))
-                                {
-                                    file.CopyTo(stream);
                                 }
 
-                                FilesInformation filesInformation = new()
-                                {
-                                    Id = Guid.NewGuid(),
-                                    CreatedAt = DateTime.Now,
-                                    CreatedBy = Guid.Parse(Case.CreatedBy),
-                                    RowStatus = RowStatus.Active,
-                                    FilePath = dbPath,
-                                    FileSettingId = Guid.Parse(fileName.Split(".")[0]),
-                                    CaseId = Guid.Parse(caseId),
-                                    filetype = file.ContentType
-                                };
-                                fileInfos.Add(filesInformation);
-                                
-
                             }
+                            //else if (file.Name.ToLower() == "filesettings")
+                            //{
+                            //    string folderName = Path.Combine("Assets", "FileSettings");
+                            //    string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                            //    // Create the directory if not exists
+                            //    if (!Directory.Exists(pathToSave))
+                            //        Directory.CreateDirectory(pathToSave);
+
+                            //    if (file.Length > 0)
+                            //    {
+                            //        string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                            //        string fullPath = Path.Combine(pathToSave, fileName);
+                            //        string dbPath = Path.Combine(folderName, fileName);
+
+
+                            //        using (var stream = new FileStream(fullPath, FileMode.Create))
+                            //        {
+                            //            file.CopyTo(stream);
+                            //        }
+
+                            //        FilesInformation filesInformation = new()
+                            //        {
+                            //            Id = Guid.NewGuid(),
+                            //            CreatedAt = DateTime.Now,
+                            //            CreatedBy = Guid.Parse(Case.CreatedBy),
+                            //            RowStatus = RowStatus.Active,
+                            //            FilePath = dbPath,
+                            //            FileSettingId = Guid.Parse(fileName.Split(".")[0]),
+                            //            CaseId = Guid.Parse(caseId),
+                            //            filetype = file.ContentType
+                            //        };
+                            //        fileInfos.Add(filesInformation);
+
+
+                            //    }
+                            //}
+
+
+
                         }
-                       
-                        
+                        await _caseAttachmentService.AddMany(attachments);
+                        //await _filesInformationService.AddMany(fileInfos);
+                        await _encoderHub.Clients.Group(employeeId).getUplodedFiles(fileList, employeeId);
 
                     }
-                    await _caseAttachmentService.AddMany(attachments);
-                    await _filesInformationService.AddMany(fileInfos);
-                    await _encoderHub.Clients.Group(employeeId).getUplodedFiles(fileList, employeeId);
-
-                }
+                
+                
 
                 return NoContent();
             }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PM_Case_Managemnt_API.Data;
 using PM_Case_Managemnt_API.DTOS.CaseDto;
 using PM_Case_Managemnt_API.Models.CaseModel;
 using PM_Case_Managemnt_API.Models.Common;
 using PM_Case_Managemnt_API.Services.CaseMGMT;
+using PM_Case_Managemnt_API.Services.CaseMGMT.Applicants;
 using System.Net.Http.Headers;
 
 namespace PM_Case_Managemnt_API.Controllers.Case
@@ -15,10 +17,12 @@ namespace PM_Case_Managemnt_API.Controllers.Case
     {
         private readonly ICaseProccessingService _caseProcessingService;
         private readonly DBContext _dbContext;
-        public CaseProccessingController(ICaseProccessingService caseProccessingService, DBContext dBContext)
+        private readonly IApplicantService _applicantService;
+        public CaseProccessingController(ICaseProccessingService caseProccessingService, DBContext dBContext, IApplicantService applicantService)
         {
             _caseProcessingService = caseProccessingService;
             _dbContext = dBContext;
+            _applicantService = applicantService;
         }
 
 
@@ -108,8 +112,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                 //public Guid ToStructureId { get; set; }
                 //public string Remark { get; set; }
 
-              
-
+             
                 CaseTransferDto caseTransferDto = new()
                 {
                     CaseHistoryId = Guid.Parse(Request.Form["CaseHistoryId"]),
@@ -120,7 +123,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                     ToEmployeeId = Guid.Parse(Request.Form["ToEmployeeId"]),
                     ToStructureId = Guid.Parse(Request.Form["ToStructureId"])
                 };
-                var history = _dbContext.CaseHistories.Find(caseTransferDto.CaseHistoryId);
+                var history = await _dbContext.CaseHistories.Include(x => x.Case).Where(x => x.Id == caseTransferDto.CaseHistoryId).FirstOrDefaultAsync();
 
                 caseTransferDto.CaseAttachments = new List<CaseAttachment>();
 
@@ -130,7 +133,12 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                     if (file.Name.ToLower() == "attachments")
                     {
                         string folderName = Path.Combine("Assets", "CaseAttachments");
-                        string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+
+                        var applicant = _applicantService.GetApplicantById(history.Case.ApplicantId);
+                        string applicantName = applicant.Result.ApplicantName;
+                        string applicantFolder = Path.Combine(folderName, applicantName);
+
+                        string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), applicantFolder);
 
                         //Create directory if not exists
                         if (!Directory.Exists(pathToSave))
@@ -140,7 +148,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                         {
                             string fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                             string fullPath = Path.Combine(pathToSave, fileName);
-                            string dbPath = Path.Combine(folderName, fileName);
+                            string dbPath = Path.Combine(applicantFolder, fileName);
 
                             using (var stream = new FileStream(fullPath, FileMode.Create))
                             {
@@ -176,6 +184,9 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+
+        
 
         [HttpPost("waiting")]
         public async Task<IActionResult> AddToWaiting(Guid caseHistoryId)

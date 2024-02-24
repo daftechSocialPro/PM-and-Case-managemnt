@@ -10,7 +10,6 @@ import * as signalR from '@microsoft/signalr';
 import { UserService } from 'src/app/pages/pages-login/user.service';
 import { UserView } from 'src/app/pages/pages-login/user';
 
-declare var Dynamsoft: any;
 @Component({
   selector: 'app-case-files',
   templateUrl: './case-files.component.html',
@@ -18,7 +17,7 @@ declare var Dynamsoft: any;
 })
 export class CaseFilesComponent implements OnInit {
 
-  
+  qrData!:string
   fileSettings!: SelectList[];
   Documents: any;
   settingsFile: fileSettingSender[] = [];
@@ -67,6 +66,7 @@ export class CaseFilesComponent implements OnInit {
        });
     }
     
+    this.qrData = `${this.case.CaseId}_${this.user.EmployeeId}_CASE`
   }
 
   submit(){

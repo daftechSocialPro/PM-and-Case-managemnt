@@ -159,6 +159,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT.History
                 .ThenBy(x => x.ReciverType).Select(x => new CaseEncodeGetDto
                 {
                     Id = x.Id,
+                    //CaseId =x.CaseId,
                     CaseTypeName = x.Case.CaseType.CaseTypeTitle,
                     CaseNumber = x.Case.CaseNumber,
                     CreatedAt = x.Case.CreatedAt.ToString(),
