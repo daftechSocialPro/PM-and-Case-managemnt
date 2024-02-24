@@ -52,7 +52,22 @@ namespace PM_Case_Managemnt_API.Controllers.Case
             {
                 var result = await _applicantService.Add(applicantPostDto);
                 return Ok(result);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpPut("applicant")]
+        public async Task<IActionResult> Update(ApplicantPostDto applicantPostDto)
+        {
+            try
+            {
+                var result = await _applicantService.Update(applicantPostDto);
+                return Ok(result);
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
@@ -71,8 +86,8 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                 return StatusCode(500, "Internal Server Error");
             }
 
-        } 
+        }
 
-      
+
     }
 }

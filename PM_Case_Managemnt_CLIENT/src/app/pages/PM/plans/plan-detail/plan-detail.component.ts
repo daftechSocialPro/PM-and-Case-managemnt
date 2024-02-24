@@ -12,6 +12,8 @@ import { ActivityView } from '../../view-activties/activityview';
 import { PlanService } from '../plan.service';
 import { PlanSingleview } from '../plans';
 import { GetStartEndDate } from 'src/app/pages/common/common';
+import { AssignTargetToBranchComponent } from './assign-target-to-branch/assign-target-to-branch.component';
+import { AssignEmployeesActivityComponent } from './assign-employees-activity/assign-employees-activity.component';
 
 @Component({
   selector: 'app-plan-detail',
@@ -31,8 +33,9 @@ export class PlanDetailComponent implements OnInit {
   plan!: PlanSingleview
   planTasks: Map<string, any[]> = new Map<string, any[]>();
   taskActivities: Map<string, any[]> = new Map<string, any[]>();
+  actParentActivities:Map<string, any[]> = new Map<string, any[]>();
   
-
+  
 
   filterBy:number=1
 
@@ -75,9 +78,7 @@ export class PlanDetailComponent implements OnInit {
       next: (res) => {
         console.log("projects", res)
         this.Plans = res
-
         this.ListTask(this.planId);
-
         console.log('this.planTasks: ', this.planTasks);
 
       },
@@ -92,10 +93,14 @@ export class PlanDetailComponent implements OnInit {
       next: (res) => {
         if (res.ActivityViewDtos !== undefined) {
           const result = res.ActivityViewDtos;
+          result.forEach((actParent) => {
+            console.log('actparent',actParent)
+            if (actParent.Id !== undefined) {
+              this.getSingleParentActivities(actParent.Id)
+            }  
+          });
           this.taskActivities.set(taskId, result);
         }
-
-
       }, error: (err) => {
         console.error(err)
       }
@@ -103,8 +108,25 @@ export class PlanDetailComponent implements OnInit {
 
   }
 
-  ListTask(planId: string) {
+  getSingleParentActivities(actparentId: string) {
+    this.taskService.getSingleActivityParent(actparentId).subscribe({
+      next: (res) => {
+        if (res !== undefined) {
+          const result = res;
+          this.actParentActivities.set(actparentId, result);
+        }
+      }, error: (err) => {
+        console.error(err)
+      }
+    })
 
+  }
+
+
+
+
+
+  ListTask(planId: string) {
     this.planService.getSinglePlans(planId).subscribe({
       next: (res) => {
         this.plan = res
@@ -113,9 +135,7 @@ export class PlanDetailComponent implements OnInit {
           if (task.Id !== undefined) {
             this.getSingleTaskActivities(task.Id)
           }
-
         });
-
         this.planTasks.set(planId, result);
         console.log('this.taskActivities: ', this.taskActivities);
 
@@ -154,6 +174,13 @@ export class PlanDetailComponent implements OnInit {
   AssignTarget(actview:ActivityView ) {
     let modalRef = this.modalService.open(ActivityTargetComponent, { size: 'xl', backdrop: 'static' })
     modalRef.componentInstance.activity = actview
+
+  }
+  AssignTargetToBranch(actview:ActivityView){
+
+    let modalRef = this.modalService.open(AssignTargetToBranchComponent,{size:'xl',backdrop:'static'})
+    modalRef.componentInstance.activity=actview
+
   }
 
   
@@ -190,4 +217,17 @@ TaskDetail(task : TaskView ){
     this.router.navigate(['activityparent',{parentId:taskId,requestFrom:'ACTIVITY'}])
   }
 }
+
+AssignEmployee (act: ActivityView){
+
+
+  let modalRef = this.modalService.open(AssignEmployeesActivityComponent,{size:'lg',backdrop:'static'})
+  modalRef.componentInstance.activity = act 
+  modalRef.result.then(()=>{
+    this.getPlans()
+  })
+
+
+}
+
 }

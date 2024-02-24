@@ -101,6 +101,7 @@ export class CaseDetailsComponent {
     this.caseService.getFileSettignsByCaseTypeId(casetTypeId).subscribe({
       next: (res) => {
         this.fileSettings = res;
+        console.log(res)
       },
       error: (err) => {
         console.error(err);

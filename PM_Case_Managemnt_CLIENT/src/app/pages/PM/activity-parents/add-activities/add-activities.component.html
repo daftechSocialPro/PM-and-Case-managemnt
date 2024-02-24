@@ -38,37 +38,10 @@
                                         <label for="EndDate">End Date</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select" id="BudgetType" #budget
-                                            formControlName="BudgetType">
+                                                             
+                                                        
 
-                                            <option>--- Select Budget Type --- </option>
-                                            <option value="CAPITAL"> Capital</option>
-                                            <option value="REGULAR"> Regular</option>
-                                            
-                                        </select>
-                                        <label for="BudgetType">Budget Type </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6" *ngIf="budget.value=='CAPITAL'">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="ProjectFunder" placeholder="Project Funder"
-                                            formControlName="ProjectFunder">
-                                        <label for="ProjectFunder">Project Funder</label>
-                                    </div>
-                                </div>
-                                
-                                
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <app-autocomplete *ngIf="employeeList.length > 0 && budget.value=='CAPITAL'" [data]="employeeList"
-                                            placeHolder="Finance" (selectedItem)="selectEmployeeF($event)">
-                                        </app-autocomplete>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" *ngIf="budget.value=='CAPITAL'">
+                                <div class="col-md-6" >
                                     <div class="form-floating">
                                         <input type="number" class="form-control" id="PlannedBudget" placeholder="EndDate" #budget 
                                             formControlName="PlannedBudget">
@@ -127,14 +100,21 @@
                                 
                                 
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-floating">
                                         <input type="number" class="form-control" id="Performance"
                                             placeholder="Performance" formControlName="PreviousPerformance">
                                         <label for="Performance">Performance</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+
+
+                             
+
+
+
+
+                                <div class="col-md-4">
                                     <div class="form-floating">
                                         <input type="number" class="form-control" id="Target" placeholder="Target"
                                             formControlName="Goal">
@@ -142,7 +122,18 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <div class="form-check" style="font-size: 30px;"> <input class="form-check-input"  (change)="onClassfiedBranch()"
+                                            formControlName="IsClassfiedToBranch" type="checkbox" id="gridCheck"> <label
+                                            class="form-check-label" style="font-size: 20px;font-weight: bold;"
+                                            for="gridCheck">Is Classfied to Branch  </label></div>
+                                </div>
+
+
+                                <div *ngIf="!isClassfiedtoBranch">
+
+                                
+                                <div class="col-md-6" >
                                     <div class="form-floating mb-3">
                                         <select class="form-select" id="assignactivityto" formControlName="WhomToAssign"
                                             #assign>
@@ -173,6 +164,8 @@
 
                                         </div>
                                     </div>
+                                </div>
+
                                 </div>
                             </div>
                         </div>

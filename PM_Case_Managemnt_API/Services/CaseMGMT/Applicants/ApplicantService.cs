@@ -8,7 +8,7 @@ using PM_Case_Managemnt_API.Models.Common;
 
 namespace PM_Case_Managemnt_API.Services.CaseMGMT.Applicants
 {
-    public class ApplicantService: IApplicantService
+    public class ApplicantService : IApplicantService
     {
         private readonly DBContext _dbContext;
 
@@ -27,7 +27,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT.Applicants
                     CreatedAt = DateTime.Now,
                     CreatedBy = applicantPost.CreatedBy,
                     ApplicantName = applicantPost.ApplicantName,
-                    ApplicantType = Enum.Parse<ApplicantType>( applicantPost.ApplicantType),
+                    ApplicantType = Enum.Parse<ApplicantType>(applicantPost.ApplicantType),
                     CustomerIdentityNumber = applicantPost.CustomerIdentityNumber,
                     Email = applicantPost.Email,
                     PhoneNumber = applicantPost.PhoneNumber,
@@ -38,11 +38,37 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT.Applicants
                 await _dbContext.Applicants.AddAsync(applicant);
                 await _dbContext.SaveChangesAsync();
                 return applicant.Id;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception("Error adding applicant");
             }
         }
+
+        public async Task<Guid> Update(ApplicantPostDto applicantPost)
+        {
+            try
+            {
+                var applicant = await _dbContext.Applicants.FindAsync(applicantPost.ApplicantId);
+
+
+                applicant.ApplicantName = applicantPost.ApplicantName;
+                applicant.ApplicantType = Enum.Parse<ApplicantType>(applicantPost.ApplicantType);
+                applicant.CustomerIdentityNumber = applicantPost.CustomerIdentityNumber;
+                applicant.Email = applicantPost.Email;
+                applicant.PhoneNumber = applicantPost.PhoneNumber;
+
+                await _dbContext.SaveChangesAsync();
+
+                return applicant.Id;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error adding applicant");
+            }
+        }
+
 
         public async Task<List<ApplicantGetDto>> GetAll()
         {
@@ -51,7 +77,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT.Applicants
                 List<Applicant> applicants = await _dbContext.Applicants.ToListAsync();
                 List<ApplicantGetDto> result = new();
 
-                foreach(Applicant applicant in applicants)
+                foreach (Applicant applicant in applicants)
                 {
                     result.Add(new ApplicantGetDto()
                     {
@@ -69,7 +95,8 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT.Applicants
 
                 return result;
 
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -81,13 +108,13 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT.Applicants
 
             var applicant = await _dbContext.Applicants.FindAsync(applicantId);
 
-            return applicant; 
+            return applicant;
         }
         public async Task<List<SelectListDto>> GetSelectList()
         {
             try
             {
-                List<Applicant> applicants = await _dbContext.Applicants.ToListAsync();
+                List<Applicant> applicants = await _dbContext.Applicants.OrderBy(x => x.ApplicantName).ToListAsync();
                 List<SelectListDto> result = new();
 
                 foreach (Applicant applicant in applicants)
@@ -95,7 +122,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT.Applicants
                     result.Add(new SelectListDto()
                     {
                         Id = applicant.Id,
-                        Name = applicant.ApplicantName+" ( "+applicant.CustomerIdentityNumber+" ) ",
+                        Name = applicant.ApplicantName + " ( " + applicant.CustomerIdentityNumber + " ) ",
 
                     });
                 }

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
 {
-    public class DashboardService: IDashboardService
+    public class DashboardService : IDashboardService
     {
 
         private readonly DBContext _dBContext;
@@ -29,14 +29,20 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
         public async Task<DashboardDto> GetPendingCase(string startat, string endat)
         {
 
+
+
+
             var allAffairps = _dBContext.Cases
                  .Include(a => a.CaseType)
                  .Include(a => a.Applicant)
                 .Include(a => a.CaseHistories)
                             .Include(a => a.Employee.OrganizationalStructure)
-                .Where(a =>
-                a.CreatedAt.Month == DateTime.Now.Month);
-            allAffairps = allAffairps.Where(x => x.AffairStatus != AffairStatus.Completed);
+
+
+                            .Where(x => x.AffairStatus != AffairStatus.Completed)
+                            .ToList();
+
+
 
             //if (startAt != null)
             //    allAffairs = allAffairs.Where(x => x.CreatedDateTime >= startAt);
@@ -47,11 +53,12 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
             foreach (var affair in allAffairps.ToList())
             {
                 var eachReport = new TopAffairsViewmodel();
+                eachReport.Id = affair.Id;
                 eachReport.CaseTypeTitle = affair.CaseType.CaseTypeTitle;
                 eachReport.AffairNumber = affair.CaseNumber;
                 eachReport.ApplicantName = affair.Applicant?.ApplicantName;
                 eachReport.Subject = affair.LetterSubject;
-                var firstOrDefault = _dBContext.CaseHistories.Include(x=>x.ToStructure).Where(x=>x.CaseId==affair.Id).OrderByDescending(x => x.CreatedAt)
+                var firstOrDefault = _dBContext.CaseHistories.Include(x => x.ToStructure).Where(x => x.CaseId == affair.Id).OrderByDescending(x => x.CreatedAt)
                     .FirstOrDefault();
                 if (firstOrDefault != null)
                     eachReport.Structure = _dBContext.OrganizationalStructures.Find(firstOrDefault
@@ -101,14 +108,13 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                  .Include(a => a.Applicant)
                   .Include(a => a.Employee)
                 .Include(a => a.CaseHistories)
-                .Where(a =>
-                a.CreatedAt.Month == DateTime.Now.Month);
-            allAffairps = allAffairps.Where(x => x.AffairStatus == AffairStatus.Completed);
+            .Where(x => x.AffairStatus == AffairStatus.Completed).ToList();
 
             report = new List<TopAffairsViewmodel>();
             foreach (var affair in allAffairps.ToList())
             {
                 var eachReport = new TopAffairsViewmodel();
+                eachReport.Id = affair.Id;
                 eachReport.CaseTypeTitle = affair.CaseType.CaseTypeTitle;
                 eachReport.AffairNumber = affair.CaseNumber;
                 eachReport.ApplicantName = affair.Applicant != null ? affair.Applicant.ApplicantName : affair.Employee.FullName;
@@ -154,12 +160,12 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
 
             var Chart = new CaseReportChartDto();
 
-            Chart.labels = new List<string>() { "LateProgress", "completed"};
+            Chart.labels = new List<string>() { "LateProgress", "completed" };
             Chart.datasets = new List<DataSets>();
 
             var datas = new DataSets();
 
-            datas.data = new List<int>() { dashboard.pendingReports.Count(), dashboard.completedReports.Count()};
+            datas.data = new List<int>() { dashboard.pendingReports.Count(), dashboard.completedReports.Count() };
             datas.hoverBackgroundColor = new List<string>() { "#fe5e2b", "#2cb436" };
             datas.backgroundColor = new List<string>() { "#fe5e2b", "#2cb436" };
 
@@ -178,16 +184,26 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
 
 
 
-        public async Task<barChartDto> GetMonthlyReport()
+        public async Task<barChartDto> GetMonthlyReport(int year)
         {
 
+
+
+            var gerYear = XAPI.EthiopicDateTime.GetGregorianDate(7, 7, year).Year;
+
+
+
+
+
+
+
             barChartDto barChart = new barChartDto();
-            barChart.labels = new List<string>() { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "sep", "Oct", "Nov", "Dec" };
+            barChart.labels = new List<string>() { "ጥር", "የካቲት", "መጋቢት", "ሚያዚያ", "ግንቦት", "ሰኔ", "ሃምሌ", "ነሃሴ", "መስከረም", "ጥቅምት", "ህዳር", "ታህሳስ" };
             barChart.datasets = new List<barChartDetailDto>();
 
 
 
-            var allAffairs = _dBContext.Cases.Include(x=>x.CaseType).Where(x => x.CreatedAt.Year == DateTime.Now.Year).ToList();
+            var allAffairs = _dBContext.Cases.Include(x => x.CaseType).Where(x => x.CreatedAt.Year == gerYear).ToList();
             var allAffairTypes = _dBContext.CaseTypes.Where(x => x.RowStatus == RowStatus.Active && x.ParentCaseTypeId == null && x.CaseForm == CaseForm.Outside).ToList();
             var monthList = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
             foreach (var affairType in allAffairTypes)
@@ -209,7 +225,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                     dataset.data.Add(
                         allAffairs.Count(x => x.CaseTypeId == affairType.Id && x.CreatedAt.Month == month && x.CaseType.ParentCaseTypeId == null));
 
-                 
+
                 }
                 barChart.datasets.Add(dataset);
 
@@ -223,8 +239,8 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
 
         public async Task<PMDashboardDto> GetPMDashboardDto(Guid empID)
         {
-           
-            var Employee =   _dBContext.Employees.Find(empID);
+
+            var Employee = _dBContext.Employees.Find(empID);
             var Structure_Hierarchy = _dBContext.OrganizationalStructures.Single(x => x.Id == Employee.OrganizationalStructureId);
             if (Structure_Hierarchy.ParentStructureId != null)
             {
@@ -232,10 +248,10 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
             }
             var thisBudgetYear = _dBContext.BudgetYears.Single(x => x.RowStatus == RowStatus.Active);
             budget = thisBudgetYear;
-            
+
             var prog = _dBContext.Programs.Where(x => x.RowStatus == RowStatus.Active && x.ProgramBudgetYearId == thisBudgetYear.ProgramBudgetYearId).ToList();
-            var plans = _dBContext.Plans.Include(x=>x.Activities)
-                .Include(x=>x.Tasks).ThenInclude(a => a.Activities)
+            var plans = _dBContext.Plans.Include(x => x.Activities)
+                .Include(x => x.Tasks).ThenInclude(a => a.Activities)
                 .Include(x => x.Tasks).ThenInclude(a => a.ActivitiesParents).ThenInclude(a => a.Activities).Where(x => x.RowStatus == RowStatus.Active && (x.BudgetYearId == thisBudgetYear.Id || x.Program.ProgramBudgetYearId == thisBudgetYear.ProgramBudgetYearId)).ToList();
             if (structureId != Guid.Empty)
             {
@@ -258,7 +274,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
 
             };
 
-            return pMDashboard; 
+            return pMDashboard;
 
 
         }
@@ -268,7 +284,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
             ps = new List<progress_Strucure>();
             if (structureId == Guid.Empty)
             {
-                var structu = _dBContext.OrganizationalStructures.Include(x=>x.SubTask).Where(x => x.ParentStructureId == null).FirstOrDefault();
+                var structu = _dBContext.OrganizationalStructures.Include(x => x.SubTask).Where(x => x.ParentStructureId == null).FirstOrDefault();
                 var structures = structu.SubTask;
                 foreach (var structureRow in structures)
                 {
@@ -281,7 +297,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                     float Pro_ActualPlan = 0;
                     float Pro_Goal = 0;
 
-                    var Plans = _dBContext.Plans.Include(x=>x.Program)
+                    var Plans = _dBContext.Plans.Include(x => x.Program)
                         .Include(x => x.Activities)
                 .Include(x => x.Tasks).ThenInclude(a => a.Activities)
                 .Include(x => x.Tasks).ThenInclude(a => a.ActivitiesParents)
@@ -380,7 +396,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                 float Pro_ActualPlan = 0;
                 float Pro_Goal = 0;
 
-                var Plans = _dBContext.Plans.Include(x=>x.Program)
+                var Plans = _dBContext.Plans.Include(x => x.Program)
                     .Include(x => x.Activities)
                 .Include(x => x.Tasks).ThenInclude(a => a.Activities)
                 .Include(x => x.Tasks).ThenInclude(a => a.ActivitiesParents).ThenInclude(a => a.Activities).Where(x => x.StructureId == structu.Id && (x.BudgetYear.Id == budget.Id || x.Program.ProgramBudgetYearId == budget.ProgramBudgetYearId))
@@ -397,7 +413,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                     }
                     else if (planItems.Activities.Any())
                     {
-                          Pro_Goal = Pro_Goal + ((planItems.Activities.FirstOrDefault().Goal * (float)planItems.PlanWeight) / Plans.Sum(x => x.PlanWeight));
+                        Pro_Goal = Pro_Goal + ((planItems.Activities.FirstOrDefault().Goal * (float)planItems.PlanWeight) / Plans.Sum(x => x.PlanWeight));
                     }
                     foreach (var taskItems in Tasks)
                     {
@@ -557,7 +573,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
         public void PlansProgress()
         {
             var Plans = _dBContext.Plans
-                .Include(x=>x.BudgetYear)
+                .Include(x => x.BudgetYear)
                 .Include(x => x.Activities)
                 .Include(x => x.Tasks).ThenInclude(a => a.Activities)
                 .Include(x => x.Tasks).ThenInclude(a => a.ActivitiesParents).ThenInclude(a => a.Activities).Where(x => x.RowStatus == RowStatus.Active && x.BudgetYearId == budget.Id || x.BudgetYear.ProgramBudgetYearId == budget.ProgramBudgetYearId).ToList();
@@ -583,7 +599,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                 {
                     foreach (var taskItems in Tasks)
                     {
-                        if (!taskItems.HasActivityParent && taskItems.Activities.Any()&&taskItems.Weight!=null)
+                        if (!taskItems.HasActivityParent && taskItems.Activities.Any() && taskItems.Weight != null)
                         {
                             BeginingPlan = BeginingPlan + ((taskItems.Activities.FirstOrDefault().Begining * (float)taskItems.Weight) / planItems.PlanWeight);
                             ActualPlan = ActualPlan + ((taskItems.Activities.FirstOrDefault().ActualWorked * (float)taskItems.Weight) / planItems.PlanWeight);
@@ -660,13 +676,13 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                                                XAPI.EthiopicDateTime.GetEthiopicMonth(planItems.BudgetYear.ToDate.Day, planItems.BudgetYear.ToDate.Month, planItems.BudgetYear.ToDate.Year) + "/" +
                                                XAPI.EthiopicDateTime.GetEthiopicYear(planItems.BudgetYear.ToDate.Day, planItems.BudgetYear.ToDate.Month, planItems.BudgetYear.ToDate.Year);
                 }
-                
+
                 ProjectList project = new ProjectList()
                 {
                     DirectorateName = planItems?.Structure?.StructureName,
                     ProjectName = planItems?.PlanName,
                     ProjectProgress = (float)Math.Round(ProgressThisYear, 2),
-                    OverallProgress = Goal != 0 ?(float)Math.Round((ActualPlan / Goal) * 100, 2):0,
+                    OverallProgress = Goal != 0 ? (float)Math.Round((ActualPlan / Goal) * 100, 2) : 0,
                     ProjectDuration = projectDuration,
                     Weight = planItems.PlanWeight
 
@@ -693,15 +709,15 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
             {
                 label = "budget year contributon graph",
                 data = new List<float>(),
-                backgroundColor= new List<string>(),
-                borderColor= new List<string>(),
-                borderWidth=1
+                backgroundColor = new List<string>(),
+                borderColor = new List<string>(),
+                borderWidth = 1
 
             };
             bugetYears.datasets.Add(dataset1);
 
             var BudgetArea = _dBContext.BudgetYears.OrderBy(x => x.Year).ToList();
-            var structu = _dBContext.OrganizationalStructures.Include(x=>x.SubTask).Where(x => x.ParentStructureId == null).FirstOrDefault();
+            var structu = _dBContext.OrganizationalStructures.Include(x => x.SubTask).Where(x => x.ParentStructureId == null).FirstOrDefault();
             var structures = structu.SubTask;
             if (structureId != Guid.Empty)
             {
@@ -724,7 +740,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
                     float ActualPlan = 0;
                     float Goal = 0;
                     float Progress = 0;
-                    var Plans = _dBContext.Plans.Include(x=>x.Program).Where(x => x.StructureId == structureRow.Id && (x.Program.ProgramBudgetYearId == BudgetItems.ProgramBudgetYearId || x.BudgetYearId == BudgetItems.Id));
+                    var Plans = _dBContext.Plans.Include(x => x.Program).Where(x => x.StructureId == structureRow.Id && (x.Program.ProgramBudgetYearId == BudgetItems.ProgramBudgetYearId || x.BudgetYearId == BudgetItems.Id));
                     foreach (var planItems in Plans)
                     {
                         float BeginingPercent = 0;
@@ -785,7 +801,7 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
 
             }
 
-          
+
 
             return bugetYears;
         }
@@ -843,8 +859,8 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
         public class PmDashboardBarchartDto
         {
 
-           public List<string> labels { get; set; }
-           public List<PmDashboardBarchartDateset> datasets { get; set; }
+            public List<string> labels { get; set; }
+            public List<PmDashboardBarchartDateset> datasets { get; set; }
 
 
         }
@@ -852,13 +868,13 @@ namespace PM_Case_Managemnt_API.Services.Common.Dashoboard
         public class PmDashboardBarchartDateset
         {
             public string label { get; set; }
-           public List<float> data { get; set; }
+            public List<float> data { get; set; }
 
             public List<string> backgroundColor { get; set; }
             public List<string> borderColor { get; set; }
             public int borderWidth { get; set; }
-            }
+        }
     }
-    }
+}
 
 

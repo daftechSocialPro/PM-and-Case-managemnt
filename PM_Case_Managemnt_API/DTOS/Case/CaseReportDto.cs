@@ -137,6 +137,7 @@ namespace PM_Case_Managemnt_API.DTOS.Case
 
     public class TopAffairsViewmodel
     {
+        public Guid Id { get; set; }
         public string CaseTypeTitle { get; set; }
         public string ApplicantName { get; set; }
         public string AffairNumber { get; set; }
@@ -189,8 +190,8 @@ namespace PM_Case_Managemnt_API.DTOS.Case
 
         public int BudgetYear { get; set; }
 
-      public List<ProjectList> ProjectLists { get; set; }
-      public List<AboutToExpireProjects> AboutToExpireProjects { get; set; }
+        public List<ProjectList> ProjectLists { get; set; }
+        public List<AboutToExpireProjects> AboutToExpireProjects { get; set; }
 
 
     }

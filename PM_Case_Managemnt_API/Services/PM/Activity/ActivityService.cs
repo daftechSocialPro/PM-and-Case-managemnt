@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using PM_Case_Managemnt_API.Data;
 using PM_Case_Managemnt_API.DTOS.Common;
 using PM_Case_Managemnt_API.DTOS.PM;
+using PM_Case_Managemnt_API.Models.CaseModel;
 using PM_Case_Managemnt_API.Models.Common;
 using PM_Case_Managemnt_API.Models.PM;
 
@@ -28,25 +29,27 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
         {
 
 
-            var actparent = _dBContext.ActivityParents.Where(x => x.TaskId == activityDetail.TaskId).FirstOrDefault();           
+                      
+
+            //var actparent = _dBContext.ActivityParents.Where(x => x.TaskId == activityDetail.TaskId).FirstOrDefault();           
 
 
-            ActivityParent activityParent = new ActivityParent();
+            //ActivityParent activityParent = new ActivityParent();
 
-            if (actparent != null)
-            {
-                activityParent = actparent;
-            }
-            else {
-                activityParent.Id = Guid.NewGuid();
-                activityParent.CreatedAt = DateTime.Now;
-                activityParent.CreatedBy = activityDetail.CreatedBy;
-                activityParent.ActivityParentDescription = activityDetail.ActivityDescription;
-                activityParent.HasActivity = activityDetail.HasActivity;
-                activityParent.TaskId = activityDetail.TaskId;
-                await _dBContext.AddAsync(activityParent);
-            }
-
+            //if (actparent != null)
+            //{
+            //    activityParent = actparent;
+            //}
+            //else {
+            //    activityParent.Id = Guid.NewGuid();
+            //    activityParent.CreatedAt = DateTime.Now;
+            //    activityParent.CreatedBy = activityDetail.CreatedBy;
+            //    activityParent.ActivityParentDescription = activityDetail.ActivityDescription;
+            //    activityParent.HasActivity = activityDetail.HasActivity;
+            //    activityParent.TaskId = activityDetail.TaskId;
+            //    await _dBContext.AddAsync(activityParent);
+            //}
+           
             foreach (var item in activityDetail.ActivityDetails)
             {
 
@@ -54,51 +57,236 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
                 PM_Case_Managemnt_API.Models.PM.Activity activity = new PM_Case_Managemnt_API.Models.PM.Activity();
                 activity.Id = Guid.NewGuid();
                 activity.CreatedAt = DateTime.Now;
-                activity.CreatedBy = activityParent.CreatedBy;
-                activity.ActivityParentId = activityParent.Id;
+                activity.CreatedBy = activityDetail.CreatedBy;
+                activity.ActivityParentId = activityDetail.TaskId;
                 activity.ActivityDescription = item.SubActivityDesctiption;
-                activity.ActivityType = item.ActivityType == 0 ? ActivityType.Office_Work : ActivityType.Fild_Work;
-                activity.Begining = item.PreviousPerformance;
-                if (item.CommiteeId != null)
-                {
-                    activity.CommiteeId = item.CommiteeId;
-                }
-                activity.FieldWork = item.FieldWork;
+                activity.ActivityType =  ActivityType.Office_Work ;
+                activity.Begining = item.PreviousPerformance;              
+                activity.FieldWork = 50;
                 activity.Goal = item.Goal;
-                activity.OfficeWork = item.OfficeWork;
+                activity.OfficeWork = 50;
                 activity.PlanedBudget = (float)item.PlannedBudget;
                 activity.UnitOfMeasurementId = item.UnitOfMeasurement;
                 activity.Weight = item.Weight;
-                activity.BudgetType = (BudgetType)Enum.Parse(typeof(BudgetType), item.BudgetType);
-                activity.ProjectFunder = item.ProjectFunder;
-                activity.FinanceId = item.FinanceId;
-                
-                if (!string.IsNullOrEmpty(item.StartDate))
+                activity.ShouldStat = DateTime.Parse(item.StartDate);
+                activity.ShouldEnd = DateTime.Parse(item.EndDate);
+                activity.CaseTypeId = activityDetail.CaseTypeId;
+                activity.OrganizationalStructureId = item.BranchId;
+
+                //if (!string.IsNullOrEmpty(item.StartDate))
+                //{
+                //    string[] startDate = item.StartDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                //    DateTime ShouldStartPeriod = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(startDate[1]), Int32.Parse(startDate[0]), Int32.Parse(startDate[2])));
+                //    activity.ShouldStat = ShouldStartPeriod;
+                //}
+
+                //if (!string.IsNullOrEmpty(item.EndDate))
+                //{
+
+                //    string[] endDate = item.EndDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                //    DateTime ShouldEnd = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(endDate[1]), Int32.Parse(endDate[0]), Int32.Parse(endDate[2])));
+                //    activity.ShouldEnd = ShouldEnd;
+                //}
+                await _dBContext.Activities.AddAsync(activity);
+                await _dBContext.SaveChangesAsync();
+                //if (item.Employees != null)
+                //{
+                //    foreach (var employee in item.Employees)
+                //    {
+                //        if (!string.IsNullOrEmpty(employee))
+                //        {
+                //            EmployeesAssignedForActivities EAFA = new EmployeesAssignedForActivities
+                //            {
+                //                CreatedAt = DateTime.Now,
+                //                CreatedBy = activityParent.CreatedBy,
+                //                RowStatus = RowStatus.Active,
+                //                Id = Guid.NewGuid(),
+
+                //                ActivityId = activity.Id,
+                //                EmployeeId = Guid.Parse(employee),
+                //            };
+                //            await _dBContext.EmployeesAssignedForActivities.AddAsync(EAFA);
+                //            await _dBContext.SaveChangesAsync();
+                //        }
+                //    }
+                //}
+
+            }
+
+            if (activityDetail.ActivityDetails.Any())
+            {
+                var actParent = _dBContext.ActivityParents.Find(activityDetail.TaskId);
+                actParent.AssignedToBranch = true;
+
+                _dBContext.SaveChangesAsync();
+            }
+
+
+            //var Task = await _dBContext.Tasks.FirstOrDefaultAsync(x => x.Id.Equals(activityDetail.TaskId));
+            //if (Task != null)
+            //{
+            //    var plan = _dBContext.Plans.FirstOrDefaultAsync(x => x.Id.Equals(Task.PlanId)).Result;
+            //    if (plan != null)
+            //    {
+            //        var ActParent = _dBContext.ActivityParents.Find(activityParent.Id);
+            //        var Activities = _dBContext.Activities.Where(x => x.ActivityParentId == activityParent.Id);
+            //        if (ActParent != null && Activities != null)
+            //        {
+            //            ActParent.ShouldStartPeriod = Activities.Min(x => x.ShouldStat);
+            //            ActParent.ShouldEnd = Activities.Max(x => x.ShouldEnd);
+            //            ActParent.Weight = Activities.Sum(x => x.Weight);
+            //            _dBContext.SaveChanges();
+            //        }
+            //        var ActParents = _dBContext.ActivityParents.Where(x => x.TaskId == Task.Id).ToList();
+            //        if (Task != null && ActParents != null)
+            //        {
+            //            Task.ShouldStartPeriod = ActParents.Min(x => x.ShouldStartPeriod);
+            //            Task.ShouldEnd = ActParents.Max(x => x.ShouldEnd);
+            //            Task.Weight = ActParents.Sum(x => x.Weight);
+            //            _dBContext.SaveChanges();
+            //        }
+            //        var tasks = _dBContext.Tasks.Where(x => x.PlanId == plan.Id).ToList();
+            //        plan.PeriodStartAt = tasks.Min(x => x.ShouldStartPeriod);
+            //        plan.PeriodEndAt = tasks.Max(x => x.ShouldEnd);
+            //        _dBContext.SaveChanges();
+            //    }
+            //}
+            return 1;
+        }
+
+
+
+        public async Task<int> AddSubActivity(SubActivityDetailDto activityDetail)
+        {
+
+
+            if (activityDetail.IsClassfiedToBranch) {
+
+
+                PM_Case_Managemnt_API.Models.PM.ActivityParent activity = new PM_Case_Managemnt_API.Models.PM.ActivityParent();
+                activity.Id = Guid.NewGuid();
+                activity.CreatedAt = DateTime.Now;
+                activity.CreatedBy = activityDetail.CreatedBy;
+                activity.ActivityParentDescription = activityDetail.SubActivityDesctiption;                
+                activity.Goal = activityDetail.Goal;
+                activity.IsClassfiedToBranch = true;
+
+
+
+
+                activity.PlanedBudget = (float)activityDetail.PlannedBudget;
+                activity.UnitOfMeasurmentId = activityDetail.UnitOfMeasurement;
+                activity.Weight = activityDetail.Weight;
+
+               
+                 if (activityDetail.TaskId != null)
                 {
-                    string[] startDate = item.StartDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    activity.TaskId = activityDetail.TaskId;
+                }
+
+                if (!string.IsNullOrEmpty(activityDetail.StartDate))
+                {
+                    string[] startDate = activityDetail.StartDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    DateTime ShouldStartPeriod = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(startDate[1]), Int32.Parse(startDate[0]), Int32.Parse(startDate[2])));
+                    activity.ShouldStartPeriod = ShouldStartPeriod;
+                }
+
+                if (!string.IsNullOrEmpty(activityDetail.EndDate))
+                {
+                    string[] endDate = activityDetail.EndDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    DateTime ShouldEnd = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(endDate[1]), Int32.Parse(endDate[0]), Int32.Parse(endDate[2])));
+                    activity.ShouldEnd = ShouldEnd;
+                }
+                await _dBContext.ActivityParents.AddAsync(activity);
+                await _dBContext.SaveChangesAsync();
+           
+
+
+
+              
+                 if (activityDetail.TaskId != Guid.Empty)
+                {
+                    var Task = await _dBContext.Tasks.FirstOrDefaultAsync(x => x.Id.Equals(activityDetail.TaskId));
+                    if (Task != null)
+                    {
+                        var plan = await _dBContext.Plans.FirstOrDefaultAsync(x => x.Id.Equals(Task.PlanId));
+
+                        Task.ShouldStartPeriod = activity.ShouldStartPeriod;
+                        Task.ShouldEnd = activity.ShouldEnd;
+                        Task.Weight = activity.Weight;
+                        if (plan != null)
+                        {
+                            var tasks = await _dBContext.Tasks.Where(x => x.PlanId == plan.Id).ToListAsync();
+                            plan.PeriodStartAt = tasks.Min(x => x.ShouldStartPeriod);
+                            plan.PeriodEndAt = tasks.Max(x => x.ShouldEnd);
+                        }
+                    }
+                }
+                _dBContext.SaveChanges();
+
+
+
+            }
+
+            else
+            {
+
+
+
+
+
+
+                PM_Case_Managemnt_API.Models.PM.Activity activity = new PM_Case_Managemnt_API.Models.PM.Activity();
+                activity.Id = Guid.NewGuid();
+                activity.CreatedAt = DateTime.Now;
+                activity.CreatedBy = activityDetail.CreatedBy;
+                activity.ActivityDescription = activityDetail.SubActivityDesctiption;
+                activity.ActivityType = (ActivityType)activityDetail.ActivityType;
+                activity.Begining = activityDetail.PreviousPerformance;
+                if (activityDetail.CommiteeId != null)
+                {
+                    activity.CommiteeId = activityDetail.CommiteeId;
+                }
+                activity.FieldWork = activityDetail.FieldWork;
+                activity.Goal = activityDetail.Goal;
+                activity.OfficeWork = activityDetail.OfficeWork;
+                activity.PlanedBudget = (float)activityDetail.PlannedBudget;
+                activity.UnitOfMeasurementId = activityDetail.UnitOfMeasurement;
+                activity.Weight = activityDetail.Weight;
+                if (activityDetail.PlanId != null)
+                {
+                    activity.PlanId = activityDetail.PlanId;
+                }
+                else if (activityDetail.TaskId != null)
+                {
+                    activity.TaskId = activityDetail.TaskId;
+                }
+
+                if (!string.IsNullOrEmpty(activityDetail.StartDate))
+                {
+                    string[] startDate = activityDetail.StartDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     DateTime ShouldStartPeriod = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(startDate[1]), Int32.Parse(startDate[0]), Int32.Parse(startDate[2])));
                     activity.ShouldStat = ShouldStartPeriod;
                 }
 
-                if (!string.IsNullOrEmpty(item.EndDate))
+                if (!string.IsNullOrEmpty(activityDetail.EndDate))
                 {
-
-                    string[] endDate = item.EndDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] endDate = activityDetail.EndDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
                     DateTime ShouldEnd = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(endDate[1]), Int32.Parse(endDate[0]), Int32.Parse(endDate[2])));
                     activity.ShouldEnd = ShouldEnd;
                 }
                 await _dBContext.Activities.AddAsync(activity);
                 await _dBContext.SaveChangesAsync();
-                if (item.Employees != null)
+                if (activityDetail.Employees != null)
                 {
-                    foreach (var employee in item.Employees)
+                    foreach (var employee in activityDetail.Employees)
                     {
                         if (!string.IsNullOrEmpty(employee))
                         {
                             EmployeesAssignedForActivities EAFA = new EmployeesAssignedForActivities
                             {
                                 CreatedAt = DateTime.Now,
-                                CreatedBy = activityParent.CreatedBy,
+                                CreatedBy = activityDetail.CreatedBy,
                                 RowStatus = RowStatus.Active,
                                 Id = Guid.NewGuid(),
 
@@ -111,140 +299,119 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
                     }
                 }
 
-            }
 
 
-
-            var Task = await _dBContext.Tasks.FirstOrDefaultAsync(x => x.Id.Equals(activityDetail.TaskId));
-            if (Task != null)
-            {
-                var plan = _dBContext.Plans.FirstOrDefaultAsync(x => x.Id.Equals(Task.PlanId)).Result;
-                if (plan != null)
+                if (activityDetail.PlanId != Guid.Empty && activityDetail.PlanId != null)
                 {
-                    var ActParent = _dBContext.ActivityParents.Find(activityParent.Id);
-                    var Activities = _dBContext.Activities.Where(x => x.ActivityParentId == activityParent.Id);
-                    if (ActParent != null && Activities != null)
+                    var plan = await _dBContext.Plans.FirstOrDefaultAsync(x => x.Id.Equals(activityDetail.PlanId));
+                    if (plan != null)
                     {
-                        ActParent.ShouldStartPeriod = Activities.Min(x => x.ShouldStat);
-                        ActParent.ShouldEnd = Activities.Max(x => x.ShouldEnd);
-                        ActParent.Weight = Activities.Sum(x => x.Weight);
-                        _dBContext.SaveChanges();
+                        plan.PeriodStartAt = activity.ShouldStat;
+                        plan.PeriodEndAt = activity.ShouldEnd;
                     }
-                    var ActParents = _dBContext.ActivityParents.Where(x => x.TaskId == Task.Id).ToList();
-                    if (Task != null && ActParents != null)
-                    {
-                        Task.ShouldStartPeriod = ActParents.Min(x => x.ShouldStartPeriod);
-                        Task.ShouldEnd = ActParents.Max(x => x.ShouldEnd);
-                        Task.Weight = ActParents.Sum(x => x.Weight);
-                        _dBContext.SaveChanges();
-                    }
-                    var tasks = _dBContext.Tasks.Where(x => x.PlanId == plan.Id).ToList();
-                    plan.PeriodStartAt = tasks.Min(x => x.ShouldStartPeriod);
-                    plan.PeriodEndAt = tasks.Max(x => x.ShouldEnd);
-                    _dBContext.SaveChanges();
                 }
+                else if (activityDetail.TaskId != Guid.Empty)
+                {
+                    var Task = await _dBContext.Tasks.FirstOrDefaultAsync(x => x.Id.Equals(activityDetail.TaskId));
+                    if (Task != null)
+                    {
+                        var plan = await _dBContext.Plans.FirstOrDefaultAsync(x => x.Id.Equals(Task.PlanId));
+
+                        Task.ShouldStartPeriod = activity.ShouldStat;
+                        Task.ShouldEnd = activity.ShouldEnd;
+                        Task.Weight = activity.Weight;
+                        if (plan != null)
+                        {
+                            var tasks = await _dBContext.Tasks.Where(x => x.PlanId == plan.Id).ToListAsync();
+                            plan.PeriodStartAt = tasks.Min(x => x.ShouldStartPeriod);
+                            plan.PeriodEndAt = tasks.Max(x => x.ShouldEnd);
+                        }
+                    }
+                }
+                _dBContext.SaveChanges();
             }
             return 1;
         }
 
 
-
-        public async Task<int> AddSubActivity(SubActivityDetailDto activityDetail)
+        public async Task<ReponseMessage> AddBranchTargetAsActivity(List<BranchTargetDto> branchTargetDtos)
         {
-            PM_Case_Managemnt_API.Models.PM.Activity activity = new PM_Case_Managemnt_API.Models.PM.Activity();
-            activity.Id = Guid.NewGuid();
-            activity.CreatedAt = DateTime.Now;
-            activity.CreatedBy = activityDetail.CreatedBy;
-            activity.ActivityDescription = activityDetail.SubActivityDesctiption;
-            activity.ActivityType = (ActivityType)activityDetail.ActivityType;
-            activity.Begining = activityDetail.PreviousPerformance;
-            if (activityDetail.CommiteeId != null)
-            {
-                activity.CommiteeId = activityDetail.CommiteeId;
-            }
-            activity.FieldWork = activityDetail.FieldWork;
-            activity.Goal = activityDetail.Goal;
-            activity.OfficeWork = activityDetail.OfficeWork;
-            activity.PlanedBudget = (float)activityDetail.PlannedBudget;
-            activity.UnitOfMeasurementId = activityDetail.UnitOfMeasurement;
-            activity.Weight = activityDetail.Weight;
-            if(activityDetail.PlanId != null)
-            {
-                activity.PlanId = activityDetail.PlanId;
-            }
-            else if(activityDetail.TaskId != null)
-            {
-                activity.TaskId = activityDetail.TaskId;
-            }
 
-            if (!string.IsNullOrEmpty(activityDetail.StartDate))
+            try
             {
-                string[] startDate = activityDetail.StartDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-                DateTime ShouldStartPeriod = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(startDate[1]), Int32.Parse(startDate[0]), Int32.Parse(startDate[2])));
-                activity.ShouldStat = ShouldStartPeriod;
-            }
 
-            if (!string.IsNullOrEmpty(activityDetail.EndDate))
-            {
-                string[] endDate = activityDetail.EndDate.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
-                DateTime ShouldEnd = Convert.ToDateTime(XAPI.EthiopicDateTime.GetGregorianDate(Int32.Parse(endDate[1]), Int32.Parse(endDate[0]), Int32.Parse(endDate[2])));
-                activity.ShouldEnd = ShouldEnd;
-            }
-            await _dBContext.Activities.AddAsync(activity);
-            await _dBContext.SaveChangesAsync();
-            if (activityDetail.Employees != null)
-            {
-                foreach (var employee in activityDetail.Employees)
+
+                var actParent = await _dBContext.ActivityParents.Where(x => x.Id == branchTargetDtos[0].ActParentId).FirstOrDefaultAsync();
+
+                if (actParent != null)
                 {
-                    if (!string.IsNullOrEmpty(employee))
+
+                    foreach (var item in branchTargetDtos)
                     {
-                        EmployeesAssignedForActivities EAFA = new EmployeesAssignedForActivities
+
+
+                        PM_Case_Managemnt_API.Models.PM.Activity activity = new PM_Case_Managemnt_API.Models.PM.Activity();
+                        activity.Id = Guid.NewGuid();
+                        activity.CreatedAt = DateTime.Now;
+                        activity.CreatedBy = item.CreatedBy ;
+                        activity.ActivityParentId = actParent.Id;
+                        activity.ActivityDescription = item.ActivityName;
+                        activity.ActivityType = ActivityType.Office_Work ;
+                        activity.Begining = actParent.BaseLine;                      
+                        activity.Goal = item.Target;
+                      
+                        activity.PlanedBudget = (float)item.Budget;
+                        if (actParent.UnitOfMeasurmentId != null)
                         {
-                            CreatedAt = DateTime.Now,
-                            CreatedBy = activityDetail.CreatedBy,
-                            RowStatus = RowStatus.Active,
-                            Id = Guid.NewGuid(),
+                            activity.UnitOfMeasurementId = actParent.UnitOfMeasurmentId.Value;
+                        }
+                       
+                        activity.Weight = item.Weight;
 
-                            ActivityId = activity.Id,
-                            EmployeeId = Guid.Parse(employee),
-                        };
-                        await _dBContext.EmployeesAssignedForActivities.AddAsync(EAFA);
+                        if (actParent.ShouldStartPeriod != null)
+                        {
+                            activity.ShouldStat = actParent.ShouldStartPeriod.Value;
+                        }
+                        if (actParent.ShouldEnd != null)
+                        {
+                            actParent.ShouldEnd = actParent.ShouldEnd.Value;
+                        }
+
+                       
+                        await _dBContext.Activities.AddAsync(activity);
                         await _dBContext.SaveChangesAsync();
+                        
+
                     }
-                }
-            }
 
-
-
-            if (activityDetail.PlanId != Guid.Empty&& activityDetail.PlanId!=null)
-            {
-                var plan = await _dBContext.Plans.FirstOrDefaultAsync(x => x.Id.Equals(activityDetail.PlanId));
-                if(plan != null)
-                {
-                    plan.PeriodStartAt = activity.ShouldStat;
-                    plan.PeriodEndAt = activity.ShouldEnd;
-                }
-            }
-            else if (activityDetail.TaskId != Guid.Empty)
-            {
-                var Task = await _dBContext.Tasks.FirstOrDefaultAsync(x => x.Id.Equals(activityDetail.TaskId));
-                if (Task != null)
-                {
-                    var plan = await _dBContext.Plans.FirstOrDefaultAsync(x => x.Id.Equals(Task.PlanId));
-
-                    Task.ShouldStartPeriod = activity.ShouldStat;
-                    Task.ShouldEnd = activity.ShouldEnd;
-                    Task.Weight = activity.Weight;
-                    if(plan != null)
+                    return new ReponseMessage
                     {
-                        var tasks = await _dBContext.Tasks.Where(x => x.PlanId == plan.Id).ToListAsync();
-                        plan.PeriodStartAt = tasks.Min(x => x.ShouldStartPeriod);
-                        plan.PeriodEndAt = tasks.Max(x => x.ShouldEnd);
-                    }
+                        Success = true,
+                        Message = ""
+                    };
                 }
+                else
+                {
+                    return new ReponseMessage
+                    {
+                        Success = false,
+                        Message = ""
+                    };
+
+                }
+
+               
             }
-            _dBContext.SaveChanges();
-            return 1;
+            catch(Exception ex ) 
+            {
+                return new ReponseMessage
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
+
+        
         }
 
 
@@ -294,8 +461,8 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
                 ActivityId = activityProgress.ActivityId,
                 CreatedBy = activityProgress.CreatedBy,
                 EmployeeValueId = activityProgress.EmployeeValueId,
-                Lat = activityProgress.lat,
-                Lng = activityProgress.lng,
+                Lat = activityProgress.lat!=null? activityProgress.lat:"",
+                Lng = activityProgress.lng != null ? activityProgress.lng : "",
             };
 
             await _dBContext.ActivityProgresses.AddAsync(activityProgress2);
@@ -360,6 +527,7 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
                                           FinanceApprovalRemark = p.FinanceApprovalRemark,
                                           DirectorApprovalRemark = p.DirectorApprovalRemark,
                                           FinanceDocument = p.FinanceDocumentPath,
+                                          CaseId= p.CaseId,
                                           Documents = _dBContext.ProgressAttachments.Where(x => x.ActivityProgressId == p.Id).Select(y => y.FilePath).ToArray(),
                                           CreatedAt = p.CreatedAt
 
@@ -380,54 +548,71 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
 
 
             var activityProgress = _dBContext.ActivityProgresses;
-            List<ActivityViewDto> assignedActivities =
-                await (from e in _dBContext.Activities
-                       .Include(x => x.UnitOfMeasurement)
-                       .Include(x=>x.Commitee).ThenInclude(x=>x.Employees)
-                       .Where(x=>x.ActualEnd==null)
-                       where employeeAssigned.Contains(e.Id)||(e.CommiteeId!=null?e.Commitee.Employees.Select(x=>x.EmployeeId).Contains(employeeId):false)
-                       select new ActivityViewDto
-                       {
-                           Id = e.Id,
-                           Name = e.ActivityDescription,
-                           PlannedBudget = e.PlanedBudget,
-                           ActivityType = e.ActivityType.ToString(),
-                           Weight = e.Weight,
-                           Begining = e.Begining,
-                           Target = e.Goal,
-                           UnitOfMeasurment = e.UnitOfMeasurement.Name,
-                           OverAllPerformance = 0,
-                           StartDate = e.ShouldStat.ToString(),
-                           EndDate = e.ShouldEnd.ToString(),
-                           Members = _dBContext.EmployeesAssignedForActivities.Include(x => x.Employee).Where(x => x.ActivityId == e.Id).Select(y => new SelectListDto
-                           {
-                               Id = y.Id,
-                               Name = y.Employee.FullName,
-                               Photo = y.Employee.Photo,
-                               EmployeeId = y.EmployeeId.ToString(),
-
-                           }).ToList(),
-                           MonthPerformance = _dBContext.ActivityTargetDivisions.Where(x => x.ActivityId == e.Id).OrderBy(x => x.Order).Select(y => new MonthPerformanceViewDto
-                           {
-                               Id = y.Id,
-                               Order = y.Order,
-                               Planned = y.Target,
-                               Actual = activityProgress.Where(x => x.QuarterId == y.Id).Sum(mp => mp.ActualWorked),
-                               Percentage = y.Target != 0 ? (activityProgress.Where(x => x.QuarterId == y.Id && x.IsApprovedByDirector == approvalStatus.approved && x.IsApprovedByFinance == approvalStatus.approved && x.IsApprovedByManager == approvalStatus.approved).Sum(x => x.ActualWorked) / y.Target) * 100 : 0
-
-
-                           }).ToList()
-
-
-
-
-                       }
-                                    ).ToListAsync();
-
-
-            
+            var assignedActivities = await _dBContext.Activities
+    .Where(x => x.ActualEnd == null &&
+                (employeeAssigned.Contains(x.Id) ||
+                 (x.CommiteeId != null && x.Commitee.Employees.Any(e => e.EmployeeId == employeeId))))
+    .Select(e => new ActivityViewDto
+    {
+        Id = e.Id,
+        Name = e.ActivityDescription,
+        PlannedBudget = e.PlanedBudget,
+        ActivityType = e.ActivityType.ToString(),
+        Weight = e.Weight,
+        Begining = e.Begining,
+        Target = e.Goal,
+        UnitOfMeasurment = e.UnitOfMeasurement.Name,
+        OverAllPerformance = 0,
+        StartDate = e.ShouldStat.ToString(),
+        EndDate = e.ShouldEnd.ToString(),
+        Members = _dBContext.EmployeesAssignedForActivities
+            .Include(x => x.Employee)
+            .Where(x => x.ActivityId == e.Id)
+            .Select(y => new SelectListDto
+            {
+                Id = y.Id,
+                Name = y.Employee.FullName,
+                Photo = y.Employee.Photo,
+                EmployeeId = y.EmployeeId.ToString()
+            })
+            .ToList(),
+        MonthPerformance = _dBContext.ActivityTargetDivisions
+            .Where(x => x.ActivityId == e.Id)
+            .OrderBy(x => x.Order)
+            .Select(y => new MonthPerformanceViewDto
+            {
+                Id = y.Id,
+                Order = y.Order,
+                Planned = y.Target,
+                Actual = activityProgress.Where(x => x.QuarterId == y.Id).Sum(mp => mp.ActualWorked),
+                Percentage = y.Target != 0 ? (activityProgress
+                    .Where(x => x.QuarterId == y.Id &&
+                                x.IsApprovedByDirector == approvalStatus.approved &&
+                                x.IsApprovedByFinance == approvalStatus.approved &&
+                                x.IsApprovedByManager == approvalStatus.approved)
+                    .Sum(x => x.ActualWorked) / y.Target) * 100 : 0
+            })
+            .ToList(),
+        ProjectType = e.ActivityParentId != null
+            ? e.ActivityParent.Task.Plan.ProjectType
+            : (e.TaskId != null
+                ? e.Task.Plan.ProjectType
+                : e.Plan.ProjectType)
+    })
+    .ToListAsync();
 
             return assignedActivities;
+            return assignedActivities;
+        }
+
+
+        public async Task<int> GetAssignedActivityNumber(Guid employeeId)
+        {
+            var employeeAssignedCount = await _dBContext.EmployeesAssignedForActivities.CountAsync(x => x.EmployeeId == employeeId);
+
+            return employeeAssignedCount;
+
+
         }
 
         public async Task<List<ActivityViewDto>> GetActivtiesForApproval(Guid employeeId)
@@ -667,6 +852,86 @@ namespace PM_Case_Managemnt_API.Services.PM.Activity
                                  ).FirstOrDefaultAsync();
             return activityViewDtos;
         }
+
+        public async Task<List<SelectListDto>> GetEmployeesInBranch(Guid branchId)
+        {
+            var employees = await _dBContext.Employees.Include(x => x.OrganizationalStructure).Where(x => x.OrganizationalStructure.OrganizationBranchId == branchId)
+                
+                .Select(x=> new SelectListDto
+                {
+                    Id = x.Id,
+                    Name = $"{x.FullName} ({x.OrganizationalStructure.StructureName})"
+                })
+                
+                .ToListAsync();
+
+
+            return employees;
+        }
+
+
+
+        public async Task<ReponseMessage> AssignEmployees(ActivityEmployees activityEmployee)
+        {
+            try
+            {
+                if (activityEmployee!=null)
+                {
+
+                    var activityEmployees = await _dBContext.EmployeesAssignedForActivities.Where(x => x.ActivityId == activityEmployee.ActivityId).ToListAsync();
+
+                    if (activityEmployees.Any())
+                    {
+                        _dBContext.RemoveRange(activityEmployees);
+                    }
+
+                    foreach (var employee in activityEmployee.Employees)
+                    {
+                        if (!string.IsNullOrEmpty(employee))
+                        {
+                            EmployeesAssignedForActivities EAFA = new EmployeesAssignedForActivities
+                            {
+                                CreatedAt = DateTime.Now,
+                                CreatedBy = activityEmployee.CreatedBy,
+                                RowStatus = RowStatus.Active,
+                                Id = Guid.NewGuid(),
+                                ActivityId = activityEmployee.ActivityId,
+                                EmployeeId = Guid.Parse(employee),
+                            };
+                            await _dBContext.EmployeesAssignedForActivities.AddAsync(EAFA);
+                            await _dBContext.SaveChangesAsync();
+                        }
+                    }
+
+                    return new ReponseMessage
+                    {
+                        Success = true,
+                        Message = "Employee Assigned Successfully"
+                    };
+
+                }
+                else
+                {
+                    return new ReponseMessage
+                    {
+                        Success = false,
+                        Message = "No Employee Was Successfully"
+                    };
+                }
+            }
+            catch (Exception ex )
+            {
+                return new ReponseMessage
+                {
+                    Success = false,
+                    Message =ex.Message
+                };
+            }
+
+
+        }
     }
+
+    
 }
 

@@ -69,6 +69,18 @@ export class CaseFilesComponent implements OnInit {
     this.qrData = `${this.case.CaseId}_${this.user.EmployeeId}_CASE`
   }
 
+  getFileSettings(casetTypeId: string) {
+    this.caseService.getFileSettignsByCaseTypeId(casetTypeId).subscribe({
+      next: (res) => {
+        this.fileSettings = res;
+        console.log(res)
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
   submit(){
 
     const formData = new FormData();

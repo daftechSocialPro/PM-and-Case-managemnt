@@ -29,9 +29,11 @@ export class AddActivitiesComponent implements OnInit {
   unitMeasurments: SelectList[] = [];
   toast!: toastPayload;
   comitteEmployees : SelectList[]=[];
-  FinanceId!: string;
+
   employeeList: SelectList[] = [];
   employee!: SelectList;
+
+  isClassfiedtoBranch:boolean= false
 
 
   constructor(
@@ -59,13 +61,20 @@ export class AddActivitiesComponent implements OnInit {
       TeamId: [null],
       CommiteeId: [null],
       AssignedEmployee: [],
-      BudgetType: ['', Validators.required],
-      ProjectFunder: [''],
+      IsClassfiedToBranch:[false,Validators.required]
+     
       
       // Finance: [''],
 
 
     })
+  }
+
+
+
+  onClassfiedBranch(){
+    this.isClassfiedtoBranch = this.activityForm.value.IsClassfiedToBranch
+
   }
   ngOnInit(): void {
 
@@ -120,12 +129,13 @@ export class AddActivitiesComponent implements OnInit {
   }
 
   submit() {
-    if(this.requestFrom == "PLAN" || this.requestFrom == "TASK"){
-        this.addSubActivity()
-    }
-    else{
-          this.addActivityParent()
-    }
+    this.addSubActivity()
+    // if(this.requestFrom == "PLAN" || this.requestFrom == "TASK"){
+    //     this.addSubActivity()
+    // }
+    // else{
+    //       this.addActivityParent()
+    // }
   }
 
   addSubActivity(){
@@ -143,15 +153,17 @@ export class AddActivitiesComponent implements OnInit {
         PreviousPerformance: this.activityForm.value.PreviousPerformance,
         Goal: this.activityForm.value.Goal,
         TeamId: this.activityForm.value.TeamId,
+        TaskId : this.task.Id,
         CommiteeId: this.activityForm.value.CommiteeId,
+        IsClassfiedToBranch:this.activityForm.value.IsClassfiedToBranch,
         Employees: this.activityForm.value.AssignedEmployee
       }
-      if(this.requestFrom == "PLAN"){
-        actvityP.PlanId = this.requestFromId;
-      }
-      else if(this.requestFrom == "TASK"){
-        actvityP.TaskId = this.requestFromId;
-      }
+      // if(this.requestFrom == "PLAN"){
+      //   actvityP.PlanId = this.requestFromId;
+      // }
+      // else if(this.requestFrom == "TASK"){
+      //   actvityP.TaskId = this.requestFromId;
+      // }
 
       console.log("act",actvityP)
 
@@ -188,20 +200,7 @@ export class AddActivitiesComponent implements OnInit {
   }
 
   addActivityParent(){
-    if (!this.FinanceId && this.activityForm.value.BudgetType == 'CAPITAL' ){
-      this.toast = {
-        message: "Finance Not selected",
-        title: 'Network error.',
-        type: 'error',
-        ic: {
-          timeOut: 2500,
-          closeButton: true,
-        } as IndividualConfig,
-      };
-      this.commonService.showToast(this.toast);
-
-      return
-    }
+  
     if (this.activityForm.valid) {
       let actvityP: SubActivityDetailDto = {
         SubActivityDesctiption: this.activityForm.value.ActivityDescription,
@@ -218,17 +217,17 @@ export class AddActivitiesComponent implements OnInit {
         TeamId: this.activityForm.value.TeamId,
         CommiteeId: this.activityForm.value.CommiteeId,
         BudgetType:this.activityForm.value.BudgetType,
-        ProjectFunder:this.activityForm.value.ProjectFunder,
-        FinanceId:this.FinanceId,
+        IsClassfiedToBranch:this.activityForm.value.IsClassfiedToBranch,
+        TaskId : this.task.Id,      
         Employees: this.activityForm.value.AssignedEmployee
       }
 
-      if(this.requestFrom == "Plan"){
-        actvityP.PlanId = this.requestFromId;
-      }
-      else if(this.requestFrom == "Task"){
-        actvityP.TaskId = this.requestFromId;
-      }
+      // if(this.requestFrom == "Plan"){
+      //   actvityP.PlanId = this.requestFromId;
+      // }
+      // else if(this.requestFrom == "Task"){
+      //   actvityP.TaskId = this.requestFromId;
+      // }
 
       let activityList : SubActivityDetailDto[] = [];
       activityList.push(actvityP);
@@ -336,10 +335,4 @@ export class AddActivitiesComponent implements OnInit {
     }
   }
 
-  selectEmployeeF(event: SelectList) {
-
-    this.employee = event;
-    this.FinanceId = event.Id
-
-  }
 }

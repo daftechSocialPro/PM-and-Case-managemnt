@@ -143,9 +143,9 @@ export class OrganizationService {
     return this.http.get<any>(this.BaseURI+"/Dashboard/GetPMBarchart?empId="+empId)
   }
 
-  getDashboardLineChart(){
+  getDashboardLineChart(year:number){
 
-    return this.http.get<barChartDto>(this.BaseURI+"/Dashboard/GetMonthlyReportBarChart")
+    return this.http.get<barChartDto>(this.BaseURI+`/Dashboard/GetMonthlyReportBarChart?year=${year}`)
   }
   
 

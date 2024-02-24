@@ -1151,8 +1151,8 @@ namespace PMCaseManagemntAPI.Migrations
                     b.Property<float>("Begining")
                         .HasColumnType("real");
 
-                    b.Property<int>("BudgetType")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("CaseTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CommiteeId")
                         .HasColumnType("uniqueidentifier");
@@ -1169,14 +1169,14 @@ namespace PMCaseManagemntAPI.Migrations
                     b.Property<float>("FieldWork")
                         .HasColumnType("real");
 
-                    b.Property<Guid>("FinanceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<float>("Goal")
                         .HasColumnType("real");
 
                     b.Property<float>("OfficeWork")
                         .HasColumnType("real");
+
+                    b.Property<Guid?>("OrganizationalStructureId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("PlanId")
                         .HasColumnType("uniqueidentifier");
@@ -1186,9 +1186,6 @@ namespace PMCaseManagemntAPI.Migrations
 
                     b.Property<bool>("PostToCase")
                         .HasColumnType("bit");
-
-                    b.Property<string>("ProjectFunder")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remark")
                         .HasColumnType("nvarchar(max)");
@@ -1221,11 +1218,13 @@ namespace PMCaseManagemntAPI.Migrations
 
                     b.HasIndex("ActivityParentId");
 
+                    b.HasIndex("CaseTypeId");
+
                     b.HasIndex("CommiteeId");
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("FinanceId");
+                    b.HasIndex("OrganizationalStructureId");
 
                     b.HasIndex("PlanId");
 
@@ -1258,16 +1257,25 @@ namespace PMCaseManagemntAPI.Migrations
                     b.Property<DateTime?>("ActuallStart")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("AssignedToBranch")
+                        .HasColumnType("bit");
+
+                    b.Property<float>("BaseLine")
+                        .HasColumnType("real");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float?>("Goal")
+                    b.Property<float>("Goal")
                         .HasColumnType("real");
 
                     b.Property<bool>("HasActivity")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsClassfiedToBranch")
                         .HasColumnType("bit");
 
                     b.Property<float>("PlanedBudget")
@@ -1291,12 +1299,17 @@ namespace PMCaseManagemntAPI.Migrations
                     b.Property<Guid?>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float?>("Weight")
+                    b.Property<Guid?>("UnitOfMeasurmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Weight")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TaskId");
+
+                    b.HasIndex("UnitOfMeasurmentId");
 
                     b.ToTable("ActivityParents");
                 });
@@ -1315,6 +1328,9 @@ namespace PMCaseManagemntAPI.Migrations
 
                     b.Property<float>("ActualWorked")
                         .HasColumnType("real");
+
+                    b.Property<Guid?>("CaseId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CoordinatorApprovalRemark")
                         .HasColumnType("nvarchar(max)");
@@ -1369,6 +1385,8 @@ namespace PMCaseManagemntAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActivityId");
+
+                    b.HasIndex("CaseId");
 
                     b.HasIndex("EmployeeValueId");
 
@@ -1587,7 +1605,7 @@ namespace PMCaseManagemntAPI.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FinanceId")
+                    b.Property<Guid?>("FinanceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("HasTask")
@@ -1611,6 +1629,9 @@ namespace PMCaseManagemntAPI.Migrations
 
                     b.Property<Guid?>("ProgramId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProjectFunder")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ProjectManagerId")
                         .HasColumnType("uniqueidentifier");
@@ -2259,6 +2280,10 @@ namespace PMCaseManagemntAPI.Migrations
                         .WithMany("Activities")
                         .HasForeignKey("ActivityParentId");
 
+                    b.HasOne("PM_Case_Managemnt_API.Models.CaseModel.CaseType", "CaseType")
+                        .WithMany()
+                        .HasForeignKey("CaseTypeId");
+
                     b.HasOne("PM_Case_Managemnt_API.Models.PM.Commitees", "Commitee")
                         .WithMany()
                         .HasForeignKey("CommiteeId");
@@ -2267,11 +2292,9 @@ namespace PMCaseManagemntAPI.Migrations
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("PM_Case_Managemnt_API.Models.Common.Employee", "Finance")
+                    b.HasOne("PM_Case_Managemnt_API.Models.Common.OrganizationalStructure", "OrganizationalStructure")
                         .WithMany()
-                        .HasForeignKey("FinanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrganizationalStructureId");
 
                     b.HasOne("PM_Case_Managemnt_API.Models.PM.Plan", "Plan")
                         .WithMany("Activities")
@@ -2289,11 +2312,13 @@ namespace PMCaseManagemntAPI.Migrations
 
                     b.Navigation("ActivityParent");
 
+                    b.Navigation("CaseType");
+
                     b.Navigation("Commitee");
 
                     b.Navigation("Employee");
 
-                    b.Navigation("Finance");
+                    b.Navigation("OrganizationalStructure");
 
                     b.Navigation("Plan");
 
@@ -2308,7 +2333,13 @@ namespace PMCaseManagemntAPI.Migrations
                         .WithMany("ActivitiesParents")
                         .HasForeignKey("TaskId");
 
+                    b.HasOne("PM_Case_Managemnt_API.Models.Common.UnitOfMeasurment", "UnitOfMeasurment")
+                        .WithMany()
+                        .HasForeignKey("UnitOfMeasurmentId");
+
                     b.Navigation("Task");
+
+                    b.Navigation("UnitOfMeasurment");
                 });
 
             modelBuilder.Entity("PM_Case_Managemnt_API.Models.PM.ActivityProgress", b =>
@@ -2318,6 +2349,10 @@ namespace PMCaseManagemntAPI.Migrations
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("PM_Case_Managemnt_API.Models.CaseModel.CaseHistory", "Case")
+                        .WithMany()
+                        .HasForeignKey("CaseId");
 
                     b.HasOne("PM_Case_Managemnt_API.Models.Common.Employee", "EmployeeValue")
                         .WithMany()
@@ -2332,6 +2367,8 @@ namespace PMCaseManagemntAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Activity");
+
+                    b.Navigation("Case");
 
                     b.Navigation("EmployeeValue");
 
@@ -2434,9 +2471,7 @@ namespace PMCaseManagemntAPI.Migrations
 
                     b.HasOne("PM_Case_Managemnt_API.Models.Common.Employee", "Finance")
                         .WithMany()
-                        .HasForeignKey("FinanceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FinanceId");
 
                     b.HasOne("PM_Case_Managemnt_API.Models.PM.Programs", "Program")
                         .WithMany()

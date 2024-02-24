@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { OrganizationService } from '../common/organization/organization.service';
 import { IDashboardDto } from './IDashboard';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DetailReportComponent } from '../Case/case-report/case-detail-report/detail-report/detail-report.component';
 declare const $: any
 
 @Component({
@@ -16,6 +18,8 @@ export class CasedashboardComponent implements OnInit {
 
   stackedData:any
   stackedOptions:any
+
+  selectedYear : number= 2016
 
   ngOnInit(): void {
     $('#startDate').calendarsPicker({
@@ -89,7 +93,10 @@ export class CasedashboardComponent implements OnInit {
 
   }
 
-  constructor(private orgService: OrganizationService, private formBuilder: FormBuilder) {
+  constructor(
+    private modalService : NgbModal,
+    private orgService: OrganizationService, 
+    private formBuilder: FormBuilder) {
     this.serachForm = this.formBuilder.group({
       startDate: [''],
       endDate: ['']
@@ -108,7 +115,7 @@ export class CasedashboardComponent implements OnInit {
   }
 
   getBarChart (){
-    this.orgService.getDashboardLineChart().subscribe({
+    this.orgService.getDashboardLineChart(this.selectedYear).subscribe({
       next:(res)=>{
         this.stackedData = res 
       },error:(err)=>{
@@ -124,6 +131,11 @@ export class CasedashboardComponent implements OnInit {
     
 
 
+  }
+
+  detail(caseId : string) {
+    let modalRef = this.modalService.open(DetailReportComponent, { size: "xl", backdrop: "static" })
+    modalRef.componentInstance.CaseId = caseId
   }
 
 

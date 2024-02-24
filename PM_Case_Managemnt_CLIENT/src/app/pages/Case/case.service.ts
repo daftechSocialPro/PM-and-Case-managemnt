@@ -24,6 +24,18 @@ export class CaseService {
 
         return this.http.post(this.BaseURI + "/type", casetype)
     }
+
+    updateCaseType(casetype: CaseType) {
+
+        return this.http.post(this.BaseURI + "/UpdateCaseType", casetype)
+    }
+
+    DeleteCaseType(caseTypeId: string) {
+
+        return this.http.delete(this.BaseURI + `/DeleteCaseType?caseTypeId=${caseTypeId}`)
+    }
+
+    
     getCaseType() {
         return this.http.get<CaseTypeView[]>(this.BaseURI + "/type")
     }
@@ -62,11 +74,19 @@ export class CaseService {
         return this.http.post(this.BaseURI + "/applicant", applicant)
     }
 
+   updateApplicant(applicant: any) {
+        return this.http.put(this.BaseURI + "/applicant", applicant)
+    }
+
     getApplicantSelectList() {
 
         return this.http.get<SelectList[]>(this.BaseURI + "/applicantSelectList")
     }
 
+    getSingleApplicant (applicantId:string){
+
+        return this.http.get(this.BaseURI+`/getApplicantById?applicantId=${applicantId}`)
+    }
     //case
     addCase(caseValue: FormData) {
 
@@ -238,6 +258,10 @@ export class CaseService {
 
     GetProgresReport(caseId: String) {
         return this.http.get<ICaseProgressReport>(this.BaseURI + "/CaseReport/GetCaseDetailProgress?caseId=" + caseId)
+    }
+
+    GetChildCaseTypes(caseId: string ){
+        return this.http.get<any>(this.BaseURI+`/CaseREport/GetCaseTypes?caseId=${caseId}`)
     }
 
     //get crurrent state in transfer 

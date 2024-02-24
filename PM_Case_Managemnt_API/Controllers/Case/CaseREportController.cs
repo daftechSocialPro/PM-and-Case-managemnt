@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PM_Case_Managemnt_API.Data;
 using PM_Case_Managemnt_API.DTOS.Case;
 using PM_Case_Managemnt_API.DTOS.CaseDto;
+using PM_Case_Managemnt_API.Models.CaseModel;
 using PM_Case_Managemnt_API.Services.CaseMGMT;
 
 namespace PM_Case_Managemnt_API.Controllers.Case
@@ -71,8 +72,8 @@ namespace PM_Case_Managemnt_API.Controllers.Case
 
         [HttpGet("GetCaseEmployeePerformace")]
 
-        public async Task<IActionResult> GetCaseEmployeePerformace(string? key, string ? OrganizationName)
-     {
+        public async Task<IActionResult> GetCaseEmployeePerformace(string? key, string? OrganizationName)
+        {
             try
             {
                 return Ok(await _caserReportService.GetCaseEmployeePerformace(key, OrganizationName));
@@ -93,7 +94,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
 
                 return Ok(await _caserReportService.GetSMSReport(startAt, endAt));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
@@ -122,6 +123,22 @@ namespace PM_Case_Managemnt_API.Controllers.Case
             try
             {
                 return Ok(await _caserReportService.GetCaseProgress(caseId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+
+
+        }
+
+        [HttpGet("GetCaseTypes")]
+
+        public async Task<IActionResult> GetChildCaseTypes(Guid caseId)
+        {
+            try
+            {
+                return Ok(await _caserReportService.GetChildCaseTypes(caseId));
             }
             catch (Exception ex)
             {

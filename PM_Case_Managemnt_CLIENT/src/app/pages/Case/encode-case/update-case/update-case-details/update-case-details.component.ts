@@ -70,12 +70,14 @@ export class UpdateCaseDetailsComponent implements OnInit {
       next: (res) => {
         this.encodecase = res
 
+        console.log(res.ApplicantId?.toLowerCase())
+
         this.getCaseNumber();
         this.getApplicants();
         this.caseForm.controls['LetterNumber'].setValue(res.LetterNumber)
         this.caseForm.controls['LetterSubject'].setValue(res.LetterSubject)
-        this.caseForm.controls['CaseTypeId'].setValue(res.CaseTypeId?.toLocaleLowerCase())
-        this.caseForm.controls['ApplicantId'].setValue(res.ApplicantId?.toLocaleLowerCase())
+        this.caseForm.controls['CaseTypeId'].setValue(res.CaseTypeId?.toLowerCase())
+        
         this.caseForm.controls['PhoneNumber2'].setValue(res.ApplicantPhoneNo)
         this.caseForm.controls['Representative'].setValue(res.Representative)
         this.getFileSettings(res.CaseTypeId!)
@@ -116,6 +118,7 @@ export class UpdateCaseDetailsComponent implements OnInit {
     this.caseService.getApplicantSelectList().subscribe({
       next: (res) => {
         this.applicants = res;
+       this.caseForm.controls['ApplicantId'].setValue(this.encodecase.ApplicantId?.toLowerCase())
       },
       error: (err) => {
         console.error(err);
@@ -131,7 +134,23 @@ export class UpdateCaseDetailsComponent implements OnInit {
     modalRef.result.then((res) => {
       console.log(res)
       this.getApplicants();
-      this.caseForm.controls['ApplicantId'].setValue(res)
+      this.caseForm.controls['ApplicantId'].setValue(res.toString().toLowerCase())
+    });
+  }
+
+  updateApplicant() {
+    let modalRef = this.modalService.open(AddApplicantComponent, {
+      size: 'lg',
+      backdrop: 'static',
+    });
+
+    console.log("update",this.caseForm.value.ApplicantId)
+    modalRef.componentInstance.applicantId=this.caseForm.value.ApplicantId
+
+    modalRef.result.then((res) => {
+      console.log(res)
+      this.getApplicants();
+    
     });
   }
 

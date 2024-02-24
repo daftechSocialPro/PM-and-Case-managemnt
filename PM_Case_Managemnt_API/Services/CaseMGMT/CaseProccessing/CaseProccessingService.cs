@@ -8,6 +8,7 @@ using PM_Case_Managemnt_API.Hubs;
 using PM_Case_Managemnt_API.Hubs.EncoderHub;
 using PM_Case_Managemnt_API.Models.CaseModel;
 using PM_Case_Managemnt_API.Models.Common;
+using PM_Case_Managemnt_API.Models.PM;
 using PM_Case_Managemnt_API.Services.CaseMGMT.CaseForwardService;
 using PM_Case_Managemnt_API.Services.CaseMGMT.History;
 using PM_Case_Managemnt_API.Services.CaseService.Encode;
@@ -65,7 +66,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
             }
         }
 
-        public async Task AssignTask(CaseAssignDto caseAssignDto)
+        public async Task<int> AssignTask(CaseAssignDto caseAssignDto)
         {
             try
             {
@@ -158,15 +159,16 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
 
                 //await _encoderHub.Clients.All.getNotification(assigndCase);
 
-
+                return 1;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+                return 1;
             }
         }
 
-        public async Task CompleteTask(CaseCompleteDto caseCompleteDto)
+        public async Task<int> CompleteTask(CaseCompleteDto caseCompleteDto)
         {
             try
             {
@@ -200,20 +202,53 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
                 _dbContext.Entry(selectedCase).Property(x => x.CompletedAt).IsModified = true;
                 _dbContext.Entry(selectedCase).Property(x => x.AffairStatus).IsModified = true;
 
-                await _dbContext.SaveChangesAsync();
+               await _dbContext.SaveChangesAsync();
+
+                var employee = await _dbContext.Employees.Include(x=>x.OrganizationalStructure).Where(x=>x.Id==selectedHistory.ToEmployeeId).FirstOrDefaultAsync();
+                if (employee != null)
+                {
+
+                    var activity = await _dbContext.Activities.Where(x => x.CaseTypeId == currentCase.CaseTypeId && x.OrganizationalStructureId == employee.OrganizationalStructure.OrganizationBranchId).FirstOrDefaultAsync();
+                    var actTarget = await _dbContext.ActivityTargetDivisions.Where(x => x.ActivityId == activity.Id).ToListAsync();
+                    if (activity != null && actTarget.Any())
+                    {
+
+                        var activityProgress2 = new ActivityProgress
+                        {
+                            Id = Guid.NewGuid(),
+                            CreatedAt = DateTime.Now,
+                            QuarterId = actTarget.FirstOrDefault().Id,
+                            ActualBudget = 0,
+                            ActualWorked = 1,
+                            progressStatus = ProgressStatus.SimpleProgress,
+                            Remark = "From Case",
+                            ActivityId = activity.Id,
+                            CreatedBy = selectedHistory.CreatedBy,
+                            EmployeeValueId = employee.Id,
+                            CaseId = selectedHistory.Id,
+                            Lat = "",
+                            Lng = "",
+                        };
+
+                        _dbContext.ActivityProgresses.Add(activityProgress2);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
 
                 string name = currentCase.Applicant != null ? currentCase.Applicant.ApplicantName : currentCase.Employee.FullName;
                 string message = name + "\nበጉዳይ ቁጥር፡" + currentCase.CaseNumber + "\nየተመዘገበ ጉዳዮ በ፡" + currentHist.ToStructure.StructureName + " ተጠናቋል\nየቢሮ ቁጥር: - ";
 
                 await _smshelper.SendSmsForCase(message, currentHist.CaseId, currentHist.Id, UserId.ToString(), MessageFrom.Complete,caseCompleteDto.SmsTemplateContent);
 
+                return 1;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+                return 1;
             }
         }
-        public async Task RevertTask(CaseRevertDto revertCase)
+        public async Task<int> RevertTask(CaseRevertDto revertCase)
         {
             try
             {
@@ -259,10 +294,11 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+                return 1;
             }
         }
 
-        public async Task TransferCase(CaseTransferDto caseTransferDto)
+        public async Task<int> TransferCase(CaseTransferDto caseTransferDto)
         {
             try
             {
@@ -330,12 +366,13 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
 
             {
                 throw new Exception(ex.Message);
+
+                return 1;
             }
         }
 
 
-
-        public async Task AddToWaiting(Guid caseHistoryId)
+        public async Task<int> AddToWaiting(Guid caseHistoryId)
         {
             try
             {
@@ -354,16 +391,20 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
 
 
 
+                return 1;
+
 
 
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+
+                return 1;
             }
         }
 
-        public async Task SendSMS(CaseCompleteDto smsdetail)
+        public async Task<int> SendSMS(CaseCompleteDto smsdetail)
         {
 
             var history = _dbContext.CaseHistories.Find(smsdetail.CaseHistoryId);
@@ -382,14 +423,14 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
                  .Include(x => x.Case.Employee)
                 .Include(x => x.FromEmployee)
                 .Include(x => x.FromStructure)
-                .Include(x => x.Case)?.FirstOrDefault(x => x.AffairHistoryStatus != AffairHistoryStatus.Completed
-                                     && x.ToEmployeeId == employeeId
-                                     && x.Id == historyId);
+                .Include(x => x.Case)?.FirstOrDefault(x =>
+                                     
+                                     x.Id == historyId);
 
 
 
 
-            if (currentHistry != null && (currentHistry.AffairHistoryStatus == AffairHistoryStatus.Pend || currentHistry.AffairHistoryStatus == AffairHistoryStatus.Waiting))
+            if (currentHistry != null && (currentHistry.AffairHistoryStatus == AffairHistoryStatus.Pend || currentHistry.AffairHistoryStatus == AffairHistoryStatus.Waiting||currentHistry.AffairHistoryStatus==AffairHistoryStatus.Completed))
             {
                 currentHistry.AffairHistoryStatus = AffairHistoryStatus.Seen;
                 currentHistry.SeenDateTime = DateTime.Now;
@@ -440,8 +481,8 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
                 ReciverType = currentHistry.ReciverType.ToString(),
                 SecreateryNeeded = currentHistry.SecreateryNeeded,
                 IsConfirmedBySeretery = currentHistry.IsConfirmedBySeretery,
-                ToEmployee = currentHistry.ToEmployee.FullName,
-                ToStructure = currentHistry.ToStructure.StructureName,
+                ToEmployee = currentHistry.ToEmployee?.FullName,
+                ToStructure = currentHistry.ToStructure?.StructureName,
                 AffairHistoryStatus = currentHistry.AffairHistoryStatus.ToString(),
                 Attachments = attachments,
                 CaseTypeId = currentHistry.Case.CaseTypeId.ToString(),
@@ -518,8 +559,11 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
         public async Task<bool> Ispermitted(Guid employeeId, Guid caseId)
         {
             var caseIDD = _dbContext.CaseHistories.Find(caseId).CaseId;
-            var employee = _dbContext.CaseHistories.Where(x => x.CaseId == caseIDD && x.ReciverType==ReciverType.Orginal ).OrderByDescending(z => z.childOrder).FirstOrDefault().ToEmployeeId;
-            if (employeeId.ToString().ToLower() == employee.ToString().ToLower())
+            var employee = _dbContext.CaseHistories.Where(x => x.CaseId == caseIDD && x.ReciverType==ReciverType.Orginal  ).OrderByDescending(z => z.childOrder).FirstOrDefault().ToEmployeeId;
+
+            var casehistor = _dbContext.CaseHistories.Where(x => x.CaseId == caseIDD).OrderBy(x => x.childOrder).Where(x=>x.CompletedDateTime!=null).Select(x=>x.CompletedDateTime).ToList();
+            
+            if ((employeeId.ToString().ToLower() == employee.ToString().ToLower())&& casehistor.Count==0)
             {
                 return true;
             }

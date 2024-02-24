@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GsmComm.PduConverter;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PM_Case_Managemnt_API.Data;
@@ -108,7 +109,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                                     affairNumber = x.Case.CaseNumber,
                                     fromEmplyee = x.FromEmployee.FullName,
                                     subject = x.Case.LetterSubject,
-                                    applicant = x.Case.Applicant != null ? (x.Case.Applicant.ApplicantName +" / "+ x.Case.Applicant.PhoneNumber) : x.Case.Employee.FullName+" / " + x.Case.Employee.PhoneNumber,
+                                    applicant = x.Case.Applicant != null ? (x.Case.Applicant.ApplicantName + " / " + x.Case.Applicant.PhoneNumber) : x.Case.Employee.FullName + " / " + x.Case.Employee.PhoneNumber,
                                     createdAt = x.CreatedAt.ToShortDateString(),
                                     historyId = x.Id,
                                     document = _db.CaseAttachments.Where(y => y.CaseId == x.CaseId).Select(d =>
@@ -518,7 +519,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
 
 
 
-                Employee currEmp = await _db.Employees.Include(x => x.OrganizationalStructure).Where(x => x.Id==(revertCase.EmployeeId)).FirstOrDefaultAsync();
+                Employee currEmp = await _db.Employees.Include(x => x.OrganizationalStructure).Where(x => x.Id == (revertCase.EmployeeId)).FirstOrDefaultAsync();
                 CaseHistory selectedHistory = _db.CaseHistories.Find(revertCase.CaseHistoryId);
                 Guid UserId = Guid.Parse((await _onContext.ApplicationUsers.Where(appUsr => appUsr.EmployeesId.Equals(selectedHistory.ToEmployeeId)).FirstAsync()).Id);
 
@@ -554,7 +555,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                 string name = currentCase.Applicant != null ? currentCase.Applicant.ApplicantName : currentCase.Employee.FullName;
                 var message = name + "\nበጉዳይ ቁጥር፡" + currentCase.CaseNumber + "\nየተመዘገበ ጉዳዮ በ፡" + selectedHistory.ToStructure.StructureName + " ወደኋላ ተመልሷል  \nየቢሮ ቁጥር: -";
 
-               // await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Revert);
+                // await _smshelper.SendSmsForCase(message, newHistory.CaseId, newHistory.Id, UserId.ToString(), MessageFrom.Revert);
 
 
                 return "Successfully reverted ";
@@ -680,10 +681,10 @@ namespace PM_Case_Managemnt_API.Controllers.Case
 
 
 
-                Employee currEmp = await _db.Employees.Where(el => el.Id==request.empIdd).FirstOrDefaultAsync();
-                CaseHistory currentLastHistory = await _db.CaseHistories.Where(el => el.Id==request.affairHisIdd).OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+                Employee currEmp = await _db.Employees.Where(el => el.Id == request.empIdd).FirstOrDefaultAsync();
+                CaseHistory currentLastHistory = await _db.CaseHistories.Where(el => el.Id == request.affairHisIdd).OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
 
-                Guid UserId = Guid.Parse((await _onContext.ApplicationUsers.Where(appUsr => appUsr.EmployeesId==request.empIdd).FirstOrDefaultAsync()).Id);
+                Guid UserId = Guid.Parse((await _onContext.ApplicationUsers.Where(appUsr => appUsr.EmployeesId == request.empIdd).FirstOrDefaultAsync()).Id);
 
                 if (request.empIdd != currentLastHistory.ToEmployeeId)
                     throw new Exception("You are not authorized to transfer this case.");
@@ -702,7 +703,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                e.Position == Position.Director).Id : request.toEmployeeId;
 
 
-                var toStructure = request.toStructureId == Guid.Empty || request.toStructureId == null ? _db.Employees.Find(toEmployee).OrganizationalStructureId:request.toStructureId;
+                var toStructure = request.toStructureId == Guid.Empty || request.toStructureId == null ? _db.Employees.Find(toEmployee).OrganizationalStructureId : request.toStructureId;
 
 
                 var newHistory = new CaseHistory
@@ -716,6 +717,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                     FromStructureId = currEmp.OrganizationalStructureId,
                     ToEmployeeId = toEmployee,
                     ToStructureId = toStructure,
+
                     Remark = request.remark,
                     CaseId = currentLastHistory.CaseId,
                     ReciverType = ReciverType.Orginal,
@@ -724,12 +726,20 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                     //must be change
                 };
 
+                if (request.date != null)
+                {
+                    long timestamp = request.date.Value;
+
+                    DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(timestamp);
+                    DateTime dateTime = dateTimeOffset.DateTime;
+                    newHistory.TransferedDateTime = dateTime;
+                }
 
                 await _db.CaseHistories.AddAsync(newHistory);
                 await _db.SaveChangesAsync();
 
 
-                if (request.photo!= null)
+                if (request.photo != null)
                 {
                     string folderName = Path.Combine("Assets", "CaseAttachments");
                     string pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -759,7 +769,7 @@ namespace PM_Case_Managemnt_API.Controllers.Case
                         };
                         await _db.CaseAttachments.AddAsync(attachment);
                         await _db.SaveChangesAsync();
-                    
+
                     }
                 }
 
@@ -859,12 +869,13 @@ namespace PM_Case_Managemnt_API.Controllers.Case
         public class TransferAffairRequest
         {
             public IFormFile? photo { get; set; }
-            public Guid ?empIdd { get; set; }
+            public Guid? empIdd { get; set; }
             public Guid? affairHisIdd { get; set; }
             public Guid? toEmployeeId { get; set; }
             public Guid? toStructureId { get; set; }
             public string? remark { get; set; }
             public string? caseTypeId { get; set; }
+            public long? date { get; set; }
         }
         public class NotificationCount
         {

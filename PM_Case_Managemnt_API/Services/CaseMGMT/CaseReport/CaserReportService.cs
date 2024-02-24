@@ -9,6 +9,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using static PM_Case_Managemnt_API.Controllers.Case.AffairForMobileController;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using String = System.String;
 
@@ -233,7 +234,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
             EmployeePerformance eachPerformance = new EmployeePerformance();
             var empPerformance = new List<EmployeePerformance>();
 
-            var employeeList = _dbContext.Employees.Include(x => x.OrganizationalStructure)                
+            var employeeList = _dbContext.Employees.Include(x => x.OrganizationalStructure)
                 .ToList();
 
             if (!string.IsNullOrEmpty(OrganizationName))
@@ -243,7 +244,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
 
             foreach (var employee in employeeList)
             {
-                var AffairHistories = _dbContext.CaseHistories.Include(x => x.CaseType).Include(x => x.Case).Where(ah =>
+                var AffairHistories = _dbContext.CaseHistories.Include(x => x.CaseType).Include(x => x.Case.CaseType).Where(ah =>
                       ah.ToEmployeeId == employee.Id).ToList();
                 var actualTimeTaken = 0.0;
                 var expectedTime = 0.0;
@@ -315,7 +316,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
         }
 
 
-        
+
 
 
         public async Task<List<SMSReportDto>> GetSMSReport(string? startAt, string? endAt)
@@ -441,7 +442,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
                                                      y.AffairHistoryStatus == AffairHistoryStatus.Completed ? y.CompletedDateTime :
                                                      y.AffairHistoryStatus == AffairHistoryStatus.Revert ? y.RevertedAt : DateTime.Now
                                         ),
-                                        EmployeeStatus = ""
+                                        EmployeeStatus = GetEmployeeStatus(y, casetype)
 
 
                                     }).OrderByDescending(x => x.CreatedDate).ToList()
@@ -455,7 +456,87 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
         }
 
 
+        public async Task<List<CaseType>> GetChildCaseTypes(Guid caseId)
+        {
+            var casse = await _dbContext.Cases.Where(x => x.Id == caseId).Select(x => x.CaseTypeId).FirstOrDefaultAsync();
+            var caseTypes = await _dbContext.CaseTypes.Where(x => x.ParentCaseTypeId == casse).OrderBy(x => x.OrderNumber).ToListAsync();
 
+
+            return caseTypes;
+
+
+
+        }
+
+
+        static private string GetEmployeeStatus(CaseHistory history, List<CaseType> caseTypes)
+        {
+
+            var caseHistoryDuratio = getElapsedTime(history.SeenDateTime,
+
+                                        history.AffairHistoryStatus == AffairHistoryStatus.Seen ? history.SeenDateTime :
+                                                    history.AffairHistoryStatus == AffairHistoryStatus.Transfered ? history.TransferedDateTime :
+                                                    history.AffairHistoryStatus == AffairHistoryStatus.Completed ? history.CompletedDateTime :
+                                                    history.AffairHistoryStatus == AffairHistoryStatus.Revert ? history.RevertedAt : DateTime.Now
+                                       );
+
+
+
+            var caseHistoryDuration = caseHistoryDuratio != "" && caseHistoryDuratio != null ? double.Parse(caseHistoryDuratio.Split(" ")[0]) : 0;
+
+
+            if (caseHistoryDuratio != "" && caseHistoryDuratio != null)
+            {
+                caseHistoryDuration = caseHistoryDuratio.Split(" ")[1] != "Hr." ? Math.Round(caseHistoryDuration/60, 2):caseHistoryDuration;
+
+            }
+         
+
+
+            var caseTypeDuration = 0.0;
+            var casetype = caseTypes.Where(x => x.OrderNumber == history.childOrder + 1).FirstOrDefault();
+
+            if (casetype != null)
+            {
+
+
+                if (casetype.MeasurementUnit == TimeMeasurement.Minutes)
+                {
+                    caseTypeDuration = casetype.Counter / 60;
+                }
+
+                else if (casetype.MeasurementUnit == TimeMeasurement.Day)
+                {
+                    caseTypeDuration = casetype.Counter * 24;
+                }
+                else
+                {
+                    caseTypeDuration = casetype.Counter;
+                }
+
+            }
+
+
+
+            if (caseTypeDuration == 0)
+            {
+                return "Case Child has No Duration";
+            }
+
+            else
+            if (caseHistoryDuration > caseTypeDuration)
+            {
+                return $"Under Plan ({Math.Round(caseTypeDuration, 2)} Hr)";
+            }
+            else if (caseHistoryDuration < caseTypeDuration)
+            {
+                return $"Over Plan ({Math.Round(caseTypeDuration, 2)} Hr)";
+            }
+            else
+            {
+                return $"On Plan ({Math.Round(caseTypeDuration, 2)} Hr)";
+            }
+        }
 
 
         //static  public string getElapsedTIme(int childOrder,List<CaseType> affairTypes)
@@ -516,7 +597,7 @@ namespace PM_Case_Managemnt_API.Services.CaseMGMT
             }
 
 
-           
+
 
         }
 

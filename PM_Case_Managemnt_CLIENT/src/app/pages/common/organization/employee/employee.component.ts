@@ -19,6 +19,7 @@ import { UpdateEmployeeComponent } from './update-employee/update-employee.compo
 export class EmployeeComponent implements OnInit {
 
   employees: Employee[] = []
+  filterdEmployees:Employee[]=[]
 
   constructor(private orgService: OrganizationService, private commonServcie: CommonService, private modalService: NgbModal) { }
 
@@ -33,6 +34,7 @@ export class EmployeeComponent implements OnInit {
     this.orgService.getEmployees().subscribe({
       next: (res) => {
         this.employees = res
+        this.filterdEmployees = res 
         console.log("employees", this.employees)
       }, error: (err) => {
         console.error(err)
@@ -62,6 +64,24 @@ export class EmployeeComponent implements OnInit {
     modalRef.result.then(() => {
       this.listEmployees()
     })
+  }
+  Filter(value:string){
+
+    const searchTerm = value.toLowerCase()
+    
+
+    this.filterdEmployees = this.employees.filter((item)=> {
+return (
+         item.FullName.toLowerCase().includes(searchTerm) ||
+         item.PhoneNumber.toLowerCase().includes(searchTerm) ||
+         item.StructureName.toLowerCase().includes(searchTerm)
+)
+    }
+
+
+    )
+
+    
   }
 
 

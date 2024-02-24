@@ -4,7 +4,8 @@
       <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" aria-label="Close"></button>
    </div>
 
-   <div class="col-lg-6">
+   <div class="row">
+   <div class="col-lg-4">
       <div class="card m-4">
          <div class="card-header">
             <div>
@@ -22,27 +23,27 @@
                   </li>
                </div>
                <div>
-                  {{CaseDetialReport.CaseTypeTitle}}
+                  {{CaseDetialReport&&CaseDetialReport.CaseTypeTitle}}
                </div>
 
             </div>
          </div>
          <div class="card-body" style="background-color: #f6f9ff !important;">
             <h5 class="card-title ">
-               {{CaseDetialReport.LetterSubject}}
+               {{CaseDetialReport&&CaseDetialReport.LetterSubject}}
             </h5>
 
             <div class="row">
                <div class="col-6">
 
-                  <span> {{CaseDetialReport.ApplicationDate | date:'fullDate'}}</span><br />
-                  <span>{{CaseDetialReport.ApplicantName}} | {{CaseDetialReport.LetterNumber}}</span><br />
+                  <span> {{CaseDetialReport&&CaseDetialReport.ApplicationDate | date:'fullDate'}}</span><br />
+                  <span>{{CaseDetialReport&&CaseDetialReport.ApplicantName}} | {{CaseDetialReport&&CaseDetialReport.LetterNumber}}</span><br />
                   <!-- <span>0919870929</span>  -->
 
                </div>
                <div class="col-6 " style="text-align: right!important;">
 
-                  <span style="font-size: 20px;" class="badge bg-secondary">{{CaseDetialReport.CaseNumber}}</span>
+                  <span style="font-size: 20px;" class="badge bg-secondary">{{CaseDetialReport&&CaseDetialReport.CaseNumber}}</span>
 
                </div>
 
@@ -54,6 +55,10 @@
       </div>
    </div>
 
+   <div class="col-lg-8">
+      <div *ngIf="CaseDetialReport" echarts [options]="chartOptions2" class="demo-chart"></div>
+   </div>
+</div>
  <div class="card p-2">
    <table class="table  table-bordered ">
       <thead>
@@ -63,19 +68,17 @@
               <th scope="col">To Employee</th>
               <th scope="col">Created At</th>
               <th scope="col">Seen At</th>
-              <th scope="col">Status</th>
-            
-              <th scope="col">  Action Take </th>
-               
-              <th scope="col"> Elapsed Time</th>
-              <th scope="col"> Elapsetime Based on Seen Time</th>
-              <th scope="col"> Employee Status</th>
+              <th scope="col">Status</th>            
+              <th scope="col">Action Take </th>               
+              <th scope="col">Elapsed Time</th>
+              <th scope="col">Elapsetime Based on Seen Time</th>
+              <th scope="col">Employee Status</th>
 
               
 
           </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="CaseDetialReport">
 
           <tr *ngFor="let caseHis of CaseDetialReport.HistoryProgress" >
 
@@ -87,7 +90,7 @@
             <th scope="col">{{caseHis.ShouldTake | date:'fullDate' }} </th>             
             <th scope="col">{{caseHis.ElapsedTime}}</th>
             <th scope="col">{{caseHis.ElapseTimeBasedOnSeenTime}}</th>
-            <th scope="col">{{caseHis.EmployeeStatus}}</th>
+            <th scope="col" [ngStyle]="applyStyles(caseHis.EmployeeStatus)" >{{caseHis.EmployeeStatus}}</th>
          
 
           </tr>
